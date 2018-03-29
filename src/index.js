@@ -11,37 +11,40 @@ import {Observer, Event} from "./plugins"
 const initConfig = {
   components: [Observer, Event],
   lifeCycle: ["awake", "start"],
-  keywords: ["observer", "on"],
+  keywords: [],
 }
 export * from "./plugins"
 
 export default class Menhera {
   constructor(config) {
-    this.struct = {}
+    this.structs = {}
     this.config = ConfigMerger(initConfig, config)
   }
   init() {
     const {
       components,
-      keywords,
       lifeCycle
     } = this.config
+    const [awake, ...lifeCycles] = lifeCycle
 
     if (components) {
-      components.forEach(async comp => {
+      components.forEach(comp => {
         let struct = typeParser({
           obj: comp,
         })
         const {
           props: {
-            name
+            name,
+            keywords
           }
         } = struct
-        this.struct[name] = struct
+        this.structs[name] = struct
+        this.config.keywords.push(keywords)
       })
     }
-
-    Object.values(this.struct).forEach(struct => {
+    this.config.keywords = Array.from(new Set(this.config.keywords))
+    
+    Object.values(this.structs).forEach(struct => {
       const {
         events,
         events: {
@@ -49,7 +52,10 @@ export default class Menhera {
         },
         props,
       } = struct
-      keywords.forEach(keyword => {
+
+      events[awake] && events[awake].call(this)
+
+      this.config.keywords.forEach(keyword => {
         if (props[keyword]) {
           for (const [key, value] of Object.entries(props[keyword])) {
             if (typeof this[keyword] == "function") {
@@ -59,7 +65,7 @@ export default class Menhera {
         }
       })
 
-      lifeCycle.forEach(key => {
+      lifeCycles.forEach(key => {
         events[key] && events[key].call(this)
       })
     })

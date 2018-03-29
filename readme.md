@@ -8,11 +8,8 @@ yarn add menhera
 ```js
 import Menhera, {Observer, Event} from "menhera"
 
-
 const menhera = new Menhera({
-  keywords:["test"],
-  plugins:[Observer, Event],
-  components: [{
+  components: [Observer, Event, {
     name: "test",
     awake(){
       console.log("test0")

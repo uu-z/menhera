@@ -2,9 +2,7 @@ import Menhera, {Observer, Event} from "../src"
 
 
 const menhera = new Menhera({
-  keywords:["test"],
-  plugins:[Observer, Event],
-  components: [{
+  components: [Observer, Event, {
     name: "test",
     awake(){
       console.log("test0")
