@@ -35,11 +35,11 @@ export default class Menhera {
         const {
           props: {
             name,
-            keywords
+            keywords=[]
           }
         } = struct
         this.structs[name] = struct
-        this.config.keywords.push(keywords)
+        this.config.keywords = this.config.keywords.concat(keywords)
       })
     }
     this.config.keywords = Array.from(new Set(this.config.keywords))

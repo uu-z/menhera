@@ -1,35 +1,36 @@
 export const keyParser = ({
   obj,
-  struct = {},
+  structs = {},
   ...other
 }= {}) => {
   Object.keys(other).forEach(key => {
     if (Array.isArray(other[key])) {
-      if (!struct[key]) {
-        struct[key] = {}
+      if (!structs[key]) {
+        structs[key] = {}
       }
 
       other[key].forEach(keyword => {
-        struct[key][keyword] = obj[keyword]
+        structs[key][keyword] = obj[keyword]
       })
     }
   })
-  return struct
+  return structs
 }
+
 
 export const typeParser = ({
   obj,
-  struct = {},
+  structs = {},
 } = {}) => {
-  struct = {...struct, props:{}, events:{}}
+  structs = {...structs, props:{}, events:{}}
   Object.keys(obj).forEach(key => {
     if (typeof obj[key] === 'function') {
-      struct["events"][key] = obj[key]
+      structs["events"][key] = obj[key]
     } else {
-      struct["props"][key] = obj[key]
+      structs["props"][key] = obj[key]
     }
   })
-  return struct
+  return structs
 }
 
 export const ConfigMerger = (Obj1, Obj2) => {
