@@ -6,12 +6,14 @@ import {
   typeParser,
   ConfigMerger
 } from './utils'
-import {Observer, Event} from "./plugins"
+import {
+  Observer,
+  Event
+} from "./plugins"
 
 const initConfig = {
   components: [Observer, Event],
-  lifeCycle: ["awake", "start"],
-  keywords: [],
+  lifeCycle: ["awake", "start"]
 }
 export * from "./plugins"
 
@@ -22,45 +24,35 @@ export default class Menhera {
   }
   init() {
     const {
-      components,
-      lifeCycle
+      components = [],
+        lifeCycle
     } = this.config
     const [awake, ...lifeCycles] = lifeCycle
 
-    if (components) {
-      components.forEach(comp => {
-        let struct = typeParser({
-          obj: comp,
-        })
-        const {
-          props: {
-            name,
-            keywords=[]
-          }
-        } = struct
-        this.structs[name] = struct
-        this.config.keywords = this.config.keywords.concat(keywords)
+    components.forEach(comp => {
+      let struct = typeParser({
+        obj: comp,
       })
-    }
-    this.config.keywords = Array.from(new Set(this.config.keywords))
-    
+      const {
+        props: {
+          name,
+        },
+        events
+      } = struct
+      this.structs[name] = struct
+      events[awake] && events[awake].call(this)
+    })
+
     Object.values(this.structs).forEach(struct => {
       const {
-        events,
-        events: {
-          name
-        },
         props,
+        events
       } = struct
 
-      events[awake] && events[awake].call(this)
-
-      this.config.keywords.forEach(keyword => {
-        if (props[keyword]) {
-          for (const [key, value] of Object.entries(props[keyword])) {
-            if (typeof this[keyword] == "function") {
-              this[keyword].call(this, key, value)
-            }
+      Object.keys(props).forEach(prop => {
+        if (typeof this[prop] === 'function') {
+          for (const [key, value] of Object.entries(props[prop])) {
+            this[prop].call(this, key, value)
           }
         }
       })

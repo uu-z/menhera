@@ -8,6 +8,7 @@ const menhera = new Menhera({
       console.log("test0")
     },
     start(){
+      console.log("12321")
       this.state.test1 = "test1"
       this.state.test2 = "test2"
       this.emit("test4","test","4")

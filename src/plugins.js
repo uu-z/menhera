@@ -4,7 +4,6 @@ import {
 
 export const Observer = {
     name: "observer",
-    keywords: ["observer"],
     awake() {
 
         this.Observer = new EventEmitter
@@ -35,7 +34,6 @@ export const Observer = {
 
 export const Event = {
     name: "event",
-    keywords: ["on"],
     awake() {
         this.Event = new EventEmitter
         this.on = (name, fn) => {
