@@ -1,13 +1,12 @@
 import { EventEmitter } from "events";
 
 export const Observer = {
-  name: "observer",
-  awake() {
-    this.Observer = new EventEmitter();
-    this.state = {};
-    this._state = {};
-    let _this = this;
-    this.state = new Proxy(this._state, {
+  name: "menhera-observer",
+  awake({ _ }) {
+    _.Observer = { Event: new EventEmitter() };
+    _.state = {};
+    _._state = {};
+    _.state = new Proxy(_._state, {
       get(target, key) {
         if (key in target) {
           return target[key];
@@ -18,28 +17,61 @@ export const Observer = {
       },
       set(target, key, val) {
         target[key] = val;
-        _this.Observer.emit(key, val);
+        _.Observer.Event.emit(key, { _, val });
         return true;
       }
     });
-    this.observer = (name, fn) => {
-      _this.Observer.on(name, fn);
+    _.observer = ({ name, event }) => {
+      _.Observer.Event.on(name, event);
     };
+  },
+  observer: {
+    foo() {
+      console.log("bar");
+    }
   }
 };
 
 export const Event = {
-  name: "event",
-  awake() {
-    this.Event = new EventEmitter();
-    this.on = (name, fn) => {
-      this.Event.on(name, fn);
-      return this;
+  name: "menhera-event",
+  awake({ _ }) {
+    _.Event = new EventEmitter();
+    _.on = ({ name, event }) => {
+      _.Event.on(name, event);
+      return _;
     };
 
-    this.emit = (name, ...args) => {
-      this.Event.emit(name, ...args);
-      return this;
+    _.emit = (name, ...val) => {
+      _.Event.emit(name, { _, val });
+      return _;
     };
+  },
+  on: {
+    foo() {
+      console.log("bar");
+    }
+  }
+};
+
+export const CLI = {
+  name: "menhera-cli",
+  awake({ _ }) {
+    _.CLI = { structs: {}, Event: new EventEmitter() };
+    _.onCli = ({ name, props }) => {
+      const { desc, exec } = props;
+      _.CLI.structs[name] = props;
+      _.CLI.Event.on(name, exec);
+    };
+  },
+  start({ _ }) {
+    let [command, ...val] = process.argv.slice(2);
+    _.CLI.Event.emit(command, { _, val });
+  },
+  onCli: {
+    foo: {
+      exec({ _, val }) {
+        console.log("bar");
+      }
+    }
   }
 };
