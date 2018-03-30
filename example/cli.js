@@ -1,6 +1,6 @@
 import Menhera, { CLI } from "../src";
 
-const cliTest = {
+const cliTest = _ => ({
   name: "clitest",
   onCli: {
     test: {
@@ -9,7 +9,7 @@ const cliTest = {
       }
     }
   }
-};
+});
 
 const _ = new Menhera({
   components: [CLI, cliTest]

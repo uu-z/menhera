@@ -16,29 +16,30 @@ export default class Menhera {
   }
   init() {
     const _ = this;
-    const { components = [], lifeCycle } = _.config;
+    const { components = [], lifeCycle = [] } = _.config;
     const [awake, ...lifeCycles] = lifeCycle;
 
-    components.forEach(async comp => {
+    components.forEach(async component => {
+      let comp = typeof component === "function" ? component(_) : component;
       const { name } = comp;
       _.components[name] = comp;
 
-      comp[awake] && (await comp[awake]({ _ }));
+      comp[awake] && (await comp[awake]());
 
       await Object.keys(comp).forEach(prop => {
         if (typeof _[prop] === "function") {
           for (const [name, value] of Object.entries(comp[prop])) {
             if (typeof value === "function") {
-              _[prop]({ _, name, event: value });
+              _[prop]({ name, event: value });
             } else {
-              _[prop]({ _, name, props: value });
+              _[prop]({ name, props: value });
             }
           }
         }
       });
 
       lifeCycles.forEach(key => {
-        comp[key] && comp[key]({ _ });
+        comp[key] && comp[key]();
       });
     });
   }

@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 
-export const Observer = {
+export const Observer = _ => ({
   name: "menhera-observer",
-  awake({ _ }) {
+  awake() {
     _.Observer = { Event: new EventEmitter() };
     _.state = {};
     _._state = {};
@@ -17,45 +17,43 @@ export const Observer = {
       },
       set(target, key, val) {
         target[key] = val;
-        _.Observer.Event.emit(key, { _, val });
+        _.Observer.Event.emit(key, { val });
         return true;
       }
     });
-    _.observer = ({ name, event }) => {
+    _.onObserver = ({ name, event }) => {
       _.Observer.Event.on(name, event);
     };
   },
-  observer: {
+  onObserver: {
     foo() {
       console.log("bar");
     }
   }
-};
+});
 
-export const Event = {
+export const Event = _ => ({
   name: "menhera-event",
-  awake({ _ }) {
+  awake() {
     _.Event = new EventEmitter();
-    _.on = ({ name, event }) => {
+    _.onEvent = ({ name, event }) => {
       _.Event.on(name, event);
-      return _;
     };
 
     _.emit = (name, ...val) => {
-      _.Event.emit(name, { _, val });
-      return _;
+      _.Event.emit(name, { val });
     };
   },
-  on: {
+  onEvent: {
     foo() {
       console.log("bar");
     }
   }
-};
+});
 
-export const CLI = {
+export const CLI = _ => ({
   name: "menhera-cli",
-  awake({ _ }) {
+  awake() {
     _.CLI = { structs: {}, Event: new EventEmitter() };
     _.onCli = ({ name, props }) => {
       const { desc, exec } = props;
@@ -63,15 +61,15 @@ export const CLI = {
       _.CLI.Event.on(name, exec);
     };
   },
-  start({ _ }) {
+  start() {
     let [command, ...val] = process.argv.slice(2);
-    _.CLI.Event.emit(command, { _, val });
+    _.CLI.Event.emit(command, { val });
   },
   onCli: {
     foo: {
-      exec({ _, val }) {
+      exec({ val }) {
         console.log("bar");
       }
     }
   }
-};
+});

@@ -28,7 +28,7 @@ export const typeParser = ({ obj, structs = {} } = {}) => {
 export const ConfigMerger = (Obj1, Obj2) => {
   let cache = Obj1;
   Object.keys(Obj2).forEach(key => {
-    cache[key] = [...(Obj1[key] || []), ...Obj2[key]];
+    cache[key] = Array.from(new Set([...(Obj1[key] || []), ...Obj2[key]]));
   });
   return cache;
 };
