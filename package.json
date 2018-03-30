@@ -1,11 +1,15 @@
 {
   "name": "menhera",
-  "version": "0.0.2",
-  "main": "lib",
+  "version": "0.0.8",
+  "main": "dist",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "example": "babel-node ./example/index.js",
     "dev": "nodemon --exec npm run babel-node --watch ./ -- app.js",
-    "build": "rm -rf dist/* ; babel ./src --out-dir dist"
+    "build": "babel ./src --out-dir dist",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
