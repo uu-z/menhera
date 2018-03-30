@@ -24,16 +24,16 @@ export const CLI = _ => ({
   }
 });
 
-const cliTest = _ => ({
+const cliTest = {
   name: "clitest",
   onCli: {
     test: {
-      exec({ _, val }) {
+      exec({ val }) {
         console.log(val);
       }
     }
   }
-});
+};
 
 const _ = new Menhera({
   components: [CLI, cliTest]
