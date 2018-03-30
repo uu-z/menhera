@@ -1,6 +1,4 @@
 export const TestPlugin = {
-    name: "test",
-    awake(){
-        
-    }
-}
+  name: "test",
+  awake() {}
+};
