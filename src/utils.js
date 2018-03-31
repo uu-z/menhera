@@ -4,7 +4,7 @@ export const ConfigMerger = (Obj1, Obj2) => {
     if (Array.isArray(Obj2[key])) {
       cache[key] = Array.from(new Set([...(Obj1[key] || []), ...Obj2[key]]));
     } else if (typeof Obj2[key] === "obj") {
-      cache[key] = { ...Obj1[key], ...Obj2[key] };
+      cache[key] = ConfigMerger(Obj1[key], Obj2[key]);
     } else {
       cache[key] = Obj2[key];
     }
