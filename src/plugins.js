@@ -3,8 +3,9 @@ import { EventEmitter } from "events";
 export const Observer = _ => ({
   name: "menhera-observer",
   awake() {
+    const { config: { observable = {} } } = _;
     _.Observer = { Event: new EventEmitter() };
-    _.config.observable = new Proxy(_.config.observable, {
+    _.config.observable = new Proxy(observable, {
       get(target, key) {
         if (key in target) {
           return target[key];
