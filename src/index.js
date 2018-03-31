@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { keyParser, typeParser, ConfigMerger } from "./utils";
+import { ConfigMerger } from "./utils";
 import { Observer, Event } from "./plugins";
 
 const initConfig = {

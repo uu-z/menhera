@@ -4,9 +4,7 @@ export const Observer = _ => ({
   name: "menhera-observer",
   awake() {
     _.Observer = { Event: new EventEmitter() };
-    _.state = {};
-    _._state = {};
-    _.state = new Proxy(_._state, {
+    _.config.observable = new Proxy(_.config.observable, {
       get(target, key) {
         if (key in target) {
           return target[key];
