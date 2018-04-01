@@ -1,9 +1,8 @@
 import { EventEmitter } from "events";
-import { ConfigMerger } from "./utils";
-import { Observer, Event } from "./plugins";
+import { ConfigMerger, bindHook } from "./utils";
 
 const initConfig = {
-  components: [Observer, Event],
+  components: [],
   lifeCycle: ["awake", "start"]
 };
 
@@ -20,26 +19,25 @@ export default class Menhera {
     const [awake, ...lifeCycles] = lifeCycle;
 
     components.forEach(async component => {
-      let comp = typeof component === "function" ? component(_) : component;
-      const { name } = comp;
-      _.components[name] = comp;
+      let cp = typeof component === "function" ? component(_) : component;
+      const { name } = cp;
+      _.components[name] = cp;
 
-      comp[awake] && (await comp[awake]());
+      cp[awake] && (await cp[awake]());
 
-      await Object.keys(comp).forEach(prop => {
-        if (typeof _[prop] === "function") {
-          for (const [name, value] of Object.entries(comp[prop])) {
-            if (typeof value === "function") {
-              _[prop]({ name, event: value });
-            } else {
-              _[prop]({ name, props: value });
-            }
-          }
+      await Object.keys(cp).forEach(prop => {
+        const hook = _[prop];
+        if (Array.isArray(hook)) {
+          hook.forEach(h => {
+            bindHook({ hook: h, prop, cp });
+          });
+        } else {
+          bindHook({ hook, prop, cp });
         }
       });
 
       lifeCycles.forEach(key => {
-        comp[key] && comp[key]();
+        cp[key] && cp[key]();
       });
     });
   }
