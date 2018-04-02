@@ -6,8 +6,6 @@ const initConfig = {
   lifeCycle: ["awake", "start"]
 };
 
-export * from "./plugins";
-
 export default class Menhera {
   constructor(config) {
     this.components = {};
