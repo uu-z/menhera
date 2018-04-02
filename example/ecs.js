@@ -37,7 +37,7 @@ const World = _ => ({
   }
 });
 
-const MovementSystem = _ => ({
+const MovementSystem = {
   name: "MovementSystem",
   CheckComponents: ["position", "velocity"],
   registerSystem: true,
@@ -46,9 +46,9 @@ const MovementSystem = _ => ({
     position.x += velocity.x;
     position.y += velocity.y;
   }
-});
+};
 
-const TestEntity1 = _ => ({
+const TestEntity1 = {
   name: "test1",
   registerEntity: true,
   position: {
@@ -59,8 +59,8 @@ const TestEntity1 = _ => ({
     x: 1,
     y: 1
   }
-});
-const TestEntity2 = _ => ({
+};
+const TestEntity2 = {
   name: "test2",
   registerEntity: true,
   position: {
@@ -71,7 +71,7 @@ const TestEntity2 = _ => ({
     x: 10,
     y: 10
   }
-});
+};
 
 const _ = new Menhera({
   components: [World, MovementSystem, TestEntity1, TestEntity2]
