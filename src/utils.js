@@ -1,4 +1,4 @@
-export const bindHook = ({ hook, cp, prop }) => {
+export const bindHook = ({ hook, prop, cp }) => {
   const { name } = cp;
   if (typeof hook === "function") {
     if (typeof cp[prop] === "object") {

@@ -1,15 +1,19 @@
 import { EventEmitter } from "events";
-import { ConfigMerger, bindHook } from "./utils";
+import { bindHook } from "./utils";
+import { Init } from "./plugins";
 
 const initConfig = {
-  lifeCycle: ["_awake", "start"]
+  lifeCycle: ["_awake", "start"],
+  components: [Init]
 };
 
 export default class Menhera {
   constructor({ components, lifeCycle, ...other }) {
     this.components = {};
+    this.hooks = {};
+    this.methods = {};
     this.config = {
-      components,
+      components: [...initConfig.components, ...components],
       lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
       ...other
     };
@@ -19,7 +23,7 @@ export default class Menhera {
     const { components = [], lifeCycle = [] } = _.config;
 
     components.forEach(async component => {
-      let cp = typeof component === "function" ? component(_) : component;
+      let cp = typeof component === "function" ? component({ _ }) : component;
       const { name } = cp;
       _.components[name] = cp;
 
@@ -30,13 +34,28 @@ export default class Menhera {
       });
 
       await Object.keys(cp).forEach(prop => {
-        const hook = _[prop];
-        if (Array.isArray(hook)) {
-          hook.forEach(h => {
-            bindHook({ hook: h, prop, cp });
-          });
-        } else {
-          bindHook({ hook, prop, cp });
+        if (prop.startsWith("_")) {
+          const hook = _.hooks[prop];
+          if (Array.isArray(hook)) {
+            hook.forEach(h => {
+              bindHook({ hook: h, prop, cp });
+            });
+          } else {
+            bindHook({ hook, prop, cp });
+          }
+        }
+      });
+
+      await Object.keys(cp).forEach(prop => {
+        if (!prop.startsWith("_")) {
+          const hook = _["hooks"][prop];
+          if (Array.isArray(hook)) {
+            hook.forEach(h => {
+              bindHook({ hook: h, prop, cp });
+            });
+          } else {
+            bindHook({ hook, prop, cp });
+          }
         }
       });
 
