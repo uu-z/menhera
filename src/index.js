@@ -2,14 +2,17 @@ import { EventEmitter } from "events";
 import { ConfigMerger, bindHook } from "./utils";
 
 const initConfig = {
-  components: [],
   lifeCycle: ["awake", "start"]
 };
 
 export default class Menhera {
-  constructor(config) {
+  constructor({ components, lifeCycle, ...other }) {
     this.components = {};
-    this.config = ConfigMerger(initConfig, config);
+    this.config = {
+      components,
+      lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
+      ...other
+    };
   }
   init() {
     const _ = this;

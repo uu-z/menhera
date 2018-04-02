@@ -95,6 +95,7 @@ let Test = _ => ({
 });
 
 const _ = new Menhera({
+  lifeCycle: ["awake", "start"],
   components: [Observer, Event, Test],
   observable: { test3: "test3" }
 }).init();
