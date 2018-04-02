@@ -20,7 +20,7 @@ export default class Menhera {
   }
   init() {
     const _ = this;
-    const { components = [], lifeCycle = [] } = _.config;
+    const { components = {}, lifeCycle = [] } = _.config;
 
     components.forEach(async component => {
       let cp = typeof component === "function" ? component({ _ }) : component;
@@ -38,10 +38,10 @@ export default class Menhera {
           const hook = _.hooks[prop];
           if (Array.isArray(hook)) {
             hook.forEach(h => {
-              bindHook({ hook: h, prop, cp });
+              bindHook({ _, hook: h, prop, cp });
             });
           } else {
-            bindHook({ hook, prop, cp });
+            bindHook({ _, hook, prop, cp });
           }
         }
       });

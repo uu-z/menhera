@@ -1,5 +1,6 @@
-export const bindHook = ({ hook, prop, cp }) => {
+export const bindHook = ({ _, hook, prop, cp }) => {
   const { name } = cp;
+
   if (typeof hook === "function") {
     if (typeof cp[prop] === "object") {
       for (const [name, value] of Object.entries(cp[prop])) {
