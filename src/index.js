@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { ConfigMerger, bindHook } from "./utils";
 
 const initConfig = {
-  lifeCycle: ["awake", "start"]
+  lifeCycle: ["_awake", "start"]
 };
 
 export default class Menhera {
@@ -17,14 +17,17 @@ export default class Menhera {
   init() {
     const _ = this;
     const { components = [], lifeCycle = [] } = _.config;
-    const [awake, ...lifeCycles] = lifeCycle;
 
     components.forEach(async component => {
       let cp = typeof component === "function" ? component(_) : component;
       const { name } = cp;
       _.components[name] = cp;
 
-      cp[awake] && (await cp[awake]());
+      lifeCycle.forEach(key => {
+        if (key.startsWith("_")) {
+          cp[key] && cp[key]();
+        }
+      });
 
       await Object.keys(cp).forEach(prop => {
         const hook = _[prop];
@@ -37,8 +40,10 @@ export default class Menhera {
         }
       });
 
-      lifeCycles.forEach(key => {
-        cp[key] && cp[key]();
+      lifeCycle.forEach(key => {
+        if (!key.startsWith("_")) {
+          cp[key] && cp[key]();
+        }
       });
     });
   }

@@ -12,7 +12,7 @@ import Menhera from "menhera";
 
 export const Observer = _ => ({
   name: "menhera-observer",
-  awake() {
+  _awake() {
     const { config: { observable = {} } } = _;
     _.Observer = { Event: new EventEmitter() };
     _.config.observable = new Proxy(observable, {
@@ -43,7 +43,7 @@ export const Observer = _ => ({
 
 export const Event = _ => ({
   name: "menhera-event",
-  awake() {
+  _awake() {
     _.Event = new EventEmitter();
     _.onEvent = ({ name, event }) => {
       _.Event.on(name, event);
@@ -62,7 +62,7 @@ export const Event = _ => ({
 
 let Test = _ => ({
   name: "test",
-  awake() {
+  _awake() {
     console.log("test0");
   },
   start() {
@@ -95,7 +95,7 @@ let Test = _ => ({
 });
 
 const _ = new Menhera({
-  lifeCycle: ["awake", "start"],
+  lifeCycle: ["_awake", "start"],
   components: [Observer, Event, Test],
   observable: { test3: "test3" }
 }).init();

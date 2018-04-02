@@ -3,7 +3,7 @@ import Menhera from "../src";
 
 const World = _ => ({
   name: "menhera-world",
-  awake() {
+  _awake() {
     _.world = { entities: {}, systems: [] };
     _.registerSystem = ({ name, prop, cp }) => {
       _.world.systems.push(cp);

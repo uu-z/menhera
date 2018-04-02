@@ -3,7 +3,7 @@ import Menhera from "../src";
 
 export const CLI = _ => ({
   name: "menhera-cli",
-  awake() {
+  _awake() {
     _.CLI = {
       structs: {},
       Event: new EventEmitter()
