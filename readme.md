@@ -8,7 +8,7 @@ yarn add menhera
 
 ```js
 import { EventEmitter } from "events";
-import Menhera from "menhera";
+import Menhera, { v1 } from "menhera";
 import minimist from "minimist";
 
 export const CLI = {
@@ -45,8 +45,8 @@ const cliTest = {
   name: "clitest",
   onCli: {
     "*": {
-      help() {
-        console.log("* help");
+      exec() {
+        console.log("help");
       }
     },
     test: {
@@ -59,6 +59,6 @@ const cliTest = {
 
 const _ = new Menhera().init({
   // lifeCycle: ["_awake", "start"],
-  components: [CLI, cliTest]
+  components: [v1, CLI, cliTest]
 });
 ```

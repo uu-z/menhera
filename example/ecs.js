@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera from "../src";
+import Menhera, { v1 } from "../src";
 
 const World = _ => ({
   name: "menhera-world",
@@ -80,5 +80,5 @@ const TestEntity2 = {
 
 const _ = new Menhera().init({
   // lifeCycle: ["_awake", "start"],
-  components: [World, MovementSystem, TestEntity1, TestEntity2]
+  components: [v1, World, MovementSystem, TestEntity1, TestEntity2]
 });

@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera from "../src";
+import Menhera, { v1 } from "../src";
 
 export const Observer = ({ observable = {} } = {}) => ({
   name: "Observer",
@@ -85,5 +85,5 @@ let Test = ({ _ }) => ({
 
 const _ = new Menhera().init({
   // lifeCycle: ["_awake", "start"],
-  components: [Observer({ observable: { test3: "test3" } }), Event, Test]
+  components: [v1, Observer({ observable: { test3: "test3" } }), Event, Test]
 });
