@@ -32,17 +32,19 @@ const World = _ => ({
       });
     }
   },
-  _hooks: {
-    onRegisterECS({ _key, _val, cp }) {
-      const { registerSystem, registerEntity } = _val;
-      const { name } = cp;
-      if (registerSystem) {
-        this.systems.push(cp);
+  _hooks() {
+    return {
+      onRegisterECS({ _key, _val, cp }) {
+        const { registerSystem, registerEntity } = _val;
+        const { name } = cp;
+        if (registerSystem) {
+          this.systems.push(cp);
+        }
+        if (registerEntity) {
+          this.entities[name] = cp;
+        }
       }
-      if (registerEntity) {
-        this.entities[name] = cp;
-      }
-    }
+    };
   }
 });
 

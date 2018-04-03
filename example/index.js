@@ -23,10 +23,12 @@ export const Observer = ({ observable = {} } = {}) => ({
       })
     };
   },
-  _hooks: {
-    onObserver({ key, val, cp }) {
-      this.Event.on(key, val);
-    }
+  _hooks() {
+    return {
+      onObserver({ key, val, cp }) {
+        this.Event.on(key, val);
+      }
+    };
   }
 });
 
@@ -37,10 +39,12 @@ export const Event = {
       Event: new EventEmitter()
     };
   },
-  _hooks: {
-    onEvent({ key, val }) {
-      this.Event.on(key, val);
-    }
+  _hooks() {
+    return {
+      onEvent({ key, val }) {
+        this.Event.on(key, val);
+      }
+    };
   },
   _methods: {
     emit(key, ...val) {

@@ -21,14 +21,16 @@ export const CLI = {
       this.Event.emit(command, { inputs, flags });
     }
   },
-  _hooks: {
-    onCli({ key, val, cp }) {
-      const { exec } = val;
-      this.structs[key] = val;
-      if (exec) {
-        this.Event.on(key, exec.bind(cp));
+  _hooks() {
+    return {
+      onCli({ key, val, cp }) {
+        const { exec } = val;
+        this.structs[key] = val;
+        if (exec) {
+          this.Event.on(key, exec.bind(cp));
+        }
       }
-    }
+    };
   }
 };
 
