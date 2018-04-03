@@ -1,10 +1,10 @@
 import { EventEmitter } from "events";
 import { bindHook, ConfigMerger } from "./utils";
-import { Init } from "./plugins";
+import { INIT } from "./plugins";
 
 export const initConfig = {
   lifeCycle: ["_awake", "start"],
-  components: [Init]
+  components: [INIT]
 };
 
 export default class Menhera {
@@ -17,7 +17,7 @@ export default class Menhera {
     const _ = this;
     _.config = ConfigMerger(initConfig, config);
     const { components = {}, lifeCycle = [] } = _.config;
-
+    console.log(components);
     components.forEach(async component => {
       let cp = typeof component === "function" ? component({ _ }) : component;
       const { name } = cp;
@@ -29,28 +29,28 @@ export default class Menhera {
         }
       });
 
-      await Object.keys(cp).forEach(p => {
-        if (p.startsWith("_")) {
-          const hook = _.hooks[p];
+      await Object.keys(cp).forEach(_key => {
+        if (_key.startsWith("_")) {
+          const hook = _.hooks[_key];
           if (Array.isArray(hook)) {
             hook.forEach(h => {
-              bindHook({ _, hook: h, p, cp });
+              bindHook({ _, hook: h, _key, cp });
             });
           } else {
-            bindHook({ _, hook, p, cp });
+            bindHook({ _, hook, _key, cp });
           }
         }
       });
 
-      await Object.keys(cp).forEach(prop => {
-        if (!prop.startsWith("_")) {
-          const hook = _["hooks"][prop];
+      await Object.keys(cp).forEach(_key => {
+        if (!_key.startsWith("_")) {
+          const hook = _["hooks"][_key];
           if (Array.isArray(hook)) {
             hook.forEach(h => {
-              bindHook({ hook: h, prop, cp });
+              bindHook({ hook: h, _key, cp });
             });
           } else {
-            bindHook({ hook, prop, cp });
+            bindHook({ hook, _key, cp });
           }
         }
       });

@@ -9,94 +9,56 @@ yarn add menhera
 ```js
 import { EventEmitter } from "events";
 import Menhera from "menhera";
+import minimist from "minimist";
 
-export const Observer = _ => ({
-  name: "menhera-observer",
-  _awake() {
-    const { config: { observable = {} } } = _;
-    _.Observer = { Event: new EventEmitter() };
-    _.config.observable = new Proxy(observable, {
-      get(target, key) {
-        if (key in target) {
-          return target[key];
-        } else {
-          target[key] = null;
-          return null;
-        }
-      },
-      set(target, key, val) {
-        target[key] = val;
-        _.Observer.Event.emit(key, { val });
-        return true;
-      }
-    });
-    _.onObserver = ({ name, event }) => {
-      _.Observer.Event.on(name, event);
+export const CLI = {
+  name: "CLI",
+  _data() {
+    return {
+      structs: {},
+      Event: new EventEmitter()
     };
-  },
-  onObserver: {
-    foo() {
-      console.log("bar");
-    }
-  }
-});
-
-export const Event = _ => ({
-  name: "menhera-event",
-  _awake() {
-    _.Event = new EventEmitter();
-    _.onEvent = ({ name, event }) => {
-      _.Event.on(name, event);
-    };
-
-    _.emit = (name, ...val) => {
-      _.Event.emit(name, { val });
-    };
-  },
-  onEvent: {
-    foo() {
-      console.log("bar");
-    }
-  }
-});
-
-let Test = _ => ({
-  name: "test",
-  _awake() {
-    console.log("test0");
   },
   start() {
-    const { config: { observable: ob } } = _;
-    ob.test1 = "test1";
-    ob.test2 = "test2";
-    ob.test3 = ob.test3;
-    _.emit("test4", "test", "4");
-    _.emit("test5", "test", "5");
-  },
-  onObserver: {
-    test1({ val }) {
-      console.log(val);
-    },
-    test2({ val }) {
-      console.log(val);
-    },
-    test3({ val }) {
-      console.log(val);
+    let { _, ...flags } = minimist(process.argv.slice(2));
+    let [command = "*", ...inputs] = _;
+    const { h, help } = flags;
+    if (h && help) {
+      let command = this.structs[command];
+      command && command.help && command.help();
+    } else {
+      this.Event.emit(command, { inputs, flags });
     }
   },
-  onEvent: {
-    test4({ val }) {
-      console.log(val.join(""));
-    },
-    test5({ val }) {
-      console.log(val.join(""));
+  _hooks: {
+    onCli({ key, val, cp }) {
+      const { exec } = val;
+      this.structs[key] = val;
+      if (exec) {
+        this.Event.on(key, exec.bind(cp));
+      }
     }
   }
-});
+};
 
-const _ = new Menhera({
-  lifeCycle: ["_awake", "start"],
-  components: [Observer, Event, Test],
-  observable: { test3: "test3" }
-}).init();
+const cliTest = {
+  name: "clitest",
+  onCli: {
+    "*": {
+      help() {
+        console.log("* help");
+      }
+    },
+    test: {
+      exec({ inputs, flags }) {
+        console.log(inputs, flags);
+      }
+    }
+  }
+};
+
+const _ = new Menhera().init({
+  // lifeCycle: ["_awake", "start"],
+  components: [CLI, cliTest]
+});
 ```

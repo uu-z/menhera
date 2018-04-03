@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
 
-export const Observer = ({ observable = {}, _ } = {}) => ({
+export const Observer = ({ observable = {} } = {}) => ({
   name: "Observer",
   _data() {
     return {
@@ -24,8 +24,8 @@ export const Observer = ({ observable = {}, _ } = {}) => ({
     };
   },
   _hooks: {
-    onObserver({ name: _name, event, cp }) {
-      this.Event.on(_name, event);
+    onObserver({ key, val, cp }) {
+      this.Event.on(key, val);
     }
   }
 });
@@ -38,13 +38,13 @@ export const Event = {
     };
   },
   _hooks: {
-    onEvent({ name: _name, event }) {
-      this.Event.on(_name, event);
+    onEvent({ key, val }) {
+      this.Event.on(key, val);
     }
   },
   _methods: {
-    emit(_name, ...val) {
-      this.Event.emit(_name, { val });
+    emit(key, ...val) {
+      this.Event.emit(key, { val });
     }
   }
 };
@@ -83,9 +83,7 @@ let Test = ({ _ }) => ({
   }
 });
 
-const _ = new Menhera();
-
-_.init({
-  lifeCycle: ["_awake", "start"],
-  components: [Observer({ _, observable: { test3: "test3" } }), Event, Test]
+const _ = new Menhera().init({
+  // lifeCycle: ["_awake", "start"],
+  components: [Observer({ observable: { test3: "test3" } }), Event, Test]
 });

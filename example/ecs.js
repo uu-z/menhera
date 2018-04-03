@@ -33,14 +33,13 @@ const World = _ => ({
     }
   },
   _hooks: {
-    onRegisterECS({ name, props, cp }) {
-      const { registerSystem, registerEntity } = cp;
-      console.log(cp);
+    onRegisterECS({ _key, _val, cp }) {
+      const { registerSystem, registerEntity } = _val;
       if (registerSystem) {
         this.systems.push(cp);
       }
       if (registerEntity) {
-        this.entities.push(cp);
+        this.entities[_key] = cp;
       }
     }
   }
@@ -79,5 +78,6 @@ const TestEntity2 = {
 };
 
 const _ = new Menhera().init({
+  // lifeCycle: ["_awake", "start"],
   components: [World, MovementSystem, TestEntity1, TestEntity2]
 });

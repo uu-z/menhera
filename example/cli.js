@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import Menhera from "../src";
 import minimist from "minimist";
 
-export const CLI = ({ _ }) => ({
+export const CLI = {
   name: "CLI",
   _data() {
     return {
@@ -11,8 +11,8 @@ export const CLI = ({ _ }) => ({
     };
   },
   start() {
-    let { _: __, ...flags } = minimist(process.argv.slice(2));
-    let [command = "*", ...inputs] = __;
+    let { _, ...flags } = minimist(process.argv.slice(2));
+    let [command = "*", ...inputs] = _;
     const { h, help } = flags;
     if (h && help) {
       let command = this.structs[command];
@@ -22,15 +22,15 @@ export const CLI = ({ _ }) => ({
     }
   },
   _hooks: {
-    onCli({ name, props }) {
-      const { exec, cp } = props;
-      this.structs[name] = props;
+    onCli({ key, val, cp }) {
+      const { exec } = val;
+      this.structs[key] = val;
       if (exec) {
-        this.Event.on(name, exec.bind(cp));
+        this.Event.on(key, exec.bind(cp));
       }
     }
   }
-});
+};
 
 const cliTest = {
   name: "clitest",
@@ -48,8 +48,7 @@ const cliTest = {
   }
 };
 
-const _ = new Menhera();
-
-_.init({
+const _ = new Menhera().init({
+  // lifeCycle: ["_awake", "start"],
   components: [CLI, cliTest]
 });
