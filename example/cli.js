@@ -1,21 +1,33 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
+import minimist from "minimist";
 
-export const CLI = ({ name = "CLI" }) => ({ _, $ = _.components[name] }) => ({
-  name,
-  structs: {},
-  Event: new EventEmitter(),
+export const CLI = ({ _ }) => ({
+  name: "CLI",
+  _data() {
+    return {
+      structs: {},
+      Event: new EventEmitter()
+    };
+  },
   start() {
-    let [command, ...val] = process.argv.slice(2);
-    _.components[name].Event.emit(command, {
-      val
-    });
+    let { _: __, ...flags } = minimist(process.argv.slice(2));
+    let [command = "*", ...inputs] = __;
+    const { h, help } = flags;
+    if (h && help) {
+      let command = this.structs[command];
+      command && command.help && command.help();
+    } else {
+      this.Event.emit(command, { inputs, flags });
+    }
   },
   _hooks: {
-    onCli: ({ name, props }) => {
-      const { desc, exec } = props;
-      $.structs[name] = props;
-      $.Event.on(name, exec);
+    onCli({ name, props }) {
+      const { exec, cp } = props;
+      this.structs[name] = props;
+      if (exec) {
+        this.Event.on(name, exec.bind(cp));
+      }
     }
   }
 });
@@ -23,14 +35,21 @@ export const CLI = ({ name = "CLI" }) => ({ _, $ = _.components[name] }) => ({
 const cliTest = {
   name: "clitest",
   onCli: {
+    "*": {
+      help() {
+        console.log("* help");
+      }
+    },
     test: {
-      exec({ val }) {
-        console.log(val);
+      exec({ inputs, flags }) {
+        console.log(inputs, flags);
       }
     }
   }
 };
 
-const _ = new Menhera({
+const _ = new Menhera();
+
+_.init({
   components: [CLI, cliTest]
-}).init();
+});

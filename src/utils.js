@@ -1,19 +1,28 @@
-export const bindHook = ({ _, hook, prop, cp }) => {
-  const { name } = cp;
-
+export const bindHook = ({ _, hook, p, cp }) => {
   if (typeof hook === "function") {
-    if (typeof cp[prop] === "object") {
-      for (const [name, value] of Object.entries(cp[prop])) {
+    if (typeof cp[p] === "object") {
+      for (const [key, value] of Object.entries(cp[p])) {
         if (typeof value === "function") {
-          hook({ name, event: value, cp });
+          hook({ key, value: value.bind(cp), cp, p });
         } else {
-          hook({ name, props: value, cp });
+          hook({ key, value, cp, p });
         }
       }
-    } else if (typeof cp[prop] === "function") {
-      hook({ name, event: cp[prop], cp });
+    } else if (typeof cp[p] === "function") {
+      hook({ p: cp[p].bind(cp), cp });
     } else {
-      hook({ name, props: cp[prop], cp });
+      hook({ cp, p });
     }
   }
+};
+
+export const ConfigMerger = (
+  initConfig,
+  { components, lifeCycle, ...other }
+) => {
+  return {
+    components: [...initConfig.components, ...components],
+    lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
+    ...other
+  };
 };

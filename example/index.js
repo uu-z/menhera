@@ -1,27 +1,27 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
 
-export const Observer = ({ observable = {} } = {}) => ({ _ }) => ({
+export const Observer = ({ observable = {}, _ } = {}) => ({
   name: "Observer",
-  Event: new EventEmitter(),
-  observable,
-  _awake() {
-    let _this = this;
-    this.observable = new Proxy(observable, {
-      get(target, key) {
-        if (key in target) {
-          return target[key];
-        } else {
-          target[key] = null;
-          return null;
+  _data() {
+    return {
+      Event: new EventEmitter(),
+      observable: new Proxy(observable, {
+        get: (target, key) => {
+          if (key in target) {
+            return target[key];
+          } else {
+            target[key] = null;
+            return null;
+          }
+        },
+        set: (target, key, val) => {
+          target[key] = val;
+          this.Event.emit(key, { val });
+          return true;
         }
-      },
-      set(target, key, val) {
-        target[key] = val;
-        _this.Event.emit(key, { val });
-        return true;
-      }
-    });
+      })
+    };
   },
   _hooks: {
     onObserver({ name: _name, event, cp }) {
@@ -30,9 +30,13 @@ export const Observer = ({ observable = {} } = {}) => ({ _ }) => ({
   }
 });
 
-export const Event = ({ _ }) => ({
+export const Event = {
   name: "Event",
-  Event: new EventEmitter(),
+  _data() {
+    return {
+      Event: new EventEmitter()
+    };
+  },
   _hooks: {
     onEvent({ name: _name, event }) {
       this.Event.on(_name, event);
@@ -43,7 +47,7 @@ export const Event = ({ _ }) => ({
       this.Event.emit(_name, { val });
     }
   }
-});
+};
 
 let Test = ({ _ }) => ({
   name: "test",
@@ -51,10 +55,7 @@ let Test = ({ _ }) => ({
     console.log("test0");
   },
   start() {
-    const {
-      components: { Observer: { observable: ob } },
-      methods: { emit }
-    } = _;
+    const { components: { Observer: { observable: ob }, Event: { emit } } } = _;
     ob.test1 = "test1";
     ob.test2 = "test2";
     ob.test3 = ob.test3;
@@ -82,7 +83,9 @@ let Test = ({ _ }) => ({
   }
 });
 
-const _ = new Menhera({
+const _ = new Menhera();
+
+_.init({
   lifeCycle: ["_awake", "start"],
-  components: [Observer({ observable: { test3: "test3" } }), Event, Test]
-}).init();
+  components: [Observer({ _, observable: { test3: "test3" } }), Event, Test]
+});

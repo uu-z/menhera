@@ -3,44 +3,55 @@ import Menhera from "../src";
 
 const World = _ => ({
   name: "menhera-world",
-  _awake() {
-    _.world = { entities: {}, systems: [] };
-    _.registerSystem = ({ name, prop, cp }) => {
-      _.world.systems.push(cp);
-    };
-    _.registerEntity = ({ name, prop, cp }) => {
-      console.log(name, cp);
-      _.world.entities[name] = cp;
+  _data() {
+    return {
+      entities: {},
+      systems: []
     };
   },
   start() {
-    setInterval(this.tick, 1000);
+    setInterval(this.tick.bind(this), 1000);
   },
-  tick() {
-    let entities = Object.values(_.world.entities);
-    let systems = _.world.systems;
-    console.log(_.world.entities);
-    systems.forEach(system => {
-      entities.forEach(entity => {
-        if (system["CheckComponents"]) {
-          let check = system["CheckComponents"].every((e, i, a) => {
-            return entity[e] !== undefined;
-          });
-          if (check) {
+  _methods: {
+    tick() {
+      let entities = Object.values(this.entities);
+      console.log(this.entities);
+      this.systems.forEach(system => {
+        entities.forEach(entity => {
+          if (system["CheckComponents"]) {
+            let check = system["CheckComponents"].every((e, i, a) => {
+              return entity[e] !== undefined;
+            });
+            if (check) {
+              system.updateEach(entity);
+            }
+          } else {
             system.updateEach(entity);
           }
-        } else {
-          system.updateEach(entity);
-        }
+        });
       });
-    });
+    }
+  },
+  _hooks: {
+    onRegisterECS({ name, props, cp }) {
+      const { registerSystem, registerEntity } = cp;
+      console.log(cp);
+      if (registerSystem) {
+        this.systems.push(cp);
+      }
+      if (registerEntity) {
+        this.entities.push(cp);
+      }
+    }
   }
 });
 
 const MovementSystem = {
   name: "MovementSystem",
   CheckComponents: ["position", "velocity"],
-  registerSystem: true,
+  onRegisterECS: {
+    registerSystem: true
+  },
   updateEach(entity) {
     const { position, velocity } = entity;
     position.x += velocity.x;
@@ -50,29 +61,23 @@ const MovementSystem = {
 
 const TestEntity1 = {
   name: "test1",
-  registerEntity: true,
-  position: {
-    x: 1,
-    y: 1
+  _data() {
+    return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
   },
-  velocity: {
-    x: 1,
-    y: 1
+  onRegisterECS: {
+    registerEntity: true
   }
 };
 const TestEntity2 = {
   name: "test2",
-  registerEntity: true,
-  position: {
-    x: 1,
-    y: 1
+  _data() {
+    return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
   },
-  velocity: {
-    x: 10,
-    y: 10
+  onRegisterECS: {
+    registerEntity: true
   }
 };
 
-const _ = new Menhera({
+const _ = new Menhera().init({
   components: [World, MovementSystem, TestEntity1, TestEntity2]
-}).init();
+});

@@ -1,25 +1,21 @@
 import { EventEmitter } from "events";
-import { bindHook } from "./utils";
+import { bindHook, ConfigMerger } from "./utils";
 import { Init } from "./plugins";
 
-const initConfig = {
+export const initConfig = {
   lifeCycle: ["_awake", "start"],
   components: [Init]
 };
 
 export default class Menhera {
-  constructor({ components, lifeCycle, ...other }) {
+  constructor() {
     this.components = {};
     this.hooks = {};
-    this.methods = {};
-    this.config = {
-      components: [...initConfig.components, ...components],
-      lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
-      ...other
-    };
+    this.config = {};
   }
-  init() {
+  init(config) {
     const _ = this;
+    _.config = ConfigMerger(initConfig, config);
     const { components = {}, lifeCycle = [] } = _.config;
 
     components.forEach(async component => {
@@ -33,15 +29,15 @@ export default class Menhera {
         }
       });
 
-      await Object.keys(cp).forEach(prop => {
-        if (prop.startsWith("_")) {
-          const hook = _.hooks[prop];
+      await Object.keys(cp).forEach(p => {
+        if (p.startsWith("_")) {
+          const hook = _.hooks[p];
           if (Array.isArray(hook)) {
             hook.forEach(h => {
-              bindHook({ _, hook: h, prop, cp });
+              bindHook({ _, hook: h, p, cp });
             });
           } else {
-            bindHook({ _, hook, prop, cp });
+            bindHook({ _, hook, p, cp });
           }
         }
       });
