@@ -35,11 +35,12 @@ const World = _ => ({
   _hooks: {
     onRegisterECS({ _key, _val, cp }) {
       const { registerSystem, registerEntity } = _val;
+      const { name } = cp;
       if (registerSystem) {
         this.systems.push(cp);
       }
       if (registerEntity) {
-        this.entities[_key] = cp;
+        this.entities[name] = cp;
       }
     }
   }

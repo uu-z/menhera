@@ -17,7 +17,6 @@ export default class Menhera {
     const _ = this;
     _.config = ConfigMerger(initConfig, config);
     const { components = {}, lifeCycle = [] } = _.config;
-    console.log(components);
     components.forEach(async component => {
       let cp = typeof component === "function" ? component({ _ }) : component;
       const { name } = cp;

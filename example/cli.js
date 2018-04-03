@@ -36,8 +36,8 @@ const cliTest = {
   name: "clitest",
   onCli: {
     "*": {
-      help() {
-        console.log("* help");
+      exec() {
+        console.log("help");
       }
     },
     test: {
