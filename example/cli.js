@@ -53,11 +53,6 @@ const cliTest = {
 const _ = new Menhera({
   // lifeCycle: ["_awake", "start"],
   $mount: {
-    1: [v1],
-    2: [CLI]
+    _: [v1, CLI, cliTest]
   }
-})
-  .$mount({
-    3: [cliTest]
-  })
-  .$go();
+}).$go();
