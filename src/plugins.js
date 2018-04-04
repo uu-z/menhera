@@ -1,6 +1,6 @@
-export const v0 = ({ _ }) => ({
+export const v0 = ({ _, $ }) => ({
   name: "v0",
-  _awake() {
+  [$[0]]() {
     _.hooks._hooks = [
       ({ _key, _val, cp }) => {
         for (let [key, val] of Object.entries(_val())) {

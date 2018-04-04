@@ -20,9 +20,7 @@ export default class Menhera {
       components.forEach(async component => {
         let cp =
           typeof component === "function"
-            ? component({
-                _
-              })
+            ? component({ _, $: lifeCycle })
             : component;
         const { name } = cp;
         _.components[name] = cp;
