@@ -10,7 +10,7 @@ export const CLI = {
       Event: new EventEmitter()
     };
   },
-  start() {
+  awake() {
     let { _, ...flags } = minimist(process.argv.slice(2));
     let [command = "*", ...inputs] = _;
     const { h, help } = flags;

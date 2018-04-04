@@ -9,7 +9,7 @@ const World = _ => ({
       systems: []
     };
   },
-  start() {
+  awake() {
     setInterval(this.tick.bind(this), 1000);
   },
   _methods: {
