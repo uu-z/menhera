@@ -97,9 +97,6 @@ const _ = new Menhera({
     0: [...Optional],
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
-  },
-  _command: {
-    run: false
   }
 }).$use({
   _command: {
