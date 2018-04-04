@@ -27,9 +27,7 @@ export const core = ({ _, parms }) => {
       for (let [key, components] of Object.entries(_val)) {
         components.forEach(async component => {
           let cp =
-            typeof component === "function"
-              ? component({ _, $: lifeCycle })
-              : component;
+            typeof component === "function" ? component({ _ }) : component;
           const { name } = cp;
           _.components[name] = cp;
 
@@ -41,14 +39,7 @@ export const core = ({ _, parms }) => {
 
           await Object.keys(cp).forEach(_key => {
             if (_key.startsWith("_")) {
-              const hook = _.hooks[_key];
-              if (Array.isArray(hook)) {
-                hook.forEach(h => {
-                  bindHook({ _, hook: h, _key, cp });
-                });
-              } else {
-                bindHook({ _, hook, _key, cp });
-              }
+              bindHook({ _, _key, cp });
             }
           });
         });
