@@ -1,7 +1,13 @@
 import { bindHook, ConfigMerger } from "./utils";
 
+export const $use = ({ _ }) => parms => {
+  Object.keys(parms).forEach(_key => {
+    bindHook({ _, _key, cp: parms });
+  });
+};
+
 export const _hooks = ({ _, _key, _val, cp }) => {
-  for (let [key, val] of Object.entries(_val())) {
+  for (let [key, val] of Object.entries(_val.bind(cp)())) {
     if (val) {
       if (!_.hooks[key]) {
         _.hooks[key] = [];
