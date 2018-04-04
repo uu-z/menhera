@@ -54,10 +54,12 @@ const MovementSystem = {
   onRegisterECS: {
     registerSystem: true
   },
-  updateEach(entity) {
-    const { position, velocity } = entity;
-    position.x += velocity.x;
-    position.y += velocity.y;
+  _methods: {
+    updateEach(entity) {
+      const { position, velocity } = entity;
+      position.x += velocity.x;
+      position.y += velocity.y;
+    }
   }
 };
 
