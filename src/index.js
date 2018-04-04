@@ -1,4 +1,9 @@
-import Menhera from "./menhera";
+import { core } from "./menhera";
+
 export * from "./plugins";
 
-export default Menhera;
+export default class Menhera {
+  constructor(parms) {
+    core({ _: this, parms });
+  }
+}

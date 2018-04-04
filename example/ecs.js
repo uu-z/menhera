@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { v1 } from "../src";
+import Menhera, { Optional } from "../src";
 
 const World = _ => ({
   name: "menhera-world",
@@ -83,13 +83,16 @@ const TestEntity2 = {
 };
 
 const _ = new Menhera({
-  // lifeCycle: ["_awake", "start"]
-  $mount: {
-    default: [v1, World],
-    systems: [MovementSystem]
-  }
-})
-  .$mount({
+  _mount: {
+    default: [...Optional, World],
+    systems: [MovementSystem],
     entities: [TestEntity1, TestEntity2]
-  })
-  .$go();
+  },
+  _command: {
+    run: false
+  }
+}).$use({
+  _command: {
+    run: true
+  }
+});

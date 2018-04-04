@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { v1 } from "../src";
+import Menhera, { Optional } from "../src";
 
 export const Observer = ({ observable = {} } = {}) => ({
   name: "Observer",
@@ -26,8 +26,10 @@ export const Observer = ({ observable = {} } = {}) => ({
   },
   _hooks() {
     return {
-      onObserver({ key, val, cp }) {
-        this.Event.on(key, val);
+      onObserver({ _key, _val, cp }) {
+        for (let [key, val] of Object.entries(_val)) {
+          this.Event.on(key, val);
+        }
       }
     };
   }
@@ -42,8 +44,10 @@ export const Event = {
   },
   _hooks() {
     return {
-      onEvent({ key, val }) {
-        this.Event.on(key, val);
+      onEvent({ _key, _val }) {
+        for (let [key, val] of Object.entries(_val)) {
+          this.Event.on(key, val);
+        }
       }
     };
   },
@@ -89,13 +93,16 @@ let Test = ({ _ }) => ({
 });
 
 const _ = new Menhera({
-  // lifeCycle: ["_awake", "start"]
-  $mount: {
-    1: [v1],
-    2: [Observer({ observable: { test3: "test3" } }), Event]
+  _mount: {
+    0: [...Optional],
+    1: [Observer({ observable: { test3: "test3" } }), Event],
+    2: [Test]
+  },
+  _command: {
+    run: false
   }
-})
-  .$mount({
-    3: [Test]
-  })
-  .$go();
+}).$use({
+  _command: {
+    run: true
+  }
+});
