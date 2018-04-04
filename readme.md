@@ -8,7 +8,7 @@ yarn add menhera
 
 ```js
 import { EventEmitter } from "events";
-import Menhera, { _methods, _data } from "../src";
+import Menhera, { _methods, _data } from "menhera";
 import minimist from "minimist";
 
 export const CLI = {
