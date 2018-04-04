@@ -1,4 +1,4 @@
-import { _hooks, _hook, _mount, _config, _command, $use } from "./plugins";
+import { _hooks, _mount, _config, _command, $use } from "./plugins";
 
 const initConfig = {
   lifeCycle: ["_awake", "awake"]
