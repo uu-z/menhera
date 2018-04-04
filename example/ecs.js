@@ -83,9 +83,11 @@ const TestEntity2 = {
 const _ = new Menhera({
   // lifeCycle: ["_awake", "start"]
   $mount: {
-    1: [v1, World],
-    2: [MovementSystem]
+    default: [v1, World],
+    systems: [MovementSystem]
   }
-}).$mount({
-  3: [TestEntity1, TestEntity2]
-});
+})
+  .$mount({
+    entities: [TestEntity1, TestEntity2]
+  })
+  .$go();

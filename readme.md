@@ -65,7 +65,9 @@ const _ = new Menhera({
     1: [v1],
     2: [CLI]
   }
-}).$mount({
-  3: [cliTest]
-});
+})
+  .$mount({
+    3: [cliTest]
+  })
+  .$go();
 ```

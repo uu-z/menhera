@@ -43,27 +43,33 @@ export default class Menhera {
             }
           }
         });
-
-        await Object.keys(cp).forEach(_key => {
-          if (!_key.startsWith("_")) {
-            const hook = _["hooks"][_key];
-            if (Array.isArray(hook)) {
-              hook.forEach(h => {
-                bindHook({ hook: h, _key, cp });
-              });
-            } else {
-              bindHook({ hook, _key, cp });
-            }
-          }
-        });
-
-        lifeCycle.forEach(key => {
-          if (!key.startsWith("_")) {
-            cp[key] && cp[key]();
-          }
-        });
       });
     }
     return this;
+  }
+
+  $go() {
+    const _ = this;
+    const { lifeCycle = [] } = _.config;
+    Object.values(this.components).forEach(async cp => {
+      await Object.keys(cp).forEach(_key => {
+        if (!_key.startsWith("_")) {
+          const hook = _["hooks"][_key];
+          if (Array.isArray(hook)) {
+            hook.forEach(h => {
+              bindHook({ hook: h, _key, cp });
+            });
+          } else {
+            bindHook({ hook, _key, cp });
+          }
+        }
+      });
+
+      lifeCycle.forEach(key => {
+        if (!key.startsWith("_")) {
+          cp[key] && cp[key]();
+        }
+      });
+    });
   }
 }

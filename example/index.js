@@ -94,6 +94,8 @@ const _ = new Menhera({
     1: [v1],
     2: [Observer({ observable: { test3: "test3" } }), Event]
   }
-}).$mount({
-  3: [Test]
-});
+})
+  .$mount({
+    3: [Test]
+  })
+  .$go();
