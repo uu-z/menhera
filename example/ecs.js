@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { Optional } from "../src";
+import Menhera, { _methods, _data } from "../src";
 
 const World = _ => ({
   name: "menhera-world",
@@ -32,20 +32,18 @@ const World = _ => ({
       });
     }
   },
-  _hooks() {
-    return {
-      onRegisterECS({ _key, _val, cp }) {
-        const { registerSystem, registerEntity } = _val;
-        const { name } = cp;
-        if (registerSystem) {
-          this.systems.push(cp);
-        }
-        if (registerEntity) {
-          this.entities[name] = cp;
-        }
+  _hooks: () => ({
+    onRegisterECS({ _key, _val, cp }) {
+      const { registerSystem, registerEntity } = _val;
+      const { name } = cp;
+      if (registerSystem) {
+        this.systems.push(cp);
       }
-    };
-  }
+      if (registerEntity) {
+        this.entities[name] = cp;
+      }
+    }
+  })
 });
 
 const MovementSystem = {
@@ -83,13 +81,14 @@ const TestEntity2 = {
 };
 
 const _ = new Menhera({
+  _hooks: () => ({
+    _methods,
+    _data
+  }),
   _mount: {
-    default: [...Optional, World],
+    world: [World],
     systems: [MovementSystem],
     entities: [TestEntity1, TestEntity2]
-  },
-  _command: {
-    run: false
   }
 }).$use({
   _command: {

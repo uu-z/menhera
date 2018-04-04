@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { Optional } from "../src";
+import Menhera, { _methods, _data } from "../src";
 import minimist from "minimist";
 
 export const CLI = {
@@ -17,19 +17,17 @@ export const CLI = {
 
     this.Event.emit(command, { inputs, flags });
   },
-  _hooks() {
-    return {
-      onCli({ _key, _val, cp }) {
-        for (let [key, val] of Object.entries(_val)) {
-          const { exec } = val;
-          this.structs[key] = val;
-          if (exec) {
-            this.Event.on(key, exec.bind(cp));
-          }
+  _hooks: () => ({
+    onCli({ _key, _val, cp }) {
+      for (let [key, val] of Object.entries(_val)) {
+        const { exec } = val;
+        this.structs[key] = val;
+        if (exec) {
+          this.Event.on(key, exec.bind(cp));
         }
       }
-    };
-  }
+    }
+  })
 };
 
 const cliTest = {
@@ -49,11 +47,12 @@ const cliTest = {
 };
 
 const _ = new Menhera({
+  _hooks: () => ({
+    _methods,
+    _data
+  }),
   _mount: {
-    _: [...Optional, CLI, cliTest]
-  },
-  _command: {
-    run: false
+    cli: [CLI, cliTest]
   }
 }).$use({
   _command: {
