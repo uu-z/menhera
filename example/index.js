@@ -8,6 +8,7 @@ export const Observer = ({ observable = {} } = {}) => ({
       Event: new EventEmitter(),
       observable: new Proxy(observable, {
         get: (target, key) => {
+          11;
           if (key in target) {
             return target[key];
           } else {
@@ -87,7 +88,12 @@ let Test = ({ _ }) => ({
   }
 });
 
-const _ = new Menhera().init({
-  // lifeCycle: ["_awake", "start"],
-  components: [v1, Observer({ observable: { test3: "test3" } }), Event, Test]
+const _ = new Menhera({
+  // lifeCycle: ["_awake", "start"]
+  $mount: {
+    1: [v1],
+    2: [Observer({ observable: { test3: "test3" } }), Event]
+  }
+}).$mount({
+  3: [Test]
 });

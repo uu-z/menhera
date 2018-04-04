@@ -50,7 +50,12 @@ const cliTest = {
   }
 };
 
-const _ = new Menhera().init({
+const _ = new Menhera({
   // lifeCycle: ["_awake", "start"],
-  components: [v1, CLI, cliTest]
+  $mount: {
+    1: [v1],
+    2: [CLI]
+  }
+}).$mount({
+  2: [cliTest]
 });

@@ -80,7 +80,12 @@ const TestEntity2 = {
   }
 };
 
-const _ = new Menhera().init({
-  // lifeCycle: ["_awake", "start"],
-  components: [v1, World, MovementSystem, TestEntity1, TestEntity2]
+const _ = new Menhera({
+  // lifeCycle: ["_awake", "start"]
+  $mount: {
+    1: [v1, World],
+    2: [MovementSystem]
+  }
+}).$mount({
+  3: [TestEntity1, TestEntity2]
 });

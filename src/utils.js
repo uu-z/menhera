@@ -20,11 +20,11 @@ export const bindHook = ({ hook, _, _key, cp }) => {
 
 export const ConfigMerger = (
   initConfig,
-  { components, lifeCycle, ...other }
+  { $mount = {}, lifeCycle, ...other }
 ) => {
   return {
-    components: Array.from(new Set([...initConfig.components, ...components])),
     lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
+    $mount: { ...initConfig.$mount, ...$mount },
     ...other
   };
 };
