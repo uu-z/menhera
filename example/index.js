@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { Optional } from "../src";
+import Menhera, { _methods, _data } from "../src";
 
 export const Observer = ({ observable = {} } = {}) => ({
   name: "Observer",
@@ -8,7 +8,6 @@ export const Observer = ({ observable = {} } = {}) => ({
       Event: new EventEmitter(),
       observable: new Proxy(observable, {
         get: (target, key) => {
-          11;
           if (key in target) {
             return target[key];
           } else {
@@ -24,15 +23,13 @@ export const Observer = ({ observable = {} } = {}) => ({
       })
     };
   },
-  _hooks() {
-    return {
-      onObserver({ _key, _val, cp }) {
-        for (let [key, val] of Object.entries(_val)) {
-          this.Event.on(key, val);
-        }
+  _hooks: () => ({
+    onObserver({ _key, _val, cp }) {
+      for (let [key, val] of Object.entries(_val)) {
+        this.Event.on(key, val);
       }
-    };
-  }
+    }
+  })
 });
 
 export const Event = {
@@ -42,15 +39,13 @@ export const Event = {
       Event: new EventEmitter()
     };
   },
-  _hooks() {
-    return {
-      onEvent({ _key, _val }) {
-        for (let [key, val] of Object.entries(_val)) {
-          this.Event.on(key, val);
-        }
+  _hooks: () => ({
+    onEvent({ _key, _val }) {
+      for (let [key, val] of Object.entries(_val)) {
+        this.Event.on(key, val);
       }
-    };
-  },
+    }
+  }),
   _methods: {
     emit(key, ...val) {
       this.Event.emit(key, { val });
@@ -63,7 +58,7 @@ let Test = ({ _ }) => ({
   _awake() {
     console.log("test0");
   },
-  start() {
+  awake() {
     const { components: { Observer: { observable: ob }, Event: { emit } } } = _;
     ob.test1 = "test1";
     ob.test2 = "test2";
@@ -93,13 +88,13 @@ let Test = ({ _ }) => ({
 });
 
 const _ = new Menhera({
+  _hooks: () => ({
+    _methods,
+    _data
+  }),
   _mount: {
-    0: [...Optional],
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
-  },
-  _command: {
-    run: false
   }
 }).$use({
   _command: {

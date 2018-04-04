@@ -1,10 +1,8 @@
 {
   "name": "menhera",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "dist",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "example": "babel-node ./example/index.js",
     "dev": "nodemon --exec npm run babel-node --watch ./ -- app.js",
