@@ -9,9 +9,9 @@ yarn add menhera
 ```js
 import Menhera from "menhera";
 
-const _data = ({ _key, _val, _cp }) => {
-  const { helloWorld } = _val;
-  console.log(helloWorld);
+const _data = ({ _key, _val, cp }) => {
+  const { data } = _val;
+  console.log(data);
 };
 
 const _ = new Menhera({
@@ -19,7 +19,11 @@ const _ = new Menhera({
     _data
   }),
   _data: {
-    helloWorld: "hello World!"
+    data: "foo"
+  }
+}).$use({
+  _data: {
+    data: "bar"
   }
 });
 ```
@@ -30,19 +34,23 @@ import Menhera from "menhera";
 const _data = {
   name: "data",
   _hooks: () => ({
-    _data: ({ _key, _val, _cp }) => {
-      const { helloWorld } = _val;
-      console.log(helloWorld);
+    _data: ({ _key, _val, cp }) => {
+      const { data } = _val;
+      console.log(data);
     }
-  }),
-  _data: {
-    helloWorld: "hello World!"
-  }
+  })
 };
 
 const _ = new Menhera({
   _mount: {
     foo: [_data]
+  },
+  _data: {
+    data: "foo"
+  }
+}).$use({
+  _data: {
+    data: "bar"
   }
 });
 ```

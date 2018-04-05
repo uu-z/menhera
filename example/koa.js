@@ -34,4 +34,9 @@ const _ = new Menhera({
     use: { res },
     listen: 3000
   }
+}).$use({
+  _koa: {
+    use: { res },
+    listen: 3001
+  }
 });
