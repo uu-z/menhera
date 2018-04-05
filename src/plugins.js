@@ -12,7 +12,10 @@ export const _hooks = ({ _, _key, _val, cp }) => {
       if (!_.hooks[key]) {
         _.hooks[key] = [];
       }
-      _.hooks[key].push(val.bind(cp));
+
+      if (!_.hooks[key].includes(val.bind(cp))) {
+        _.hooks[key].push(val.bind(cp));
+      }
     }
   }
 };
