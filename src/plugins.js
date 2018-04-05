@@ -34,11 +34,7 @@ export const _mount = ({ _, _key, _val, cp }) => {
   }
 };
 
-const initConfig = { lifeCycle: ["awake", "start"] };
 export const _config = ({ _, _key, _val, cp }) => {
-  if (_.config) {
-    _.config = initConfig;
-  }
   _.config = ConfigMerger(_.config, _val);
 };
 

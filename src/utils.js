@@ -14,9 +14,10 @@ export const bindHook = ({ _, _key, cp }) => {
   }
 };
 
-export const ConfigMerger = (initConfig, { lifeCycle, ...other }) => {
-  return {
-    lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle,
-    ...other
-  };
+const initConfig = { lifeCycle: ["awake", "start"] };
+export const ConfigMerger = (
+  initConfig = initConfig,
+  { lifeCycle, ...other }
+) => {
+  return { lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle, ...other };
 };
