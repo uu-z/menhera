@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { _data } from "../src";
+import Menhera, { _data } from "menhera";
 import minimist from "minimist";
 
 export const CLI = {
@@ -47,6 +47,9 @@ const cliTest = {
 };
 
 const _ = new Menhera({
+  _config: {
+    lifeCycle: ["_awake", "awake"]
+  },
   _hooks: () => ({
     _data
   }),

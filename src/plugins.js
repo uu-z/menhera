@@ -46,6 +46,7 @@ export const _mount = ({ _, _key, _val, cp }) => {
 export const _config = ({ _, _key, _val, cp }) => {
   _.config = ConfigMerger(_.config, _val);
 };
+
 export const _command = ({ _, _key, _val, cp }) => {
   const { run } = _val;
   if (run) {

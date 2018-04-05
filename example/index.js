@@ -1,4 +1,4 @@
-import Menhera from "../src";
+import Menhera from "menhera";
 
 const _data = ({ _key, _val, _cp }) => {
   const { helloWorld } = _val;
@@ -10,10 +10,6 @@ const _ = new Menhera({
     _data
   }),
   _data: {
-    helloWorld: "hello World"
-  }
-}).$use({
-  _command: {
-    run: true
+    helloWorld: "hello World!"
   }
 });

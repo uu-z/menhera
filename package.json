@@ -12,10 +12,13 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@types/koa": "^2.0.44",
     "@types/minimist": "^1.2.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "koa": "^2.5.0",
+    "menhera": "^0.4.5",
     "minimist": "^1.2.0",
     "nodemon": "^1.11.0"
   },
