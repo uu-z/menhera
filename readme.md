@@ -19,11 +19,7 @@ const _ = new Menhera({
     _data
   }),
   _data: {
-    helloWorld: "hello World"
-  }
-}).$use({
-  _command: {
-    run: true
+    helloWorld: "hello World!"
   }
 });
 ```
