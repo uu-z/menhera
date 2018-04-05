@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { _methods, _data } from "menhera";
+import Menhera, { _methods, _data, _config, _command } from "menhera";
 
 const World = _ => ({
   name: "menhera-world",
@@ -81,13 +81,15 @@ const TestEntity2 = {
 };
 
 const _ = new Menhera({
+  _hooks: () => ({
+    _data,
+    _config,
+    _command,
+    _methods
+  }),
   _config: {
     lifeCycle: ["_awake", "awake"]
   },
-  _hooks: () => ({
-    _methods,
-    _data
-  }),
   _mount: {
     world: [World],
     systems: [MovementSystem],

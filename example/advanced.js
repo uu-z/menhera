@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { _methods, _data } from "menhera";
+import Menhera, { _methods, _data, _config, _command } from "../src";
 
 export const Observer = ({ observable = {} } = {}) => ({
   name: "Observer",
@@ -88,18 +88,19 @@ let Test = ({ _ }) => ({
 });
 
 const _ = new Menhera({
-  _config: {
-    lifeCycle: ["_awake", "awake"]
-  },
   _hooks: () => ({
+    _config,
+    _command,
     _methods,
     _data
   }),
+  _config: {
+    lifeCycle: ["_awake", "awake"]
+  },
   _mount: {
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
-  }
-}).$use({
+  },
   _command: {
     run: true
   }
