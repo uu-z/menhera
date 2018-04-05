@@ -1,9 +1,9 @@
-import Menhera from "menhera";
+import Menhera from "../src";
 
 const _data = {
   name: "data",
   _hooks: () => ({
-    _data: ({ _key, _val, cp }) => {
+    _data: ({ _val }) => {
       const { data } = _val;
       console.log(data);
     }

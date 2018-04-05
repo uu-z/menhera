@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera, { _methods, _data, _config, _command } from "menhera";
+import Menhera, { _methods, _data, _config, _command } from "../src";
 
 const World = _ => ({
   name: "menhera-world",
@@ -9,7 +9,7 @@ const World = _ => ({
       systems: []
     };
   },
-  awake() {
+  start() {
     setInterval(this.tick.bind(this), 1000);
   },
   _methods: {
@@ -33,7 +33,7 @@ const World = _ => ({
     }
   },
   _hooks: () => ({
-    onRegisterECS({ _key, _val, cp }) {
+    onRegisterECS({ _, _key, _val, cp }) {
       const { registerSystem, registerEntity } = _val;
       const { name } = cp;
       if (registerSystem) {
@@ -48,7 +48,11 @@ const World = _ => ({
 
 const MovementSystem = {
   name: "MovementSystem",
-  CheckComponents: ["position", "velocity"],
+  _data() {
+    return {
+      CheckComponents: ["position", "velocity"]
+    };
+  },
   onRegisterECS: {
     registerSystem: true
   },
@@ -88,7 +92,7 @@ const _ = new Menhera({
     _methods
   }),
   _config: {
-    lifeCycle: ["_awake", "awake"]
+    lifeCycle: ["start"]
   },
   _mount: {
     world: [World],
@@ -97,6 +101,6 @@ const _ = new Menhera({
   }
 }).$use({
   _command: {
-    run: true
+    start: true
   }
 });

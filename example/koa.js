@@ -1,5 +1,5 @@
 import koa from "koa";
-import Menhera from "menhera";
+import Menhera from "../src";
 
 const res = ctx => {
   ctx.body = `Hello Koa`;

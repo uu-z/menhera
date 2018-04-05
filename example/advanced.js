@@ -24,7 +24,7 @@ export const Observer = ({ observable = {} } = {}) => ({
     };
   },
   _hooks: () => ({
-    onObserver({ _key, _val, cp }) {
+    onObserver({ _, _key, _val, cp }) {
       for (let [key, val] of Object.entries(_val)) {
         this.Event.on(key, val);
       }
@@ -40,7 +40,7 @@ export const Event = {
     };
   },
   _hooks: () => ({
-    onEvent({ _key, _val }) {
+    onEvent({ _, _key, _val, cp }) {
       for (let [key, val] of Object.entries(_val)) {
         this.Event.on(key, val);
       }
@@ -55,11 +55,11 @@ export const Event = {
 
 let Test = ({ _ }) => ({
   name: "test",
-  _awake() {
+  awake() {
     console.log("test0");
   },
-  awake() {
-    const { components: { Observer: { observable: ob }, Event: { emit } } } = _;
+  start() {
+    const { cps: { Observer: { observable: ob }, Event: { emit } } } = _;
     ob.test1 = "test1";
     ob.test2 = "test2";
     ob.test3 = ob.test3;
@@ -95,13 +95,13 @@ const _ = new Menhera({
     _data
   }),
   _config: {
-    lifeCycle: ["_awake", "awake"]
+    lifeCycle: ["awake", "start"]
   },
   _mount: {
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
   },
   _command: {
-    run: true
+    start: true
   }
 });

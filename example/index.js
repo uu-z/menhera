@@ -1,6 +1,6 @@
-import Menhera from "menhera";
+import Menhera from "../src";
 
-const _data = ({ _key, _val, cp }) => {
+const _data = ({ _val }) => {
   const { data } = _val;
   console.log(data);
 };

@@ -21,29 +21,20 @@ export const _hooks = ({ _, _key, _val, cp }) => {
 };
 
 export const _mount = ({ _, _key, _val, cp }) => {
-  const { lifeCycle = [] } = _.config;
-  for (let [key, components] of Object.entries(_val)) {
-    components.forEach(async component => {
+  for (let [key, cps] of Object.entries(_val)) {
+    cps.forEach(async component => {
       let cp = typeof component === "function" ? component({ _ }) : component;
       const { name } = cp;
-      _.components[name] = cp;
-
-      lifeCycle.forEach(key => {
-        if (key.startsWith("_")) {
-          cp[key] && cp[key]();
-        }
-      });
+      _.cps[name] = cp;
 
       await Object.keys(cp).forEach(_key => {
-        if (_key.startsWith("_")) {
-          bindHook({ _, _key, cp });
-        }
+        bindHook({ _, _key, cp });
       });
     });
   }
 };
 
-const initConfig = { lifeCycle: ["_awake", "awake"] };
+const initConfig = { lifeCycle: ["awake", "start"] };
 export const _config = ({ _, _key, _val, cp }) => {
   if (_.config) {
     _.config = initConfig;
@@ -52,20 +43,12 @@ export const _config = ({ _, _key, _val, cp }) => {
 };
 
 export const _command = ({ _, _key, _val, cp }) => {
-  const { run } = _val;
-  if (run) {
+  const { start } = _val;
+  if (start) {
     const { lifeCycle = [] } = _.config;
-    Object.values(_.components).forEach(async cp => {
-      await Object.keys(cp).forEach(_key => {
-        if (!_key.startsWith("_")) {
-          bindHook({ _, _key, cp });
-        }
-      });
-
-      lifeCycle.forEach(key => {
-        if (!key.startsWith("_")) {
-          cp[key] && cp[key]();
-        }
+    Object.values(_.cps).forEach(async cp => {
+      await lifeCycle.forEach(key => {
+        cp[key] && cp[key]();
       });
     });
   }

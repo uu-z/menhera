@@ -10,7 +10,7 @@ export const CLI = {
       Event: new EventEmitter()
     };
   },
-  awake() {
+  start() {
     let { _, ...flags } = minimist(process.argv.slice(2));
     let [command = "*", ...inputs] = _;
     const { h, help } = flags;
@@ -18,7 +18,7 @@ export const CLI = {
     this.Event.emit(command, { inputs, flags });
   },
   _hooks: () => ({
-    onCli({ _key, _val, cp }) {
+    onCli({ _, _key, _val, cp }) {
       for (let [key, val] of Object.entries(_val)) {
         const { exec } = val;
         this.structs[key] = val;
@@ -53,13 +53,13 @@ const _ = new Menhera({
     _command
   }),
   _config: {
-    lifeCycle: ["_awake", "awake"]
+    lifeCycle: ["start"]
   },
   _mount: {
     cli: [CLI, cliTest]
   }
 }).$use({
   _command: {
-    run: true
+    start: true
   }
 });

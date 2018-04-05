@@ -9,7 +9,7 @@ yarn add menhera
 ```js
 import Menhera from "menhera";
 
-const _data = ({ _key, _val, cp }) => {
+const _data = ({ _val }) => {
   const { data } = _val;
   console.log(data);
 };
@@ -34,7 +34,7 @@ import Menhera from "menhera";
 const _data = {
   name: "data",
   _hooks: () => ({
-    _data: ({ _key, _val, cp }) => {
+    _data: ({ _val }) => {
       const { data } = _val;
       console.log(data);
     }
