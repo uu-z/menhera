@@ -1,6 +1,6 @@
 import koa from "koa";
 import Router from "koa-router";
-import Menhera, { _data } from "../src";
+import Menhera from "../src";
 
 const app = {
   name: "app",
