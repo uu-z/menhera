@@ -2,21 +2,23 @@ import koa from "koa";
 import Router from "koa-router";
 import Menhera, { _data } from "../src";
 
-const app = ({ _ }) => ({
+const app = {
   name: "app",
-  _data() {
-    return {
-      app: new koa(),
-      router: new Router(),
-      test: { index: 0, user: "" },
-      services: {
-        getIndex: () => this.test.index,
-        getUser: () => this.test.user
-      }
-    };
-  },
+  app: new koa(),
+  router: new Router(),
   _hooks: {
     koa: {
+      data({ _, _key, _val, cp }) {
+        for (let [key, val] of Object.entries(_val.bind(this)())) {
+          if (!this[key]) {
+            this[key] = val;
+          }
+        }
+      },
+      controller({ _, _key, _val, cp }) {
+        const controllers = _val(this);
+        this.controllers = controllers;
+      },
       router({ _, _key, _val, cp }) {
         const { router } = this;
         const routers = _val(this);
@@ -24,10 +26,6 @@ const app = ({ _ }) => ({
           const [method, path] = key.split(" ");
           router[method](path, ctx => val(ctx));
         }
-      },
-      controller({ _, _key, _val, cp }) {
-        const controllers = _val(this);
-        this.controllers = controllers;
       },
       listen({ _, _key, _val, cp }) {
         const { app } = this;
@@ -38,14 +36,22 @@ const app = ({ _ }) => ({
       }
     }
   }
-});
+};
 
 const _ = new Menhera({
-  _hooks: { _data },
   _mount: {
     foo: [app]
   },
   koa: {
+    data() {
+      return {
+        test: { index: 0, user: "" },
+        services: {
+          getIndex: () => this.test.index,
+          getUser: () => this.test.user
+        }
+      };
+    },
     controller: ({ test, services: { getIndex, getUser } }) => ({
       index: {
         getIndex(ctx) {
@@ -66,7 +72,10 @@ const _ = new Menhera({
     router: ({ controllers: { index, user } }) => ({
       "get /": index.getIndex,
       "get /user": user.getUser
-    }),
+    })
+  }
+}).$use({
+  koa: {
     listen: 3000
   }
 });
