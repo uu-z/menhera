@@ -9,21 +9,18 @@ yarn add menhera
 ```js
 import Menhera from "menhera";
 
-const _data = ({ _val }) => {
-  const { data } = _val;
-  console.log(data);
-};
+const test = ({ _val }) => console.log(_val);
 
 const _ = new Menhera({
-  _hooks: () => ({
-    _data
-  }),
-  _data: {
-    data: "foo"
-  }
-}).$use({
-  _data: {
-    data: "bar"
+  _hooks: {
+    data: {
+      test1: test,
+      test2: test
+    }
+  },
+  data: {
+    test1: "foo",
+    test2: "bar"
   }
 });
 ```
@@ -31,26 +28,26 @@ const _ = new Menhera({
 ```js
 import Menhera from "menhera";
 
-const _data = {
+const test = ({ _val }) => console.log(_val);
+
+const mount = {
   name: "data",
-  _hooks: () => ({
-    _data: ({ _val }) => {
-      const { data } = _val;
-      console.log(data);
+  _hooks: {
+    data: {
+      test1: test,
+      test2: test
     }
-  })
+  }
 };
 
 const _ = new Menhera({
   _mount: {
-    foo: [_data]
-  },
-  _data: {
-    data: "foo"
+    foo: [mount]
   }
 }).$use({
-  _data: {
-    data: "bar"
+  data: {
+    test1: "foo",
+    test2: "bar"
   }
 });
 ```

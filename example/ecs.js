@@ -32,18 +32,20 @@ const World = _ => ({
       });
     }
   },
-  _hooks: () => ({
-    onRegisterECS({ _, _key, _val, cp }) {
-      const { registerSystem, registerEntity } = _val;
-      const { name } = cp;
-      if (registerSystem) {
-        this.systems.push(cp);
-      }
-      if (registerEntity) {
-        this.entities[name] = cp;
+  _hooks: {
+    onRegisterECS: {
+      _({ _, _key, _val, cp }) {
+        const { registerSystem, registerEntity } = _val;
+        const { name } = cp;
+        if (registerSystem) {
+          this.systems.push(cp);
+        }
+        if (registerEntity) {
+          this.entities[name] = cp;
+        }
       }
     }
-  })
+  }
 });
 
 const MovementSystem = {
@@ -85,12 +87,12 @@ const TestEntity2 = {
 };
 
 const _ = new Menhera({
-  _hooks: () => ({
+  _hooks: {
     _data,
     _config,
     _command,
     _methods
-  }),
+  },
   _config: {
     lifeCycle: ["start"]
   },

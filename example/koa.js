@@ -1,42 +1,72 @@
 import koa from "koa";
-import Menhera from "../src";
+import Router from "koa-router";
+import Menhera, { _data } from "../src";
 
-const res = ctx => {
-  ctx.body = `Hello Koa`;
-};
-
-const _koa = {
-  name: "koa",
-  _hooks: () => ({
-    _koa: ({ _, _key, _val, cp }) => {
-      const { listen, use } = _val;
-      const app = new koa();
-      if (use) {
-        for (let [key, val] of Object.entries(use)) {
-          app.use(val);
-        }
+const app = ({ _ }) => ({
+  name: "app",
+  _data() {
+    return {
+      app: new koa(),
+      router: new Router(),
+      test: { index: 0, user: "" },
+      services: {
+        getIndex: () => this.test.index,
+        getUser: () => this.test.user
       }
-
-      if (listen) {
-        app.listen(listen, e => {
-          console.log(`app running on port: ${listen}`);
+    };
+  },
+  _hooks: {
+    koa: {
+      router({ _, _key, _val, cp }) {
+        const { router } = this;
+        const routers = _val(this);
+        for (let [key, val] of Object.entries(routers)) {
+          const [method, path] = key.split(" ");
+          router[method](path, ctx => val(ctx));
+        }
+      },
+      controller({ _, _key, _val, cp }) {
+        const controllers = _val(this);
+        this.controllers = controllers;
+      },
+      listen({ _, _key, _val, cp }) {
+        const { app } = this;
+        app.use(this.router.routes());
+        app.listen(_val, e => {
+          console.log(`app running on port: ${_val}`);
         });
       }
     }
-  })
-};
+  }
+});
 
 const _ = new Menhera({
+  _hooks: { _data },
   _mount: {
-    _koa: [_koa]
+    foo: [app]
   },
-  _koa: {
-    use: { res },
+  koa: {
+    controller: ({ test, services: { getIndex, getUser } }) => ({
+      index: {
+        getIndex(ctx) {
+          test.index++;
+          ctx.body = getIndex();
+        }
+      },
+      user: {
+        getUser(ctx) {
+          test.user = Math.random()
+            .toString(36)
+            .replace(/[^a-z]+/g, "")
+            .substr(0, 5);
+          ctx.body = getUser();
+        }
+      }
+    }),
+    router: ({ controllers: { index, user } }) => ({
+      "get /": index.getIndex,
+      "get /user": user.getUser
+    }),
     listen: 3000
-  }
-}).$use({
-  _koa: {
-    use: { res },
-    listen: 3001
   }
 });

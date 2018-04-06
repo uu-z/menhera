@@ -23,13 +23,13 @@ export const Observer = ({ observable = {} } = {}) => ({
       })
     };
   },
-  _hooks: () => ({
+  _hooks: {
     onObserver({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val)) {
+      for (let [key, val] of Object.entries(_val())) {
         this.Event.on(key, val);
       }
     }
-  })
+  }
 });
 
 export const Event = {
@@ -39,13 +39,13 @@ export const Event = {
       Event: new EventEmitter()
     };
   },
-  _hooks: () => ({
+  _hooks: {
     onEvent({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val)) {
+      for (let [key, val] of Object.entries(_val())) {
         this.Event.on(key, val);
       }
     }
-  }),
+  },
   _methods: {
     emit(key, ...val) {
       this.Event.emit(key, { val });
@@ -66,7 +66,7 @@ let Test = ({ _ }) => ({
     emit("test4", "test", "4");
     emit("test5", "test", "5");
   },
-  onObserver: {
+  onObserver: () => ({
     test1({ val }) {
       console.log(val);
     },
@@ -76,30 +76,30 @@ let Test = ({ _ }) => ({
     test3({ val }) {
       console.log(val);
     }
-  },
-  onEvent: {
+  }),
+  onEvent: () => ({
     test4({ val }) {
       console.log(val.join(""));
     },
     test5({ val }) {
       console.log(val.join(""));
     }
-  }
+  })
 });
 
 const _ = new Menhera({
-  _hooks: () => ({
+  _hooks: {
     _config,
     _command,
     _methods,
     _data
-  }),
-  _config: {
-    lifeCycle: ["awake", "start"]
   },
   _mount: {
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
+  },
+  _config: {
+    lifeCycle: ["awake", "start"]
   },
   _command: {
     start: true

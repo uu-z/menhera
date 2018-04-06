@@ -6,7 +6,6 @@ export const CLI = {
   name: "CLI",
   _data() {
     return {
-      structs: {},
       Event: new EventEmitter()
     };
   },
@@ -17,22 +16,21 @@ export const CLI = {
 
     this.Event.emit(command, { inputs, flags });
   },
-  _hooks: () => ({
+  _hooks: {
     onCli({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val)) {
+      for (let [key, val] of Object.entries(_val())) {
         const { exec } = val;
-        this.structs[key] = val;
         if (exec) {
           this.Event.on(key, exec.bind(cp));
         }
       }
     }
-  })
+  }
 };
 
 const cliTest = {
   name: "clitest",
-  onCli: {
+  onCli: () => ({
     "*": {
       exec() {
         console.log("help");
@@ -43,15 +41,15 @@ const cliTest = {
         console.log(inputs, flags);
       }
     }
-  }
+  })
 };
 
 const _ = new Menhera({
-  _hooks: () => ({
+  _hooks: {
     _data,
     _config,
     _command
-  }),
+  },
   _config: {
     lifeCycle: ["start"]
   },

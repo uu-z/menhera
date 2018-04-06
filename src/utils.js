@@ -1,19 +1,3 @@
-export const bindHook = ({ _, _key, cp }) => {
-  const hook = _.hooks[_key];
-  const _val = cp[_key];
-  if (Array.isArray(hook)) {
-    hook.forEach(h => {
-      if (typeof h === "function") {
-        h({ _, _key, _val, cp });
-      }
-    });
-  } else {
-    if (typeof hook === "function") {
-      hook({ _, _key, _val, cp });
-    }
-  }
-};
-
 const initConfig = { lifeCycle: ["awake", "start"] };
 export const ConfigMerger = (
   currentConfig = initConfig,
@@ -24,3 +8,45 @@ export const ConfigMerger = (
     ...other
   };
 };
+
+export const scanObject = ({
+  object,
+  depth = null,
+  isObject = () => {},
+  isFunction = () => {},
+  isVariable = () => {}
+}) => {
+  if (object) {
+    for (let [_key, _val] of Object.entries(object)) {
+      if (_val) {
+        const newDepth = depth ? depth + `.${_key}` : _key;
+        if (typeof _val === "function") {
+          isFunction({
+            object,
+            depth: newDepth,
+            _key,
+            _val
+          });
+        } else if (typeof _val === "object" && !Array.isArray(_val)) {
+          isObject({
+            object: object[_key],
+            depth: newDepth,
+            _key,
+            _val
+          });
+        } else {
+          isVariable({
+            object,
+            depth: newDepth,
+            _key,
+            _val
+          });
+        }
+      }
+    }
+  } else {
+    console.warn(`scanObject: object must be valid`);
+  }
+};
+
+export const getRootHookDepth = depth => `${depth}._`;

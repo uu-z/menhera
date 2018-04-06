@@ -1,19 +1,16 @@
 import Menhera from "../src";
 
-const _data = ({ _val }) => {
-  const { data } = _val;
-  console.log(data);
-};
+const test = ({ _val }) => console.log(_val);
 
 const _ = new Menhera({
-  _hooks: () => ({
-    _data
-  }),
-  _data: {
-    data: "foo"
-  }
-}).$use({
-  _data: {
-    data: "bar"
+  _hooks: {
+    data: {
+      test1: test,
+      test2: test
+    }
+  },
+  data: {
+    test1: "foo",
+    test2: "bar"
   }
 });
