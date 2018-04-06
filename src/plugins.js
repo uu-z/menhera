@@ -2,37 +2,37 @@ import { ConfigMerger, scanObject, getRootHookDepth } from "./utils";
 import { get, set } from "lodash";
 
 export const $use = ({ _ }) => parms => {
-  const isVariable = ({ object, depth, _key, _val }) => {
+  const onVariable = ({ object, depth, _key, _val }) => {
     const hooks = get(_.hooks, depth, []);
     hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: parms }));
   };
-  const isObject = ({ object, depth, _key, _val }) => {
+  const onObject = ({ object, depth, _key, _val }) => {
     let rootHookDepth = getRootHookDepth(depth);
     const hooks = get(_.hooks, rootHookDepth, []);
     hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: parms }));
 
-    scanObject({ object, depth, isObject, isVariable, isFunction: isVariable });
+    scanObject({ object, depth, onObject, onVariable, onFunction: onVariable });
   };
 
   if (typeof parms === "object") {
-    isObject({ object: parms });
+    onObject({ object: parms });
   }
   return _;
 };
 
 export const _hooks = ({ _, _key, _val, cp }) => {
-  const isFunction = ({ depth, _val }) => {
+  const onFunction = ({ depth, _val }) => {
     let target = get(_.hooks, depth, []);
     if (!target.includes(_val.bind(cp))) {
       target.push(_val.bind(cp));
       set(_.hooks, depth, target);
     }
   };
-  const isObject = ({ object, depth, _key, _val }) => {
-    scanObject({ object, depth, isObject, isFunction });
+  const onObject = ({ object, depth, _key, _val }) => {
+    scanObject({ object, depth, onObject, onFunction });
   };
   if (typeof _val === "object") {
-    isObject({ object: _val });
+    onObject({ object: _val });
   }
 };
 

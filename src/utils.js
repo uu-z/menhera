@@ -12,30 +12,30 @@ export const ConfigMerger = (
 export const scanObject = ({
   object,
   depth = null,
-  isObject = () => {},
-  isFunction = () => {},
-  isVariable = () => {}
+  onObject = () => {},
+  onFunction = () => {},
+  onVariable = () => {}
 }) => {
   if (object) {
     for (let [_key, _val] of Object.entries(object)) {
       if (_val) {
         const newDepth = depth ? depth + `.${_key}` : _key;
         if (typeof _val === "function") {
-          isFunction({
+          onFunction({
             object,
             depth: newDepth,
             _key,
             _val
           });
         } else if (typeof _val === "object" && !Array.isArray(_val)) {
-          isObject({
+          onObject({
             object: object[_key],
             depth: newDepth,
             _key,
             _val
           });
         } else {
-          isVariable({
+          onVariable({
             object,
             depth: newDepth,
             _key,

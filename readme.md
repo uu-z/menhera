@@ -14,28 +14,47 @@ const test = ({ _val }) => console.log(_val);
 const _ = new Menhera({
   _hooks: {
     data: {
-      test1: test,
-      test2: test
+      foo: {
+        bar: {
+          foo1: {
+            bar1: {
+              test
+            }
+          }
+        }
+      }
     }
   },
   data: {
-    test1: "foo",
-    test2: "bar"
+    foo: {
+      bar: {
+        foo1: {
+          bar1: {
+            test: "foo bar"
+          }
+        }
+      }
+    }
   }
 });
 ```
 
 ```js
-import Menhera from "menhera";
-
 const test = ({ _val }) => console.log(_val);
 
 const mount = {
-  name: "data",
+  name: "mount",
   _hooks: {
     data: {
-      test1: test,
-      test2: test
+      foo: {
+        bar: {
+          foo1: {
+            bar1: {
+              test
+            }
+          }
+        }
+      }
     }
   }
 };
@@ -46,8 +65,15 @@ const _ = new Menhera({
   }
 }).$use({
   data: {
-    test1: "foo",
-    test2: "bar"
+    foo: {
+      bar: {
+        foo1: {
+          bar1: {
+            test: "foo bar"
+          }
+        }
+      }
+    }
   }
 });
 ```
