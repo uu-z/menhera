@@ -16,8 +16,11 @@ export const bindHook = ({ _, _key, cp }) => {
 
 const initConfig = { lifeCycle: ["awake", "start"] };
 export const ConfigMerger = (
-  initConfig = initConfig,
+  currentConfig = initConfig,
   { lifeCycle, ...other }
 ) => {
-  return { lifeCycle: lifeCycle ? lifeCycle : initConfig.lifeCycle, ...other };
+  return {
+    lifeCycle: lifeCycle ? lifeCycle : currentConfig.lifeCycle,
+    ...other
+  };
 };

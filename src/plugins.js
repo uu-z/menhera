@@ -63,8 +63,7 @@ export const _methods = ({ _, _key, _val, cp }) => {
 };
 
 export const _data = ({ _, _key, _val, cp }) => {
-  const props = _val.bind(cp)();
-  for (let [key, val] of Object.entries(props)) {
+  for (let [key, val] of Object.entries(_val.bind(cp)())) {
     if (!cp[key]) {
       cp[key] = val;
     } else {
