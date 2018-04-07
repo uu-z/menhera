@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
-import Menhera, { _data, _config, _command } from "../src";
+import Menhera from "../src";
+import { _data, _config, _command } from "./plugins";
 import minimist from "minimist";
 
 export const CLI = {

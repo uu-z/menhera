@@ -1,4 +1,5 @@
 import Menhera from "../src";
+
 const _ = new Menhera({
   _hooks: {
     foo: {

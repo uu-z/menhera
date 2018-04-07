@@ -44,9 +44,9 @@ class Foo {
   constructor() {}
 }
 
-const _bar = parms => core({ _: new Foo(), parms });
+const Bar = parms => core({ _: new Foo(), parms });
 
-const _ = new _bar({
+const _ = new Bar({
   _hooks: {
     foo: {
       bar: {

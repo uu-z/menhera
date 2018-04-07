@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
-import Menhera, { _methods, _data, _config, _command } from "../src";
+import Menhera from "../src";
+import { _methods, _data, _config, _command } from "./plugins";
 
 const World = _ => ({
   name: "menhera-world",
