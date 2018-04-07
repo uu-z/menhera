@@ -1,5 +1,5 @@
 import { ConfigMerger, scanObject, getRootHookDepth } from "./utils";
-import { get, set } from "lodash";
+import { set, get } from "lodash";
 
 export const $use = ({ _ }) => parms => {
   const onVariable = ({ object, depth, _key, _val }) => {
@@ -15,7 +15,7 @@ export const $use = ({ _ }) => parms => {
   };
 
   if (typeof parms === "object") {
-    onObject({ object: parms });
+    onObject({ object: parms, depth: "" });
   }
   return _;
 };
@@ -32,7 +32,7 @@ export const _hooks = ({ _, _key, _val, cp }) => {
     scanObject({ object, depth, onObject, onFunction });
   };
   if (typeof _val === "object") {
-    onObject({ object: _val });
+    onObject({ object: _val, depth: "" });
   }
 };
 

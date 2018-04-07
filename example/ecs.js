@@ -33,15 +33,17 @@ const World = _ => ({
     }
   },
   _hooks: {
-    onRegisterECS: {
-      _({ _, _key, _val, cp }) {
-        const { registerSystem, registerEntity } = _val;
-        const { name } = cp;
-        if (registerSystem) {
-          this.systems.push(cp);
-        }
-        if (registerEntity) {
-          this.entities[name] = cp;
+    ECS: {
+      onRegisterECS: {
+        _({ _, _key, _val, cp }) {
+          const { registerSystem, registerEntity } = _val;
+          const { name } = cp;
+          if (registerSystem) {
+            this.systems.push(cp);
+          }
+          if (registerEntity) {
+            this.entities[name] = cp;
+          }
         }
       }
     }
@@ -55,8 +57,10 @@ const MovementSystem = {
       CheckComponents: ["position", "velocity"]
     };
   },
-  onRegisterECS: {
-    registerSystem: true
+  ECS: {
+    onRegisterECS: {
+      registerSystem: true
+    }
   },
   _methods: {
     updateEach(entity) {
@@ -72,8 +76,10 @@ const TestEntity1 = {
   _data() {
     return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
   },
-  onRegisterECS: {
-    registerEntity: true
+  ECS: {
+    onRegisterECS: {
+      registerEntity: true
+    }
   }
 };
 const TestEntity2 = {
@@ -81,8 +87,10 @@ const TestEntity2 = {
   _data() {
     return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
   },
-  onRegisterECS: {
-    registerEntity: true
+  ECS: {
+    onRegisterECS: {
+      registerEntity: true
+    }
   }
 };
 

@@ -24,9 +24,11 @@ export const Observer = ({ observable = {} } = {}) => ({
     };
   },
   _hooks: {
-    onObserver({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val())) {
-        this.Event.on(key, val);
+    on: {
+      onObserver({ _, _key, _val, cp }) {
+        for (let [key, val] of Object.entries(_val())) {
+          this.Event.on(key, val);
+        }
       }
     }
   }
@@ -35,14 +37,14 @@ export const Observer = ({ observable = {} } = {}) => ({
 export const Event = {
   name: "Event",
   _data() {
-    return {
-      Event: new EventEmitter()
-    };
+    return { Event: new EventEmitter() };
   },
   _hooks: {
-    onEvent({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val())) {
-        this.Event.on(key, val);
+    on: {
+      onEvent({ _, _key, _val, cp }) {
+        for (let [key, val] of Object.entries(_val())) {
+          this.Event.on(key, val);
+        }
       }
     }
   },
@@ -66,31 +68,35 @@ let Test = ({ _ }) => ({
     emit("test4", "test", "4");
     emit("test5", "test", "5");
   },
-  onObserver: () => ({
-    test1({ val }) {
-      console.log(val);
-    },
-    test2({ val }) {
-      console.log(val);
-    },
-    test3({ val }) {
-      console.log(val);
-    }
-  }),
-  onEvent: () => ({
-    test4({ val }) {
-      console.log(val.join(""));
-    },
-    test5({ val }) {
-      console.log(val.join(""));
-    }
-  })
+  on: {
+    onObserver: () => ({
+      test1({ val }) {
+        console.log(val);
+      },
+      test2({ val }) {
+        console.log(val);
+      },
+      test3({ val }) {
+        console.log(val);
+      }
+    }),
+    onEvent: () => ({
+      test4({ val }) {
+        console.log(val.join(""));
+      },
+      test5({ val }) {
+        console.log(val.join(""));
+      }
+    })
+  }
 });
 
 const _ = new Menhera({
   _hooks: {
-    _config,
-    _command,
+    default: {
+      _config,
+      _command
+    },
     _methods,
     _data
   },
@@ -98,10 +104,12 @@ const _ = new Menhera({
     1: [Observer({ observable: { test3: "test3" } }), Event],
     2: [Test]
   },
-  _config: {
-    lifeCycle: ["awake", "start"]
-  },
-  _command: {
-    start: true
+  default: {
+    _config: {
+      lifeCycle: ["awake", "start"]
+    },
+    _command: {
+      start: true
+    }
   }
 });

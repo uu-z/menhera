@@ -28,8 +28,19 @@ export const CLI = {
   }
 };
 
-const cliTest = {
-  name: "clitest",
+const _ = new Menhera({
+  _hooks: {
+    _data,
+    _config,
+    _command
+  },
+  _config: {
+    lifeCycle: ["start"]
+  },
+  _mount: {
+    cli: [CLI]
+  }
+}).$use({
   onCli: () => ({
     "*": {
       exec() {
@@ -41,22 +52,7 @@ const cliTest = {
         console.log(inputs, flags);
       }
     }
-  })
-};
-
-const _ = new Menhera({
-  _hooks: {
-    _data,
-    _config,
-    _command
-  },
-  _config: {
-    lifeCycle: ["start"]
-  },
-  _mount: {
-    cli: [CLI, cliTest]
-  }
-}).$use({
+  }),
   _command: {
     start: true
   }
