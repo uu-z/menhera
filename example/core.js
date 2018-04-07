@@ -1,5 +1,12 @@
-import Menhera from "../src";
-const _ = new Menhera({
+import { core } from "../src";
+
+class Foo {
+  constructor() {}
+}
+
+const _bar = parms => core({ _: new Foo(), parms });
+
+const _ = new _bar({
   _hooks: {
     foo: {
       bar: {

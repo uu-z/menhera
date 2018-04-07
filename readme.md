@@ -2,14 +2,16 @@
 
 an experimental lovely frame
 
+### Install
+
 ```bash
 yarn add menhera
 ```
 
+### Example
+
 ```js
 import Menhera from "menhera";
-
-const test = ({ _val }) => console.log(_val);
 
 const _ = new Menhera({
   _hooks: {
@@ -17,7 +19,7 @@ const _ = new Menhera({
       bar: {
         foo1: {
           bar1: {
-            test
+            test: ({ _val }) => console.log(_val)
           }
         }
       }
@@ -36,28 +38,26 @@ const _ = new Menhera({
 ```
 
 ```js
-const test = ({ _val }) => console.log(_val);
+import { core } from "menhera";
 
-const mount = {
-  name: "mount",
+class Foo {
+  constructor() {}
+}
+
+const _bar = parms => core({ _: new Foo(), parms });
+
+const _ = new _bar({
   _hooks: {
     foo: {
       bar: {
         foo1: {
           bar1: {
-            test
+            test: ({ _val }) => console.log(_val)
           }
         }
       }
     }
-  }
-};
-
-const _ = new Menhera({
-  _mount: {
-    foo: [mount]
-  }
-}).$use({
+  },
   foo: {
     bar: {
       foo1: {

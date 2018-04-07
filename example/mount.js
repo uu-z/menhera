@@ -1,7 +1,5 @@
 import Menhera from "../src";
 
-const test = ({ _val }) => console.log(_val);
-
 const mount = {
   name: "mount",
   _hooks: {
@@ -9,7 +7,7 @@ const mount = {
       bar: {
         foo1: {
           bar1: {
-            test
+            test: ({ _val }) => console.log(_val)
           }
         }
       }
