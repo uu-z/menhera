@@ -8,16 +8,15 @@ const app = {
   router: new Router(),
   _hooks: {
     koa: {
-      data({ _, _key, _val, cp }) {
-        for (let [key, val] of Object.entries(_val.bind(this)())) {
-          if (!this[key]) {
-            this[key] = val;
+      data: {
+        $({ _key, _val }) {
+          if (!this[_key]) {
+            this[_key] = _val;
           }
         }
       },
       controller({ _, _key, _val, cp }) {
-        const controllers = _val(this);
-        this.controllers = controllers;
+        this.controllers = _val(this);
       },
       router({ _, _key, _val, cp }) {
         const { router } = this;
@@ -43,20 +42,13 @@ const _ = new Menhera({
     foo: [app]
   },
   koa: {
-    data() {
-      return {
-        test: { index: 0, user: "" },
-        services: {
-          getIndex: () => this.test.index,
-          getUser: () => this.test.user
-        }
-      };
+    data: {
+      test: { index: 0, user: "" }
     },
-    controller: ({ test, services: { getIndex, getUser } }) => ({
+    controller: ({ test }) => ({
       index: {
         getIndex(ctx) {
-          test.index++;
-          ctx.body = getIndex();
+          ctx.body = test.index++;
         }
       },
       user: {
@@ -65,7 +57,7 @@ const _ = new Menhera({
             .toString(36)
             .replace(/[^a-z]+/g, "")
             .substr(0, 5);
-          ctx.body = getUser();
+          ctx.body = test.user;
         }
       }
     }),
