@@ -28,8 +28,17 @@ export const _hooks = ({ _, _key, _val, cp }) => {
       set(_.hooks, depth, target);
     }
   };
+  const onVariable = ({ depth, _val }) => {
+    if (Array.isArray(_val)) {
+      _val.forEach(val => {
+        if (typeof val === "function") {
+          onFunction({ depth, _val: val });
+        }
+      });
+    }
+  };
   const onObject = ({ object, depth, _key, _val }) => {
-    scanObject({ object, depth, onObject, onFunction });
+    scanObject({ object, depth, onObject, onFunction, onVariable });
   };
   if (typeof _val === "object") {
     onObject({ object: _val, depth: "" });
