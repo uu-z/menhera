@@ -1,15 +1,24 @@
-import { scanObject } from "./utils";
+import { scanObject, getEachHookDepth, getRootHookDepth } from "./utils";
 import { set, get } from "lodash";
 
 export const $use = ({ _ }) => parms => {
   const onVariable = ({ object, depth, _key, _val }) => {
     const hooks = get(_.hooks, depth, []);
+
     hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: parms }));
   };
   const onObject = ({ object, depth, _key, _val }) => {
-    let rootHookDepth = `${depth}._`;
-    const hooks = get(_.hooks, rootHookDepth, []);
-    hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: parms }));
+    let rootHookDepth = getRootHookDepth(depth);
+    let eachHookDepth = getEachHookDepth(depth);
+    const rootHooks = get(_.hooks, rootHookDepth, []);
+    const eachHooks = get(_.hooks, eachHookDepth, []);
+    rootHooks.length > 0 &&
+      rootHooks.forEach(h => h({ _, _key, _val, cp: parms }));
+    if (`${depth}._`.length > 0 && _val) {
+      for (let [key, val] of Object.entries(_val)) {
+        eachHooks.forEach(h => h({ _, _key: key, _val: val, cp: parms }));
+      }
+    }
 
     scanObject({ object, depth, onObject, onVariable, onFunction: onVariable });
   };

@@ -1,28 +1,26 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
-import { _data, _config, _command } from "./plugins";
 import minimist from "minimist";
 
 export const CLI = {
   name: "CLI",
-  _data() {
-    return {
-      Event: new EventEmitter()
-    };
-  },
-  start() {
-    let { _, ...flags } = minimist(process.argv.slice(2));
-    let [command = "*", ...inputs] = _;
-    const { h, help } = flags;
-
-    this.Event.emit(command, { inputs, flags });
-  },
+  Event: new EventEmitter(),
   _hooks: {
-    onCli({ _, _key, _val, cp }) {
-      for (let [key, val] of Object.entries(_val())) {
-        const { exec } = val;
-        if (exec) {
-          this.Event.on(key, exec.bind(cp));
+    CLI: {
+      commands: {
+        $({ _key, _val, cp }) {
+          const { exec } = _val;
+          this.Event.on(_key, exec.bind(cp));
+        }
+      },
+      config: {
+        _({ _val }) {
+          const { start } = _val;
+          if (start) {
+            let { _, ...flags } = minimist(process.argv.slice(2));
+            let [command = "*", ...inputs] = _;
+            this.Event.emit(command, { inputs, flags });
+          }
         }
       }
     }
@@ -30,31 +28,25 @@ export const CLI = {
 };
 
 const _ = new Menhera({
-  _hooks: {
-    _data,
-    _config,
-    _command
-  },
-  _config: {
-    lifeCycle: ["start"]
-  },
   _mount: {
     cli: [CLI]
   }
 }).$use({
-  onCli: () => ({
-    "*": {
-      exec() {
-        console.log("help");
+  CLI: {
+    commands: {
+      "*": {
+        exec() {
+          console.log("help");
+        }
+      },
+      test: {
+        exec({ inputs, flags }) {
+          console.log(inputs, flags);
+        }
       }
     },
-    test: {
-      exec({ inputs, flags }) {
-        console.log(inputs, flags);
-      }
+    config: {
+      start: true
     }
-  }),
-  _command: {
-    start: true
   }
 });

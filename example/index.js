@@ -3,9 +3,12 @@ import Menhera from "../src";
 const test = ({ _val }) => console.log(_val);
 const testFn = ({ _val }) => console.log(_val());
 const testEach = ({ _val }) => {
+  typeof _val === "function" && testFn({ _val });
+  typeof _val !== "function" && test({ _val });
+};
+const testRoot = ({ _val }) => {
   for (let [key, val] of Object.entries(_val)) {
-    typeof val === "function" && testFn({ _val: val });
-    typeof val !== "function" && test({ _val: val });
+    testEach({ _val: val });
   }
 };
 
@@ -15,7 +18,8 @@ const _ = new Menhera({
       bar: {
         foo1: {
           bar1: {
-            _: testEach,
+            $: testEach,
+            _: testRoot,
             test,
             testFn
           }

@@ -37,3 +37,7 @@ export const scanObject = ({
     console.warn(`scanObject: object must be valid`);
   }
 };
+
+export const getRootHookDepth = depth => `${depth}._`;
+
+export const getEachHookDepth = depth => `${depth}.$`;
