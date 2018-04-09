@@ -1,13 +1,7 @@
 import "babel-polyfill";
 import Menehra from "../src";
 
-const createDOMFromString = domString => {
-  const div = document.createElement("div");
-  div.innerHTML = domString;
-  return div;
-};
-
-const h = _val => {
+export const h = _val => {
   const { name, children, props } = _val;
   const el = document.createElement(name);
 
