@@ -1,36 +1,41 @@
 export const scanObject = ({
   object,
   depth = null,
-  onObject = () => {},
-  onFunction = () => {},
-  onVariable = () => {}
+  onObject,
+  onFunction,
+  onVariable,
+  onAll
 }) => {
   if (object) {
     for (let [_key, _val] of Object.entries(object)) {
       if (_val) {
         const newDepth = depth ? depth + `.${_key}` : _key;
         if (typeof _val === "function") {
-          onFunction({
-            object,
-            depth: newDepth,
-            _key,
-            _val
-          });
+          onFunction &&
+            onFunction({
+              object,
+              depth: newDepth,
+              _key,
+              _val
+            });
         } else if (typeof _val === "object" && !Array.isArray(_val)) {
-          onObject({
-            object: object[_key],
-            depth: newDepth,
-            _key,
-            _val
-          });
+          onObject &&
+            onObject({
+              object: object[_key],
+              depth: newDepth,
+              _key,
+              _val
+            });
         } else {
-          onVariable({
-            object,
-            depth: newDepth,
-            _key,
-            _val
-          });
+          onVariable &&
+            onVariable({
+              object,
+              depth: newDepth,
+              _key,
+              _val
+            });
         }
+        onAll && onAll({ object, depth, _key, _val });
       }
     }
   } else {
