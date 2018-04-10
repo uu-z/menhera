@@ -14,7 +14,7 @@ export const $use = ({ _ }) => parms => {
     const eachHooks = get(_.hooks, eachHookDepth, []);
     rootHooks.length > 0 &&
       rootHooks.forEach(h => h({ _, _key, _val, cp: parms }));
-    if (`${depth}._`.length > 0 && _val) {
+    if (eachHooks.length > 0) {
       for (let [key, val] of Object.entries(_val)) {
         eachHooks.forEach(h => h({ _, _key: key, _val: val, cp: parms }));
       }
