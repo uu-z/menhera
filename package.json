@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "main": "dist",
   "files": [
     "dist"
@@ -12,6 +12,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "menhera": "^0.4.5",
