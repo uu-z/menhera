@@ -26,9 +26,9 @@ export const Observer = ({ observable = {} } = {}) => ({
   },
   _hooks: {
     on: {
-      onObserver({ _, _key, _val, cp }) {
-        for (let [key, val] of Object.entries(_val())) {
-          this.Event.on(key, val);
+      Observer: {
+        $({ _, _key, _val, cp }) {
+          this.Event.on(_key, _val);
         }
       }
     }
@@ -42,9 +42,9 @@ export const Event = {
   },
   _hooks: {
     on: {
-      onEvent({ _, _key, _val, cp }) {
-        for (let [key, val] of Object.entries(_val())) {
-          this.Event.on(key, val);
+      Event: {
+        $({ _, _key, _val, cp }) {
+          this.Event.on(_key, _val);
         }
       }
     }
@@ -62,7 +62,7 @@ let Test = ({ _ }) => ({
     console.log("test0");
   },
   start() {
-    const { cps: { Observer: { observable: ob }, Event: { emit } } } = _;
+    const { Observer: { observable: ob }, Event: { emit } } = _;
     ob.test1 = "test1";
     ob.test2 = "test2";
     ob.test3 = ob.test3;
@@ -70,7 +70,7 @@ let Test = ({ _ }) => ({
     emit("test5", "test", "5");
   },
   on: {
-    onObserver: () => ({
+    Observer: {
       test1({ val }) {
         console.log(val);
       },
@@ -80,15 +80,15 @@ let Test = ({ _ }) => ({
       test3({ val }) {
         console.log(val);
       }
-    }),
-    onEvent: () => ({
+    },
+    Event: {
       test4({ val }) {
         console.log(val.join(""));
       },
       test5({ val }) {
         console.log(val.join(""));
       }
-    })
+    }
   }
 });
 

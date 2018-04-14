@@ -59,8 +59,8 @@ export const _mount = ({ _, _key, _val, cp }) => {
     val.forEach(async component => {
       let cp = typeof component === "function" ? component({ _ }) : component;
       const { name } = cp;
-      _.cps[name] = cp;
-      _.$use(_.cps[name]);
+      _[name] = cp;
+      _.$use(_[name]);
     });
   }
 };

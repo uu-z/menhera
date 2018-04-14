@@ -11,7 +11,7 @@ export const _command = {
     const { start } = _val;
     if (start) {
       const { lifeCycle = [] } = _.config;
-      Object.values(_.cps).forEach(async cp => {
+      Object.values(_).forEach(async cp => {
         await lifeCycle.forEach(key => {
           cp[key] && cp[key]();
         });
