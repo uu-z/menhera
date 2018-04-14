@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.5.8",
+  "version": "0.5.9-rc1",
   "main": "dist",
   "files": [
     "dist"
