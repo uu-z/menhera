@@ -13,12 +13,7 @@ const Observer = {
       },
       observe: {
         $({ _key, _val }) {
-          let vals = Array.isArray(_val) ? _val : [_val];
-          vals.forEach(val => {
-            for (let [k, v] of Object.entries(val)) {
-              observe(() => v({ ...this.observable[_key] }));
-            }
-          });
+          observe(() => _val({ ...this.observable[_key] }));
         }
       }
     }
@@ -36,10 +31,8 @@ const _ = new Menehra({
       }
     },
     observe: {
-      foo: {
-        bar(val) {
-          console.log(val);
-        }
+      foo(val) {
+        console.log(val);
       }
     }
   }
