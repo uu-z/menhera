@@ -4,11 +4,9 @@ import { _methods, _data, _config, _command } from "./plugins";
 
 const World = _ => ({
   name: "menhera-world",
-  _data() {
-    return {
-      entities: {},
-      systems: []
-    };
+  _data: {
+    entities: {},
+    systems: []
   },
   start() {
     setInterval(this.tick.bind(this), 1000);
@@ -53,10 +51,8 @@ const World = _ => ({
 
 const MovementSystem = {
   name: "MovementSystem",
-  _data() {
-    return {
-      CheckComponents: ["position", "velocity"]
-    };
+  _data: {
+    CheckComponents: ["position", "velocity"]
   },
   ECS: {
     onRegisterECS: {
@@ -74,8 +70,9 @@ const MovementSystem = {
 
 const TestEntity1 = {
   name: "test1",
-  _data() {
-    return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
+  _data: {
+    position: { x: 1, y: 1 },
+    velocity: { x: 1, y: 1 }
   },
   ECS: {
     onRegisterECS: {
@@ -85,8 +82,9 @@ const TestEntity1 = {
 };
 const TestEntity2 = {
   name: "test2",
-  _data() {
-    return { position: { x: 1, y: 1 }, velocity: { x: 10, y: 10 } };
+  _data: {
+    position: { x: 1, y: 1 },
+    velocity: { x: 10, y: 10 }
   },
   ECS: {
     onRegisterECS: {
@@ -102,16 +100,13 @@ const _ = new Menhera({
     _command,
     _methods
   },
-  _config: {
-    lifeCycle: ["start"]
-  },
   _mount: {
-    world: [World],
-    systems: [MovementSystem],
+    World,
+    MovementSystem,
     entities: [TestEntity1, TestEntity2]
-  }
-}).$use({
-  _command: {
-    start: true
+  },
+  _config: {
+    lifeCycle: ["start"],
+    run: true
   }
 });

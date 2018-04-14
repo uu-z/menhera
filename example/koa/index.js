@@ -1,11 +1,18 @@
 import Menhera from "../../src";
 import * as routes from "./routers";
 import * as controllers from "./controllers";
-import koa from "./menhera-koa";
+import { hooks } from "./menhera-koa";
+
+const app = {
+  name: "koa",
+  _hooks: {
+    koa: hooks
+  }
+};
 
 const _ = new Menhera({
   _mount: {
-    foo: [koa]
+    app
   },
   koa: {
     data: {
@@ -13,9 +20,6 @@ const _ = new Menhera({
     },
     controllers,
     routes
-  }
-}).$use({
-  koa: {
-    listen: 3000
-  }
+  },
+  listen: 3000
 });

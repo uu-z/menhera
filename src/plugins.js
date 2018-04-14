@@ -56,11 +56,18 @@ export const _hooks = ({ _, _key, _val, cp }) => {
 
 export const _mount = ({ _, _key, _val, cp }) => {
   for (let [key, val] of Object.entries(_val)) {
-    val.forEach(async component => {
-      let cp = typeof component === "function" ? component({ _ }) : component;
+    if (Array.isArray(val)) {
+      val.forEach(async component => {
+        let cp = typeof component === "function" ? component({ _ }) : component;
+        const { name } = cp;
+        _[name] = cp;
+        _.$use(_[name]);
+      });
+    } else {
+      let cp = typeof val === "function" ? val({ _ }) : val;
       const { name } = cp;
       _[name] = cp;
       _.$use(_[name]);
-    });
+    }
   }
 };
