@@ -37,7 +37,8 @@ const _ = new Menehra({
     }
   }
 });
+const { Observer: { observable: { foo } } } = _;
 
-_.Observer.observable.foo.bar++;
-_.Observer.observable.foo.bar = 10;
-_.Observer.observable.foo.foo = { bar: 100 };
+foo.bar++;
+foo.bar = 10;
+foo.foo = { bar: 100 };
