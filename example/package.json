@@ -28,7 +28,6 @@
     "parcel-bundler": "^1.7.0"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.104",
-    "lodash": "^4.17.5"
+    "@nx-js/observer-util": "^4.1.2"
   }
 }

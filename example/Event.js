@@ -4,19 +4,15 @@ import { _methods, _data, _config, _command } from "./plugins";
 
 export const Event = {
   name: "Event",
-  _data: {
-    Event: new EventEmitter()
-  },
+  _data: { Event: new EventEmitter() },
   _hooks: {
-    on: {
-      Event: {
+    Event: {
+      on: {
         $({ _, _key, _val, cp }) {
           this.Event.on(_key, _val);
         }
-      }
-    },
-    emit: {
-      Event: {
+      },
+      emit: {
         $({ _, _key, _val }) {
           this.Event.emit(_key, { val: _val });
         }
@@ -26,22 +22,15 @@ export const Event = {
 };
 
 let Test = {
-  name: "test",
+  name: "Test",
   awake() {
     console.log("test0");
   },
   start({ _ }) {
-    _.$use({
-      emit: {
-        Event: {
-          test1: "test1",
-          test2: "test2"
-        }
-      }
-    });
+    _.$use({ Event: { emit: { test1: "test1", test2: "test2" } } });
   },
-  on: {
-    Event: {
+  Event: {
+    on: {
       test1({ val }) {
         console.log(val);
       },
