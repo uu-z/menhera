@@ -1,7 +1,7 @@
 import Menhera from "../../src";
 import * as routes from "./routers";
 import * as controllers from "./controllers";
-import { hooks as koa } from "./menhera-koa";
+import * as koa from "./hooks";
 
 const _ = new Menhera({
   _hooks: {
