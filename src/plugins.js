@@ -1,7 +1,7 @@
 import { scanObject, getEachHookDepth, getRootHookDepth, $ } from "./utils";
 import { set, get } from "lodash";
 
-export const $use = ({ _ }) => _object => {
+export const $use = ({ _, _object }) => {
   const onVariable = ({ object, depth, _key, _val }) => {
     const hooks = get(_.hooks, depth, []);
 
@@ -27,7 +27,7 @@ export const $use = ({ _ }) => _object => {
   return _;
 };
 
-export const $set = ({ _ }) => _object => {
+export const $set = ({ _, _object }) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
     set(_, depth, _val);
@@ -41,7 +41,13 @@ export const $set = ({ _ }) => _object => {
   };
 
   const onObject = ({ object, depth, _key, _val }) => {
-    scanObject({ object, depth, onObject, onVariable, onFunction });
+    scanObject({
+      object,
+      depth,
+      onObject,
+      onVariable,
+      onFunction
+    });
   };
   if (typeof _object === "object") {
     onObject({ object: _object, depth: "" });
@@ -49,7 +55,7 @@ export const $set = ({ _ }) => _object => {
   return cache;
 };
 
-export const $get = ({ _ }) => _object => {
+export const $get = ({ _, _object }) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
     let result = get(_, depth);
@@ -65,7 +71,13 @@ export const $get = ({ _ }) => _object => {
   };
 
   const onObject = ({ object, depth, _key, _val }) => {
-    scanObject({ object, depth, onObject, onFunction, onVariable });
+    scanObject({
+      object,
+      depth,
+      onObject,
+      onFunction,
+      onVariable
+    });
   };
 
   if (typeof _object === "object") {
