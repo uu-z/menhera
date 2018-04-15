@@ -1,11 +1,7 @@
-import { ConfigMerger } from "./utils";
-
-export const _config = {
+export const _lifeCycle = {
   _({ _, _key, _val, cp }) {
-    _.config = ConfigMerger(_.config, _val);
-    const { run } = _.config;
+    const { lifeCycle = [], run } = _val;
     if (run) {
-      const { lifeCycle = [] } = _.config;
       Object.values(_).forEach(async cp => {
         await lifeCycle.forEach(key => {
           cp[key] && cp[key]({ _ });

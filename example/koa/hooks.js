@@ -1,9 +1,4 @@
-import koa from "koa";
-
-export function _() {
-  !this["app"] && (this["app"] = new koa());
-}
-
+import { $ } from "../../src";
 export const data = {
   $({ _key, _val }) {
     if (!this[_key]) {
@@ -19,26 +14,19 @@ export const use = {
 };
 
 export const controllers = {
-  _() {
-    !this.controllers && (this.controllers = {});
-  },
   $({ _, _key, _val, cp }) {
     this.controllers[_key] = { ...this.controllers[_key], ..._val(this) };
   }
 };
 
-import Router from "koa-router";
 export const routes = {
-  _() {
-    !this.router && (this.router = new Router());
-  },
   $({ _, _key, _val, cp }) {
     const { router } = this;
     const routers = _val(this);
-    for (let [key, val] of Object.entries(routers)) {
+    $(routers, (key, val) => {
       const [method, path] = key.split(" ");
       router[method](path, ctx => val(ctx));
-    }
+    });
   }
 };
 

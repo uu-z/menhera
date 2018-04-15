@@ -1,3 +1,9 @@
+export const $ = (obj, cb) => {
+  for (let [key, val] of Object.entries(obj)) {
+    cb(key, val);
+  }
+};
+
 export const scanObject = async ({
   object,
   depth = null,
@@ -7,7 +13,7 @@ export const scanObject = async ({
   onAll
 }) => {
   if (object) {
-    for (let [_key, _val] of Object.entries(object)) {
+    $(object, (_key, _val) => {
       const newDepth = depth ? depth + `.${_key}` : _key;
       if (_val) {
         if (typeof _val === "function") {
@@ -36,10 +42,16 @@ export const scanObject = async ({
             });
         }
       } else {
-        onVariable && onVariable({ object, depth: newDepth, _key, _val });
+        onVariable &&
+          onVariable({
+            object,
+            depth: newDepth,
+            _key,
+            _val
+          });
       }
       onAll && onAll({ object, depth, _key, _val });
-    }
+    });
   } else {
     console.warn(`scanObject: object must be valid`);
   }

@@ -1,10 +1,10 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
-import { _methods, _data, _config, _command } from "./plugins";
+import { _methods, _lifeCycle } from "./plugins";
 
 export const Event = {
   name: "Event",
-  _data: { Event: new EventEmitter() },
+  Event: new EventEmitter(),
   _hooks: {
     Event: {
       on: {
@@ -43,14 +43,13 @@ let Test = {
 
 const _ = new Menhera({
   _hooks: {
-    _config,
-    _data
+    _lifeCycle
   },
   _mount: {
     Event,
     Test
   },
-  _config: {
+  _lifeCycle: {
     lifeCycle: ["awake", "start"],
     run: true
   }

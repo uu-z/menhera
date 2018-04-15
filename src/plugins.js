@@ -1,4 +1,4 @@
-import { scanObject, getEachHookDepth, getRootHookDepth } from "./utils";
+import { scanObject, getEachHookDepth, getRootHookDepth, $ } from "./utils";
 import { set, get } from "lodash";
 
 export const $use = ({ _ }) => _object => {
@@ -14,11 +14,10 @@ export const $use = ({ _ }) => _object => {
     const eachHooks = get(_.hooks, eachHookDepth, []);
     rootHooks.length > 0 &&
       rootHooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    if (eachHooks.length > 0) {
-      for (let [key, val] of Object.entries(_val)) {
+    eachHooks.length > 0 &&
+      $(_val, (key, val) => {
         eachHooks.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
-      }
-    }
+      });
 
     scanObject({ object, depth, onObject, onVariable, onFunction: onVariable });
   };

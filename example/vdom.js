@@ -1,11 +1,11 @@
 import "babel-polyfill";
-import Menehra from "../src";
+import Menehra, { $ } from "../src";
 
 export const h = _val => {
   const { name, children, props } = _val;
   const el = document.createElement(name);
 
-  for (let [key, val] of Object.entries(props)) {
+  $(props, (key, val) => {
     switch (key) {
       case "style":
         el.style.cssText = val;
@@ -14,7 +14,7 @@ export const h = _val => {
         el.setAttribute(key, val);
         break;
     }
-  }
+  });
 
   children.forEach(child => {
     const childEl = child.children ? h(child) : document.createTextNode(child);

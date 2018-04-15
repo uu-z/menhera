@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import Menhera from "../src";
-import { _methods, _data, _config, _command } from "./plugins";
+import { _data, _lifeCycle } from "./plugins";
 
 const World = _ => ({
   name: "menhera-world",
@@ -11,25 +11,25 @@ const World = _ => ({
   start() {
     setInterval(this.tick.bind(this), 1000);
   },
-  _methods: {
-    tick() {
-      let entities = Object.values(this.entities);
-      console.log(this.entities);
-      this.systems.forEach(system => {
-        entities.forEach(entity => {
-          if (system["CheckComponents"]) {
-            let check = system["CheckComponents"].every((e, i, a) => {
-              return entity[e] !== undefined;
-            });
-            if (check) {
-              system.updateEach(entity);
-            }
-          } else {
+  tick() {
+    let entities = Object.values(this.entities);
+    console.log(this.entities);
+    const [method, path] = key.split(" ");
+    router[method](path, ctx => val(ctx));
+    this.systems.forEach(system => {
+      entities.forEach(entity => {
+        if (system["CheckComponents"]) {
+          let check = system["CheckComponents"].every((e, i, a) => {
+            return entity[e] !== undefined;
+          });
+          if (check) {
             system.updateEach(entity);
           }
-        });
+        } else {
+          system.updateEach(entity);
+        }
       });
-    }
+    });
   },
   _hooks: {
     ECS: {
@@ -59,12 +59,10 @@ const MovementSystem = {
       registerSystem: true
     }
   },
-  _methods: {
-    updateEach(entity) {
-      const { position, velocity } = entity;
-      position.x += velocity.x;
-      position.y += velocity.y;
-    }
+  updateEach(entity) {
+    const { position, velocity } = entity;
+    position.x += velocity.x;
+    position.y += velocity.y;
   }
 };
 
@@ -96,16 +94,14 @@ const TestEntity2 = {
 const _ = new Menhera({
   _hooks: {
     _data,
-    _config,
-    _command,
-    _methods
+    _lifeCycle
   },
   _mount: {
     World,
     MovementSystem,
     entities: [TestEntity1, TestEntity2]
   },
-  _config: {
+  _lifeCycle: {
     lifeCycle: ["start"],
     run: true
   }
