@@ -61,7 +61,7 @@ const _ = new Menhera({
     foo: {
       bar: {
         $({ _key, _val }) {
-          console.log(`${_key}: ${_val}`);
+          console.log(`${_key}: ${JSON.stringify(_val)}`);
         }
       }
     }
@@ -71,7 +71,14 @@ const _ = new Menhera({
 _.$set({
   foo: {
     bar: {
-      test: 123
+      String: "123",
+      Number: 123,
+      Array: [1, 2, 3],
+      Object: {
+        1: 1,
+        2: 2,
+        3: 3
+      }
     }
   }
 });
@@ -80,8 +87,10 @@ _.$use(
   _.$get({
     foo: {
       bar: {
-        test: 233,
-        test1: 456
+        String: ({ tar }) => `${tar}456`,
+        Number: ({ tar }) => tar + 123333,
+        Array: ({ tar }) => [...tar, ...[4, 5, 6]],
+        Object: ({ tar }) => ({ ...tar, ...{ 4: 4, 5: 5, 6: 6 } })
       }
     }
   })
