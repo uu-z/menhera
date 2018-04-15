@@ -33,9 +33,15 @@ export const $set = ({ _ }) => _object => {
     set(_, depth, _val);
     set(cache, depth, _val);
   };
+  const onFunction = ({ object, depth, _key, _val }) => {
+    let tar = get(_, depth);
+    let result = _val({ tar });
+    set(_, depth, result);
+    set(cache, depth, result);
+  };
 
   const onObject = ({ object, depth, _key, _val }) => {
-    scanObject({ object, depth, onObject, onVariable });
+    scanObject({ object, depth, onObject, onVariable, onFunction });
   };
   if (typeof _object === "object") {
     onObject({ object: _object, depth: "" });

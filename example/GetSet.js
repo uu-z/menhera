@@ -17,12 +17,12 @@ _.$set({
     bar: {
       String: "123456",
       Number: 123,
-      Array: [1, 2, 3],
-      Object: {
+      Array: ({ tar = [1, 2, 3] }) => tar,
+      Object: ({ tar }) => ({
         1: 1,
         2: 2,
         3: 3
-      }
+      })
     }
   }
 });
