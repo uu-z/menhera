@@ -1,9 +1,9 @@
-import { core, $get, $set, $use } from "../src";
+import { $core, $get, $set, $use } from "../src";
 
 class Foo {
   constructor() {}
 }
-const Bar = _object => core({ _: new Foo(), _object });
+const Bar = _object => $core({ _: new Foo(), _object });
 
 const _ = new Bar({
   _hooks: {

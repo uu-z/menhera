@@ -1,7 +1,6 @@
-import { core } from "./menhera";
+import { $core } from "./core";
 
-export * from "./menhera";
 export * from "./utils";
-export * from "./plugins";
+export * from "./core";
 
-export default _object => core({ _: {}, _object });
+export default _object => $core({ _: {}, _object });
