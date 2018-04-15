@@ -2,4 +2,4 @@ import { core } from "./menhera";
 
 export * from "./menhera";
 
-export default parms => core({ _: {}, parms });
+export default _object => core({ _: {}, _object });

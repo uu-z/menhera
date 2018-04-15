@@ -53,13 +53,39 @@ const _ = new Menhera({
 });
 ```
 
+![index](./assets/index.png)
+
 ```js
-import { core } from "menhera";
+const _ = new Menhera({
+  _hooks: {
+    foo: {
+      bar: {
+        $({ _key, _val }) {
+          console.log(`${_key}: ${_val}`);
+        }
+      }
+    }
+  }
+});
 
-class Foo {
-  constructor() {}
-}
-const Bar = parms => core({ _: new Foo(), parms });
+_.$set({
+  foo: {
+    bar: {
+      test: 123
+    }
+  }
+});
 
-const _ = new Bar({});
+_.$use(
+  _.$get({
+    foo: {
+      bar: {
+        test: 233,
+        test1: 456
+      }
+    }
+  })
+);
 ```
+
+![getset](./assets/getset.png)

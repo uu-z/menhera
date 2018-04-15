@@ -3,6 +3,6 @@ import { core } from "../src";
 class Foo {
   constructor() {}
 }
-const Bar = parms => core({ _: new Foo(), parms });
+const Bar = _object => core({ _: new Foo(), _object });
 
 const _ = new Bar({});
