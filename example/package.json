@@ -1,10 +1,4 @@
 {
-  "scripts": {
-    "vdom": "parcel ./test.html",
-    "cli": "babel-node ./cli test 123 -h",
-    "ecs": "babel-node ./ecs",
-    "koa": "babel-node ./koa"
-  },
   "devDependencies": {
     "@types/koa": "^2.0.44",
     "@types/koa-router": "^7.0.27",

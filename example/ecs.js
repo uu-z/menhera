@@ -14,8 +14,6 @@ const World = _ => ({
   tick() {
     let entities = Object.values(this.entities);
     console.log(this.entities);
-    const [method, path] = key.split(" ");
-    router[method](path, ctx => val(ctx));
     this.systems.forEach(system => {
       entities.forEach(entity => {
         if (system["CheckComponents"]) {
