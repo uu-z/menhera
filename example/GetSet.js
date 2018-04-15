@@ -15,7 +15,7 @@ const _ = new Menhera({
 _.$set({
   foo: {
     bar: {
-      String: "123",
+      String: "123456",
       Number: 123,
       Array: [1, 2, 3],
       Object: {
@@ -31,7 +31,7 @@ _.$use(
   _.$get({
     foo: {
       bar: {
-        String: ({ tar }) => `${tar}456`,
+        String: "",
         Number: ({ tar }) => tar + 123333,
         Array: ({ tar }) => [...tar, ...[4, 5, 6]],
         Object: ({ tar }) => ({ ...tar, ...{ 4: 4, 5: 5, 6: 6 } })
