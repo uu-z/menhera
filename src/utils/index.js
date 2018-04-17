@@ -3,6 +3,30 @@ export const $ = (obj, cb) => {
     cb(key, val);
   }
 };
+export const $O = (obj, cb) => {
+  $(obj, (key, val) => {
+    if (typeof val === "object") {
+      cb(key, val);
+    }
+  });
+};
+
+export const $F = (obj, cb) => {
+  $(obj, (key, val) => {
+    if (typeof val === "function") {
+      cb(key, val);
+    }
+  });
+};
+
+export const $V = (obj, cb) => {
+  $(obj, (key, val) => {
+    let type = typeof val;
+    if (type !== "function" && type !== "object") {
+      cb(key, val);
+    }
+  });
+};
 
 export const scanObject = async ({
   object,
@@ -56,7 +80,3 @@ export const scanObject = async ({
     console.warn(`scanObject: object must be valid`);
   }
 };
-
-export const getRootHookDepth = depth => `${depth}._`;
-
-export const getEachHookDepth = depth => `${depth}.$`;
