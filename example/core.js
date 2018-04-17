@@ -3,7 +3,7 @@ import { $core, $get, $set, $use } from "../src";
 class Foo {
   constructor() {}
 }
-const Bar = _object => $core({ _: new Foo(), _object });
+const Bar = _object => $core(new Foo(), _object);
 
 const _ = new Bar({
   _hooks: {
@@ -17,22 +17,19 @@ const _ = new Bar({
   }
 });
 
-let a = $set({
-  _,
-  _object: {
-    foo: {
-      bar: {
-        String: "123",
-        Number: 123,
-        Array: ({ tar = [1, 2, 3] }) => tar,
-        Object: ({ tar }) => ({
-          1: 1,
-          2: 2,
-          3: 3
-        })
-      }
+let a = $set(_, {
+  foo: {
+    bar: {
+      String: "123",
+      Number: 123,
+      Array: ({ tar = [1, 2, 3] }) => tar,
+      Object: ({ tar }) => ({
+        1: 1,
+        2: 2,
+        3: 3
+      })
     }
   }
 });
 
-$use({ _, _object: a });
+$use(_, a);
