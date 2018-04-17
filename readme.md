@@ -74,12 +74,12 @@ _.$set({
       String: "123456",
       Boolean: false,
       Number: 123,
-      Array: ({ tar = [1, 2, 3] }) => tar,
-      Object: ({ tar }) => ({
+      Array: [1, 2, 3],
+      Object: {
         1: 1,
         2: 2,
         3: 3
-      }),
+      },
       Function: ({ tar }) => val => val + 1
     }
   }
