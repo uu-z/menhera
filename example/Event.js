@@ -47,12 +47,7 @@ const _ = new Menhera({
   },
   _set: {},
   _mount: {
-    Event: {
-      $set: {
-        _: Event,
-        _object: {}
-      }
-    },
+    Event,
     Test
   },
   _lifeCycle: {

@@ -4,10 +4,10 @@ import { set, get } from "lodash";
 export const $core = (_, _object) => {
   _.hooks = {};
   _.hooks._hooks = { _: [_hooks] };
-  _.hooks._mount = { $: [_mount] };
   _.$use = _object => $use(_, _object);
   _.$get = _object => $get(_, _object);
   _.$set = _object => $set(_, _object);
+  _.$use({ _hooks: { _mount } });
   _.$use(_object);
   return _;
 };
@@ -122,15 +122,17 @@ export const _hooks = ({ _, _key, _val, cp }) => {
   }
 };
 
-export const _mount = ({ _, _val, cp }) => {
-  let cps = Array.isArray(_val) ? _val : [_val];
-  cps.forEach(async component => {
-    let cp = typeof component === "function" ? component({ _ }) : component;
-    const { name } = cp;
-    if (_[name]) {
-      throw new Error(`_mount: name "${name}" exists, please another one`);
-    }
-    _[name] = cp;
-    _.$use(_[name]);
-  });
+export const _mount = {
+  $({ _, _val, cp }) {
+    let cps = Array.isArray(_val) ? _val : [_val];
+    cps.forEach(async component => {
+      let cp = typeof component === "function" ? component({ _ }) : component;
+      _.$use(cp);
+      const { name } = cp;
+      if (_[name]) {
+        throw new Error(`_mount: name "${name}" exists, please another one`);
+      }
+      _[name] = cp;
+    });
+  }
 };
