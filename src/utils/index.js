@@ -3,30 +3,6 @@ export const $ = (obj, cb) => {
     cb(key, val);
   }
 };
-export const $O = (obj, cb) => {
-  $(obj, (key, val) => {
-    if (typeof val === "object") {
-      cb(key, val);
-    }
-  });
-};
-
-export const $F = (obj, cb) => {
-  $(obj, (key, val) => {
-    if (typeof val === "function") {
-      cb(key, val);
-    }
-  });
-};
-
-export const $V = (obj, cb) => {
-  $(obj, (key, val) => {
-    let type = typeof val;
-    if (type !== "function" && type !== "object") {
-      cb(key, val);
-    }
-  });
-};
 
 export const scanObject = async ({
   object,
@@ -38,6 +14,7 @@ export const scanObject = async ({
 }) => {
   if (object) {
     $(object, (_key, _val) => {
+      let parentDepth = depth;
       const newDepth = depth ? depth + `.${_key}` : _key;
       if (_val) {
         if (typeof _val === "function") {
@@ -45,6 +22,7 @@ export const scanObject = async ({
             onFunction({
               object,
               depth: newDepth,
+              parentDepth,
               _key,
               _val
             });
@@ -53,6 +31,7 @@ export const scanObject = async ({
             onObject({
               object: object[_key],
               depth: newDepth,
+              parentDepth,
               _key,
               _val
             });
@@ -61,6 +40,7 @@ export const scanObject = async ({
             onVariable({
               object,
               depth: newDepth,
+              parentDepth,
               _key,
               _val
             });
@@ -70,6 +50,7 @@ export const scanObject = async ({
           onVariable({
             object,
             depth: newDepth,
+            parentDepth,
             _key,
             _val
           });

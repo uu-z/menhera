@@ -1,10 +1,10 @@
-import { scanObject, $, $F, $O, $V } from "./utils";
+import { scanObject, $ } from "./utils";
 import { set, get } from "lodash";
 
 export const $core = (_, _object) => {
   _.hooks = {};
   _.hooks._hooks = { _: [_hooks] };
-  _.symbolHooks = symbolHooks(_);
+  _.objectHooks = objectHooks(_);
   _.$use = _object => $use(_, _object);
   _.$get = _object => $get(_, _object);
   _.$set = _object => $set(_, _object);
@@ -14,17 +14,32 @@ export const $core = (_, _object) => {
 };
 
 export const $use = (_, _object) => {
-  const onVariable = ({ object, depth, _key, _val }) => {
+  const onFunction = ({ object, depth, parentDepth, _key, _val }) => {
     const hooks = get(_.hooks, depth, []);
+    const $F = `${parentDepth}.$F`;
+    const $FHooks = get(_.hooks, $F, []);
+
+    $FHooks.length > 0 &&
+      $FHooks.forEach(h => h({ _, _key, _val, cp: _object }));
 
     hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
   };
-  const onObject = ({ object, depth, _key, _val }) => {
-    $(_.symbolHooks, (key, hook) => {
-      hook({ object, depth, _key, _val, _object });
+  const onVariable = ({ object, depth, parentDepth, _key, _val }) => {
+    const hooks = get(_.hooks, depth, []);
+    const $V = `${parentDepth}.$V`;
+    const $VHooks = get(_.hooks, $V, []);
+
+    $VHooks.length > 0 &&
+      $VHooks.forEach(h => h({ _, _key, _val, cp: _object }));
+
+    hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
+  };
+  const onObject = ({ object, depth, parentDepth, _key, _val }) => {
+    $(_.objectHooks, (key, hook) => {
+      hook({ object, parentDepth, depth, _key, _val, _object });
     });
 
-    scanObject({ object, depth, onObject, onVariable, onFunction: onVariable });
+    scanObject({ object, depth, onObject, onVariable, onFunction });
   };
   if (typeof _object === "object") {
     onObject({ object: _object, depth: "" });
@@ -119,7 +134,7 @@ export const _mount = {
   }
 };
 
-const symbolHooks = _ => ({
+const objectHooks = _ => ({
   _({ object, depth, _key, _val, _object }) {
     let rootHookDepth = `${depth}._`;
     const rootHooks = get(_.hooks, rootHookDepth, []);
@@ -134,28 +149,10 @@ const symbolHooks = _ => ({
         eachHooks.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
       });
   },
-  $O({ object, depth, _key, _val, _object }) {
-    let eachObjectDepth = `${depth}.$O`;
-    const eachObjects = get(_.hooks, eachObjectDepth, []);
-    eachObjects.length > 0 &&
-      $O(_val, (key, val) => {
-        eachObjects.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
-      });
-  },
-  $F({ object, depth, _key, _val, _object }) {
-    let eachFunctionDepth = `${depth}.$F`;
-    const eachFunctions = get(_.hooks, eachFunctionDepth, []);
-    eachFunctions.length > 0 &&
-      $F(_val, (key, val) => {
-        eachFunctions.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
-      });
-  },
-  $V({ object, depth, _key, _val, _object }) {
-    let eachVariableDepth = `${depth}.$V`;
-    const eachVariables = get(_.hooks, eachVariableDepth, []);
-    eachVariables.length > 0 &&
-      $V(_val, (key, val) => {
-        eachVariables.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
-      });
+  $O({ object, parentDepth, depth, _key, _val, _object }) {
+    let rootHookDepth = `${parentDepth}.$O`;
+    const rootHooks = get(_.hooks, rootHookDepth, []);
+    rootHooks.length > 0 &&
+      rootHooks.forEach(h => h({ _, _key, _val, cp: _object }));
   }
 });
