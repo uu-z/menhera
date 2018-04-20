@@ -1,10 +1,11 @@
 import { $, scanObject } from "../utils";
+import { useHooks } from "./scanHooks";
 import get from "lodash.get";
 import set from "lodash.set";
 import has from "lodash.has";
 
 const use = (_, _object) => {
-  const hooks = _.hooks["$use"];
+  const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
     const _hooks = hooks[hook];
     _hooks &&

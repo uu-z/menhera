@@ -2,6 +2,13 @@ import get from "lodash.get";
 import set from "lodash.set";
 import { scanObject, $ } from "../utils";
 
+export const initHooks = _ => {
+  let cache = {};
+  cache._hooks = { _: [_hooks] };
+  cache._mount = { $: [_mount] };
+  return cache;
+};
+
 export const _hooks = ({ _, _val, cp }) => {
   if (typeof _val === "object") {
     const onFunction = ({ depth, _val }) => {

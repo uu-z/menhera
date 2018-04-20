@@ -2,7 +2,7 @@ import get from "lodash.get";
 import set from "lodash.set";
 import { $ } from "../utils";
 
-export const $use = _ => ({
+export const useHooks = _ => ({
   onAny: {
     any({ object, parentDepth, depth, _key, _val, _object }) {
       const key = `${depth}`;
