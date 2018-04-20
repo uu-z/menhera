@@ -1,5 +1,6 @@
 import { scanObject, $ } from "./utils";
-import { set, get } from "lodash";
+import get from 'lodash.get'
+import set from 'lodash.set'
 
 export const $core = (_, _object) => {
   _.hooks = {};

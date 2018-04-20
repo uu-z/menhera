@@ -19,7 +19,7 @@
     "menhera": "^0.6.1-rc6"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.104",
-    "lodash": "^4.17.5"
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2"
   }
 }
