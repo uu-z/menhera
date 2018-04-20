@@ -1,7 +1,19 @@
+import * as scanHooks from "./scanHooks";
+
+export * from "./scan";
+export * from "./hooks";
+
 export const $ = (obj, cb) => {
   for (let [key, val] of Object.entries(obj)) {
     cb(key, val);
   }
+};
+export const initHooks = _ => {
+  let cache = {};
+  $(scanHooks, (key, val) => {
+    cache[key] = val(_);
+  });
+  return cache;
 };
 
 export const scanObject = async ({

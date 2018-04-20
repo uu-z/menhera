@@ -1,95 +1,43 @@
 import get from "lodash.get";
 import set from "lodash.set";
-import { $ } from "../utils";
+import { scanObject, $ } from "../utils";
 
-export const $use = _ => ({
-  onAny: {
-    any({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    },
-    _({ object, depth, _key, _val, _object }) {
-      const __ = `${depth}._`;
-      const _Hooks = get(_.hooks, __, []);
-      _Hooks.length > 0 &&
-        _Hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    }
-  },
-  onObject: {
-    O({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}.O`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    },
-    $({ object, depth, _key, _val, _object }) {
-      const key = `${depth}.$`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 &&
-        $(_val, (key, val) => {
-          hooks.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
+export const _hooks = ({ _, _val, cp }) => {
+  if (typeof _val === "object") {
+    const onFunction = ({ depth, _val }) => {
+      let target = get(_.hooks, depth, []);
+      if (!target.includes(_val.bind(cp))) {
+        target.push(_val.bind(cp));
+        set(_.hooks, depth, target);
+      }
+    };
+    const onVariable = ({ depth, _val }) => {
+      if (Array.isArray(_val)) {
+        _val.forEach(val => {
+          if (typeof val === "function") {
+            onFunction({ depth, _val: val });
+          }
         });
-    },
-    O$({ object, depth, _key, _val, _object }) {
-      const key = `${depth}.O$`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 &&
-        $(_val, (key, val) => {
-          hooks.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
-        });
-    },
-    $O({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${parentDepth}.$O`;
-      const $hooks = get(_.hooks, key, []);
-      $hooks.length > 0 &&
-        $hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    }
-  },
-  onArray: {
-    A({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}.A`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    },
-    A$({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}.A$`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 &&
-        _val.forEach((val, i) => {
-          hooks.forEach(h => h({ _, i, _val: val, cp: _object }));
-        });
-    },
-    $A({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${parentDepth}.$A`;
-      const $hooks = get(_.hooks, key, []);
-      $hooks.length > 0 &&
-        $hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    }
-  },
-  onFunction: {
-    F({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}.F`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    },
-    $F({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${parentDepth}.$F`;
-      const $hooks = get(_.hooks, key, []);
-      $hooks.length > 0 &&
-        $hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    }
-  },
-  onVariable: {
-    V({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${depth}.V`;
-      const hooks = get(_.hooks, key, []);
-      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    },
-    $V({ object, parentDepth, depth, _key, _val, _object }) {
-      const key = `${parentDepth}.$V`;
-      const $hooks = get(_.hooks, key, []);
-      $hooks.length > 0 &&
-        $hooks.forEach(h => h({ _, _key, _val, cp: _object }));
-    }
+      }
+    };
+    const onObject = ({ object, depth, _key, _val }) => {
+      scanObject({ object, depth, onObject, onFunction, onVariable });
+    };
+    onObject({ object: _val, depth: "" });
   }
-});
+};
+
+export const _mount = {
+  $({ _, _val, cp }) {
+    let cps = Array.isArray(_val) ? _val : [_val];
+    cps.forEach(async component => {
+      let cp = typeof component === "function" ? component({ _ }) : component;
+      _.$use(cp);
+      const { name } = cp;
+      if (_[name]) {
+        throw new Error(`_mount: name "${name}" exists, please another one`);
+      }
+      _[name] = cp;
+    });
+  }
+};
