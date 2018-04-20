@@ -55,8 +55,8 @@ export const $use = _ => ({
       const key = `${depth}.A$`;
       const hooks = get(_.hooks, key, []);
       hooks.length > 0 &&
-        _val.forEach((val, i) => {
-          hooks.forEach(h => h({ _, i, _val: val, cp: _object }));
+        $(_val, (key, val) => {
+          hooks.forEach(h => h({ _, _key: key, _val: val, cp: _object }));
         });
     },
     $A({ object, parentDepth, depth, _key, _val, _object }) {

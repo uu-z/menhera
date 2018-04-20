@@ -26,8 +26,8 @@ const _ = new Menhera({
         A({ _val }) {
           console.log(`A:`, _val);
         },
-        A$({ i, _val }) {
-          console.log(`A$_${i}:`, _val);
+        A$({ _key, _val }) {
+          console.log(`A$_${_key}:`, _val);
         }
       },
       bar3: {
