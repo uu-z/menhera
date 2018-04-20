@@ -17,11 +17,20 @@ export const scanObject = async ({
     $(object, (_key, _val) => {
       let parentDepth = depth;
       const newDepth = depth ? depth + `.${_key}` : _key;
-      onAny && onAny({ object, depth: newDepth, parentDepth, _key, _val });
+      onAny &&
+        onAny({
+          hook: "onAny",
+          object,
+          depth: newDepth,
+          parentDepth,
+          _key,
+          _val
+        });
       if (_val) {
         if (typeof _val === "function") {
           onFunction &&
             onFunction({
+              hook: "onFunction",
               object,
               depth: newDepth,
               parentDepth,
@@ -32,6 +41,7 @@ export const scanObject = async ({
           if (Array.isArray(_val)) {
             onArray &&
               onArray({
+                hook: "onArray",
                 object: object,
                 depth: newDepth,
                 parentDepth,
@@ -41,6 +51,7 @@ export const scanObject = async ({
           } else {
             onObject &&
               onObject({
+                hook: "onObject",
                 object: object[_key],
                 depth: newDepth,
                 parentDepth,
@@ -51,6 +62,7 @@ export const scanObject = async ({
         } else {
           onVariable &&
             onVariable({
+              hook: "onVariable",
               object,
               depth: newDepth,
               parentDepth,
@@ -61,6 +73,7 @@ export const scanObject = async ({
       } else {
         onVariable &&
           onVariable({
+            hook: "onVariable",
             object,
             depth: newDepth,
             parentDepth,
