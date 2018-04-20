@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.6.6-rc1",
+  "version": "0.6.6-rc2",
   "main": "dist",
   "files": [
     "dist"
@@ -19,7 +19,10 @@
     "menhera": "^0.6.4-rc2"
   },
   "dependencies": {
+    "@types/lodash.get": "^4.4.3",
+    "@types/lodash.set": "^4.3.3",
     "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
     "lodash.set": "^4.3.2"
   }
 }
