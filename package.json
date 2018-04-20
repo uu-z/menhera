@@ -1,13 +1,13 @@
 {
   "name": "menhera",
-  "version": "0.6.4-rc2",
+  "version": "0.6.4-rc3",
   "main": "dist",
   "files": [
     "dist"
   ],
   "scripts": {
     "example": "babel-node ./example/index",
-    "build": "babel ./src --out-dir dist",
+    "build": "rm -rf dist/; babel ./src --out-dir dist",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -16,7 +16,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
-    "menhera": "^0.6.2"
+    "menhera": "^0.6.4-rc2"
   },
   "dependencies": {
     "lodash.get": "^4.4.2",
