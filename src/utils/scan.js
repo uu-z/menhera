@@ -35,7 +35,9 @@ export const $use = (_, _object) => {
   };
   typeof _object === "object" && onObject({ object: _object, depth: "" });
   Array.isArray(_object) &&
-    $(_object, (key, object) => onObject({ object, depth: "" }));
+    $(_object, (key, object) => {
+      onObject({ object, depth: "" });
+    });
 
   return _;
 };

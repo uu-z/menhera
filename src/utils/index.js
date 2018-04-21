@@ -7,7 +7,7 @@ export const $ = (obj, cb) => {
   }
 };
 
-export const scanObject = async ({
+export const scanObject = ({
   object,
   depth = null,
   onObject,

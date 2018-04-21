@@ -39,7 +39,7 @@ export const _hooks = {
 export const _mount = {
   $({ _, _val, cp }) {
     let cps = Array.isArray(_val) ? _val : [_val];
-    cps.forEach(async component => {
+    $(cps, (key, component) => {
       let cp = typeof component === "function" ? component({ _ }) : component;
       _.$use(cp);
       const { name } = cp;
