@@ -20,7 +20,8 @@ export const scanObject = async ({
     $(object, (_key, _val) => {
       let parentDepth = depth;
       const newDepth = depth ? depth + `.${_key}` : _key;
-      onAny &&
+      let out =
+        onAny &&
         onAny({
           hook: "onAny",
           object,

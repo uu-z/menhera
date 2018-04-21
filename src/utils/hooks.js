@@ -21,7 +21,7 @@ export const _hooks = {
       };
       const onVariable = ({ depth, _val }) => {
         if (Array.isArray(_val)) {
-          _val.forEach(val => {
+          $(_val, (key, val) => {
             if (typeof val === "function") {
               onFunction({ depth, _val: val });
             }

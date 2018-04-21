@@ -11,9 +11,8 @@ export const useHooks = _ => ({
     },
     _({ object, depth, _key, _val, _object }) {
       const __ = `${depth}._`;
-      const _Hooks = get(_.hooks, __, []);
-      _Hooks.length > 0 &&
-        _Hooks.forEach(h => h({ _, _key, _val, cp: _object }));
+      const hooks = get(_.hooks, __, []);
+      hooks.length > 0 && hooks.forEach(h => h({ _, _key, _val, cp: _object }));
     }
   },
   onObject: {

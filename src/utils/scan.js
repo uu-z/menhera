@@ -4,9 +4,12 @@ import get from "lodash.get";
 import set from "lodash.set";
 import has from "lodash.has";
 
-const use = (_, _object) => {
+export const $use = (_, _object) => {
   const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
+    const validHook = has(_.hooks, depth);
+    if (depth != "" && !validHook) return;
+
     const _hooks = hooks[hook];
     _hooks &&
       $(_hooks, (key, hook) => {
@@ -16,10 +19,9 @@ const use = (_, _object) => {
 
   const onObject = data => {
     const { object, hook, depth } = data;
-    hook && BindHook(data);
-
     const validHook = has(_.hooks, depth);
     if (depth != "" && !validHook) return;
+    hook && BindHook(data);
 
     scanObject({
       object,
@@ -31,18 +33,10 @@ const use = (_, _object) => {
       onAny: BindHook
     });
   };
-  onObject({ object: _object, depth: "" });
-};
+  typeof _object === "object" && onObject({ object: _object, depth: "" });
+  Array.isArray(_object) &&
+    $(_object, (key, object) => onObject({ object, depth: "" }));
 
-export const $use = (_, _object) => {
-  if (typeof _object === "object") {
-    use(_, _object);
-  }
-  if (Array.isArray(_object)) {
-    _object.forEach(o => {
-      use(_, o);
-    });
-  }
   return _;
 };
 
@@ -71,6 +65,7 @@ export const $set = (_, _object) => {
       });
     };
     onObject({ object: _object, depth: "" });
+
     return cache;
   }
 };
