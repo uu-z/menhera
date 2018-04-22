@@ -10,8 +10,8 @@ export const $core = (_, _object) => {
   _.$use = _object => _.events.emit("$use", _object);
   _.$get = _object => $get(_, _object);
   _.$set = _object => $set(_, _object);
+  _.$diff = _object => $diff(_, _object);
   _.$merge = _array => $merge(_array);
-  _.$diff = _object => $diff(_object);
   _.$use(_object);
   return _;
 };
