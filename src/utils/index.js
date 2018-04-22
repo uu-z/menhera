@@ -20,8 +20,7 @@ export const scanObject = ({
     $(object, (_key, _val) => {
       let parentDepth = depth;
       const newDepth = depth ? depth + `.${_key}` : _key;
-      let out =
-        onAny &&
+      onAny &&
         onAny({
           hook: "onAny",
           object,
@@ -31,37 +30,34 @@ export const scanObject = ({
           _val
         });
       if (_val) {
-        if (typeof _val === "function") {
-          onFunction &&
-            onFunction({
-              hook: "onFunction",
-              object,
+        if (onFunction && typeof _val === "function") {
+          onFunction({
+            hook: "onFunction",
+            object,
+            depth: newDepth,
+            parentDepth,
+            _key,
+            _val
+          });
+        } else if ((onArray || onObject) && typeof _val === "object") {
+          if (Array.isArray(_val)) {
+            onArray({
+              hook: "onArray",
+              object: object,
               depth: newDepth,
               parentDepth,
               _key,
               _val
             });
-        } else if (typeof _val === "object") {
-          if (Array.isArray(_val)) {
-            onArray &&
-              onArray({
-                hook: "onArray",
-                object: object,
-                depth: newDepth,
-                parentDepth,
-                _key,
-                _val
-              });
           } else {
-            onObject &&
-              onObject({
-                hook: "onObject",
-                object: object[_key],
-                depth: newDepth,
-                parentDepth,
-                _key,
-                _val
-              });
+            onObject({
+              hook: "onObject",
+              object: object[_key],
+              depth: newDepth,
+              parentDepth,
+              _key,
+              _val
+            });
           }
         } else {
           onVariable &&

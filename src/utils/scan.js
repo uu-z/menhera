@@ -61,15 +61,22 @@ export const _set = (_, _object) => {
   const onVariable = ({ object, depth, _key, _val }) => {
     set(_, depth, _val);
     set(cache, depth, _val);
+    return;
   };
   const onFunction = ({ object, depth, _key, _val }) => {
     let tar = get(_, depth);
     let result = _val({ tar });
     set(_, depth, result);
     set(cache, depth, result);
+    return;
   };
 
   const onObject = ({ object, depth, _key, _val }) => {
+    if (Object.keys(object).length === 0) {
+      set(_, depth, _val);
+      set(cache, depth, _val);
+      return;
+    }
     scanObject({
       object,
       depth,
@@ -112,6 +119,7 @@ export const _get = (_, _object) => {
     let result = get(_, depth);
     result && set(cache, depth, result);
     !result && set(cache, depth, _val);
+    return;
   };
 
   const onFunction = ({ object, depth, _key, _val }) => {
@@ -119,9 +127,17 @@ export const _get = (_, _object) => {
     let result = _val({ tar });
     result && set(cache, depth, result);
     !result && set(cache, depth, _val);
+    return;
   };
 
   const onObject = ({ object, depth, _key, _val }) => {
+    if (Object.keys(object).length === 0) {
+      let result = get(_, depth);
+      result && set(cache, depth, result);
+      !result && set(cache, depth, _val);
+      return;
+    }
+
     scanObject({
       object,
       depth,
@@ -129,6 +145,47 @@ export const _get = (_, _object) => {
       onFunction,
       onVariable,
       onArray: onVariable
+    });
+  };
+  onObject({ object: _object, depth: "" });
+
+  return cache;
+};
+
+export const $diff = (_, _object) => {
+  if (Array.isArray(_object)) {
+    let cache = [];
+    $(_object, (key, val) => {
+      cache[key] = _diff(_, val);
+    });
+    return cache;
+  }
+
+  if (typeof _object === "object") {
+    return _diff(_, _object);
+  }
+};
+
+export const _diff = (_, _object) => {
+  let cache = {};
+  const onObject = ({ object, depth, _key, _val }) => {
+    let target = get(_, depth, {});
+    $(object, (key, val) => {
+      if (typeof val === "object") {
+        return;
+      }
+      let result = target[key];
+      if (result !== val) {
+        const newDepth = `${depth}.${key}`;
+        set(cache, newDepth, val);
+      }
+      return;
+    });
+
+    scanObject({
+      object,
+      depth,
+      onObject
     });
   };
   onObject({ object: _object, depth: "" });
