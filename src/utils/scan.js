@@ -33,73 +33,105 @@ export const $use = (_, _object) => {
       onAny: BindHook
     });
   };
-  typeof _object === "object" && onObject({ object: _object, depth: "" });
-  Array.isArray(_object) &&
+  if (Array.isArray(_object)) {
     $(_object, (key, object) => {
       onObject({ object, depth: "" });
     });
+    return _;
+  }
 
+  typeof _object === "object" && onObject({ object: _object, depth: "" });
   return _;
 };
 
 export const $set = (_, _object) => {
-  if (typeof _object === "object") {
-    let cache = {};
-    const onVariable = ({ object, depth, _key, _val }) => {
-      set(_, depth, _val);
-      set(cache, depth, _val);
-    };
-    const onFunction = ({ object, depth, _key, _val }) => {
-      let tar = get(_, depth);
-      let result = _val({ tar });
-      set(_, depth, result);
-      set(cache, depth, result);
-    };
-
-    const onObject = ({ object, depth, _key, _val }) => {
-      scanObject({
-        object,
-        depth,
-        onObject,
-        onVariable,
-        onFunction,
-        onArray: onVariable
-      });
-    };
-    onObject({ object: _object, depth: "" });
-
+  if (Array.isArray(_object)) {
+    let cache = $merge(_object);
+    _set(_, cache);
     return cache;
+  }
+
+  if (typeof _object === "object") {
+    return _set(_, _object);
   }
 };
 
+export const _set = (_, _object) => {
+  let cache = {};
+  const onVariable = ({ object, depth, _key, _val }) => {
+    set(_, depth, _val);
+    set(cache, depth, _val);
+  };
+  const onFunction = ({ object, depth, _key, _val }) => {
+    let tar = get(_, depth);
+    let result = _val({ tar });
+    set(_, depth, result);
+    set(cache, depth, result);
+  };
+
+  const onObject = ({ object, depth, _key, _val }) => {
+    scanObject({
+      object,
+      depth,
+      onObject,
+      onVariable,
+      onFunction,
+      onArray: onVariable
+    });
+  };
+  onObject({ object: _object, depth: "" });
+
+  return cache;
+};
+
+export const $merge = _array => {
+  let cache = {};
+  $(_array, (key, val) => {
+    _set(cache, val);
+  });
+  return cache;
+};
+
 export const $get = (_, _object) => {
-  if (typeof _object === "object") {
-    let cache = {};
-    const onVariable = ({ object, depth, _key, _val }) => {
-      let result = get(_, depth);
-      result && set(cache, depth, result);
-      !result && set(cache, depth, _val);
-    };
-
-    const onFunction = ({ object, depth, _key, _val }) => {
-      let tar = get(_, depth);
-      let result = _val({ tar });
-      result && set(cache, depth, result);
-      !result && set(cache, depth, _val);
-    };
-
-    const onObject = ({ object, depth, _key, _val }) => {
-      scanObject({
-        object,
-        depth,
-        onObject,
-        onFunction,
-        onVariable,
-        onArray: onVariable
-      });
-    };
-    onObject({ object: _object, depth: "" });
-
+  if (Array.isArray(_object)) {
+    let cache = [];
+    $(_object, (key, val) => {
+      cache[key] = _get(_, val);
+    });
     return cache;
   }
+
+  if (typeof _object === "object") {
+    return _get(_, _object);
+  }
+};
+
+export const _get = (_, _object) => {
+  let cache = {};
+  const onVariable = ({ object, depth, _key, _val }) => {
+    let result = get(_, depth);
+    result && set(cache, depth, result);
+    !result && set(cache, depth, _val);
+  };
+
+  const onFunction = ({ object, depth, _key, _val }) => {
+    let tar = get(_, depth);
+    let result = _val({ tar });
+    result && set(cache, depth, result);
+    !result && set(cache, depth, _val);
+  };
+
+  const onObject = ({ object, depth, _key, _val }) => {
+    scanObject({
+      object,
+      depth,
+      onObject,
+      onFunction,
+      onVariable,
+      onArray: onVariable
+    });
+  };
+  onObject({ object: _object, depth: "" });
+
+  return cache;
 };
