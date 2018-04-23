@@ -1,4 +1,4 @@
-import Menhera from "../src";
+import Menhera from "../dist";
 
 const middleware = {
   name: "middleware",

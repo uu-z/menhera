@@ -1,4 +1,4 @@
-import Menhera, { $get, $set, $merge } from "../src";
+import Menhera, { $, $get, $set, $merge } from "../dist";
 
 const _ = new Menhera({
   _hooks: {

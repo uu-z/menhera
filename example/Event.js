@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera from "../src";
+import Menhera from "../dist";
 import { _methods, _lifeCycle } from "./plugins";
 
 export const Event = {

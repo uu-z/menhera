@@ -1,4 +1,4 @@
-import { $core, $get, $set, $use } from "../src";
+import { $core, $get, $set, $use } from "../dist";
 
 class Foo {
   constructor() {}

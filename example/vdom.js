@@ -1,5 +1,5 @@
 import "babel-polyfill";
-import Menehra, { $ } from "../src";
+import Menehra, { $ } from "../dist";
 
 export const h = _val => {
   const { name, children, props } = _val;

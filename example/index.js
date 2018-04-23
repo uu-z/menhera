@@ -1,4 +1,4 @@
-import Menhera from "../src";
+import Menhera from "../dist";
 
 const test = ({ _val }) => console.log(_val);
 const testFn = ({ _val }) => console.log(_val());

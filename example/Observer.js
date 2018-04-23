@@ -1,4 +1,4 @@
-import Menehra from "../src";
+import Menehra from "../dist";
 import { observable, observe } from "@nx-js/observer-util";
 
 const Observer = {

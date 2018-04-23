@@ -1,4 +1,4 @@
-import Menehra, { $set } from "../src";
+import Menehra, { $set } from "../dist";
 
 let Test = {
   name: "test",
