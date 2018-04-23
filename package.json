@@ -1,26 +1,19 @@
 {
   "name": "menhera",
-  "version": "0.6.7-rc2",
+  "version": "0.6.7-rc4",
   "main": "dist",
   "files": [
     "dist"
   ],
   "scripts": {
-    "example": "babel-node ./example/index",
-    "build": "babel ./src --out-dir dist",
+    "build": "bili --format umd --name index",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-3": "^6.24.1",
+    "bili": "^3.1.0",
     "menhera": "^0.6.4-rc2"
   },
   "dependencies": {
-    "@types/lodash.get": "^4.4.3",
-    "@types/lodash.set": "^4.3.3",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.set": "^4.3.2"
