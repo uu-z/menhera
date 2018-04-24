@@ -1,13 +1,13 @@
 {
   "name": "menhera",
-  "version": "0.6.7-rc6",
-  "main": "dist/index.cjs.js",
+  "version": "0.6.7-rc7",
+  "main": "dist/menhera.js",
   "license": "MIT",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "bili --name index",
+    "build": "bili  --filename [name].js",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
