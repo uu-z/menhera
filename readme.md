@@ -11,7 +11,7 @@ yarn add menhera
 ### Example
 
 ```js
-import Menhera from "menehra";
+import Mhr from "menehra";
 
 const test = ({ _val }) => console.log(_val);
 const testFn = ({ _val }) => console.log(_val());
@@ -57,7 +57,7 @@ Mhr.$use({
 ![index](./assets/index.png)
 
 ```js
-import Menhera from "menehra";
+import mhr from "menehra";
 
 
 mhr.$use({
