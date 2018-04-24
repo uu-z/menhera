@@ -1,4 +1,4 @@
-import Menhera from "../dist";
+import Mhr from "../dist";
 
 const middleware = {
   name: "middleware",
@@ -34,7 +34,7 @@ const logFoo = ctx => {
   return ctx;
 };
 
-const _ = new Menhera({
+Mhr.$use({
   _mount: {
     middleware
   },

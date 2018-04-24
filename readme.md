@@ -25,7 +25,7 @@ const testRoot = ({ _val }) => {
   }
 };
 
-const _ = new Menhera({
+Mhr.$use({
   _hooks: {
     foo: {
       bar: {
@@ -51,12 +51,16 @@ const _ = new Menhera({
     }
   }
 });
+
 ```
 
 ![index](./assets/index.png)
 
 ```js
-const _ = new Menhera({
+import Menhera from "menehra";
+
+
+mhr.$use({
   _hooks: {
     foo: {
       bar: {
@@ -68,7 +72,7 @@ const _ = new Menhera({
   }
 });
 
-_.$set({
+mhr.$set({
   foo: {
     bar: {
       String: "123456",
@@ -85,8 +89,8 @@ _.$set({
   }
 });
 
-_.$use(
-  _.$get({
+mhr.$use(
+  mhr.$get({
     foo: {
       bar: {
         String: "",
@@ -99,6 +103,7 @@ _.$use(
     }
   })
 );
+
 ```
 
 ![getset](./assets/getset.png)

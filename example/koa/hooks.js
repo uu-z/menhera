@@ -1,4 +1,4 @@
-import { $ } from "../../src";
+import { $ } from "../../dist";
 export const data = {
   $({ _key, _val }) {
     if (!this[_key]) {

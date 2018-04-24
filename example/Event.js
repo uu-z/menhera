@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera from "../dist";
+import Mhr from "../dist";
 import { _methods, _lifeCycle } from "./plugins";
 
 export const Event = {
@@ -41,7 +41,7 @@ let Test = {
   }
 };
 
-const _ = new Menhera({
+Mhr.$use({
   _hooks: {
     _lifeCycle
   },

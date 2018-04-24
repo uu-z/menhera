@@ -1,4 +1,4 @@
-import Menhera from "../dist";
+import Mhr from "../dist";
 
 const test = ({ _val }) => console.log(_val);
 const testFn = ({ _val }) => console.log(_val());
@@ -12,7 +12,7 @@ const testRoot = ({ _val }) => {
   }
 };
 
-const _ = new Menhera({
+Mhr.$use({
   _hooks: {
     foo: {
       bar: {

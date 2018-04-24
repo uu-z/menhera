@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Menhera from "../dist";
+import Mhr from "../dist";
 import { _data, _lifeCycle } from "./plugins";
 
 const World = _ => ({
@@ -89,7 +89,7 @@ const TestEntity2 = {
   }
 };
 
-const _ = new Menhera({
+Mhr.$use({
   _hooks: {
     _data,
     _lifeCycle

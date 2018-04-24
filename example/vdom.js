@@ -1,5 +1,5 @@
 import "babel-polyfill";
-import Menehra, { $ } from "../dist";
+import Mhr, { $ } from "../dist";
 
 export const h = _val => {
   const { name, children, props } = _val;
@@ -42,7 +42,7 @@ const Vdom = {
   }
 };
 
-const _ = new Menehra({
+Mhr.$use({
   _mount: {
     core: [Vdom]
   },

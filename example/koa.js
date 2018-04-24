@@ -1,11 +1,12 @@
-import Menhera from "../../src";
+import Mhr from "../dist";
 import Koa from "koa";
 import Router from "koa-router";
-import * as routes from "./routers";
-import * as controllers from "./controllers";
-import * as koa from "./hooks";
+import * as routes from "./koa/routers";
+import * as controllers from "./koa/controllers";
+import * as koa from "./koa/hooks";
 
-const _ = new Menhera({
+
+Mhr.$use({
   app: new Koa(),
   router: new Router(),
   controllers: {},

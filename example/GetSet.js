@@ -1,6 +1,6 @@
-import Menhera from "../dist";
+import mhr from "../dist";
 
-const _ = new Menhera({
+mhr.$use({
   _hooks: {
     foo: {
       bar: {
@@ -12,7 +12,7 @@ const _ = new Menhera({
   }
 });
 
-_.$set({
+mhr.$set({
   foo: {
     bar: {
       String: "123456",
@@ -29,8 +29,8 @@ _.$set({
   }
 });
 
-_.$use(
-  _.$get({
+mhr.$use(
+  mhr.$get({
     foo: {
       bar: {
         String: "",

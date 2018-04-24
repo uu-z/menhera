@@ -1,6 +1,6 @@
-import Menhera, { $, $get, $set, $merge } from "../dist";
+import Mhr, { $, $get, $set, $merge } from "../dist";
 
-const _ = new Menhera({
+Mhr.$use({
   _hooks: {
     foo: {
       bar0: {

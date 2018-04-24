@@ -1,4 +1,4 @@
-import Menhera, { $set, $get, $merge, $diff } from "../dist";
+import { $set, $get, $merge, $diff } from "../dist";
 
 let _ = {};
 

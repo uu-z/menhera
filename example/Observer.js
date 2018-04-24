@@ -1,4 +1,4 @@
-import Menehra from "../dist";
+import Mhr from "../dist";
 import { observable, observe } from "@nx-js/observer-util";
 
 const Observer = {
@@ -20,7 +20,7 @@ const Observer = {
   }
 };
 
-const _ = new Menehra({
+Mhr.$use({
   _mount: {
     Observer
   },
@@ -41,7 +41,7 @@ const {
   Observer: {
     observable: { foo }
   }
-} = _;
+} = Mhr;
 
 foo.bar++;
 foo.bar = 10;

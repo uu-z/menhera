@@ -1,4 +1,4 @@
-import Menehra, { $set } from "../dist";
+import Mhr, { $set } from "../dist";
 
 let Test = {
   name: "test",
@@ -14,7 +14,7 @@ let newTest = $set(Test, {
   }
 });
 
-const _ = new Menehra({
+Mhr.$use({
   _mount: {
     newTest
   },
