@@ -1,4 +1,4 @@
-import { $, scanObject } from "../utils";
+import { $, scanObject, HOOKS } from "../utils";
 import { useHooks } from "./scanHooks";
 import get from "lodash.get";
 import set from "lodash.set";
@@ -7,7 +7,7 @@ import has from "lodash.has";
 export const $use = (_, _object) => {
   const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
-    const validHook = has(_.hooks, depth);
+    const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
 
     const _hooks = hooks[hook];
@@ -19,7 +19,7 @@ export const $use = (_, _object) => {
 
   const onObject = data => {
     const { object, hook, depth } = data;
-    const validHook = has(_.hooks, depth);
+    const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
     hook && BindHook(data);
 

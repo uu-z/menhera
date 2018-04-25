@@ -1,4 +1,4 @@
-import Mhr from "../dist";
+import Mhr, { HOOKS } from "../dist";
 
 const test = ({ _val }) => console.log(_val);
 const testFn = ({ _val }) => console.log(_val());

@@ -1,14 +1,24 @@
-import { initHooks, $get, $set, $use, $merge, $diff } from "./utils";
+import {
+  initHooks,
+  $get,
+  $set,
+  $use,
+  $merge,
+  $diff,
+  hooks,
+  HOOKS,
+  EVENTS
+} from "./utils";
 import { EventEmitter } from "events";
 
 export * from "./utils";
 
 export const $core = (_, _object) => {
-  _.hooks = initHooks(_);
-  _.events = new EventEmitter();
-  _.events.on("$use", _object => $use(_, _object));
+  _[HOOKS] = initHooks(_);
+  _[EVENTS] = new EventEmitter();
+  _[EVENTS].on("$use", _object => $use(_, _object));
   _.$use = _object => {
-    _.events.emit("$use", _object);
+    _[EVENTS].emit("$use", _object);
     return _;
   };
   _.$get = _object => $get(_, _object);
