@@ -41,11 +41,12 @@ export const _mount = {
     let cps = Array.isArray(_val) ? _val : [_val];
     $(cps, (key, component) => {
       let cp = typeof component === "function" ? component({ _ }) : component;
-      _.$use(cp);
       const { name } = cp;
       if (_[name]) {
-        throw new Error(`_mount: name "${name}" exists, please another one`);
+        console.log(`_mount: name "${name}" exists`);
+        return;
       }
+      _.$use(cp);
       _[name] = cp;
     });
   }

@@ -1,6 +1,11 @@
 export * from "./scan";
 export * from "./hooks";
 
+import get from "lodash.get";
+import set from "lodash.set";
+import has from "lodash.has";
+export { get, set, has };
+
 export const $ = (obj, cb) => {
   for (let [key, val] of Object.entries(obj)) {
     cb(key, val);

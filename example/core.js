@@ -1,11 +1,12 @@
 import { $core, $get, $set, $use } from "../dist";
 
 class Foo {
-  constructor() {}
+  constructor(object) {
+    $core(this, object);
+  }
 }
-const Bar = _object => $core(new Foo(), _object);
 
-const _ = new Bar({
+const _ = new Foo({
   _hooks: {
     foo: {
       bar: {
