@@ -5,7 +5,7 @@ import {
   $use,
   $merge,
   $diff,
-  hooks,
+  $has,
   HOOKS,
   EVENTS
 } from "./utils";
@@ -24,6 +24,7 @@ export const $core = (_, _object) => {
   _.$get = _object => $get(_, _object);
   _.$set = _object => $set(_, _object);
   _.$diff = _object => $diff(_, _object);
+  _.$has = _object => $has(_, _object);
   _.$merge = _array => $merge(_array);
   _.$use(_object);
   return _;

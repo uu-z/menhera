@@ -192,3 +192,45 @@ export const _diff = (_, _object) => {
 
   return cache;
 };
+
+export const _has = (_, _object) => {
+  let cache = {};
+  const onObject = ({ object, depth, _key, _val }) => {
+    let target = get(_, depth);
+    $(object, (key, val) => {
+      if (typeof val === "object") {
+        return;
+      }
+      const newDepth = `${depth}.${key}`;
+      let result = target[key];
+
+      result && set(cache, newDepth, true);
+      !result && set(cache, newDepth, false);
+
+      return;
+    });
+
+    scanObject({
+      object,
+      depth,
+      onObject
+    });
+  };
+  onObject({ object: _object, depth: "" });
+
+  return cache;
+};
+
+export const $has = (_, _object) => {
+  if (Array.isArray(_object)) {
+    let cache = [];
+    $(_object, (key, val) => {
+      cache[key] = _has(_, val);
+    });
+    return cache;
+  }
+
+  if (typeof _object === "object") {
+    return _has(_, _object);
+  }
+};

@@ -14,7 +14,6 @@ export const $ = (obj, cb) => {
     cb(key, val);
   }
 };
-
 export const scanObject = ({
   object,
   depth = null,

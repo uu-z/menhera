@@ -1,4 +1,4 @@
-import { $set, $get, $merge, $diff } from "../dist";
+import { $set, $get, $merge, $diff, $has } from "../dist";
 
 let _ = {};
 
@@ -75,3 +75,15 @@ let diff = $diff(_, [
   }
 ]);
 console.log("$diff: ", JSON.stringify(diff));
+
+let has = $has(_, {
+  foo: {
+    bar: {
+      String: "",
+      number: "",
+      test: ""
+    }
+  }
+});
+
+console.log("$has: ", JSON.stringify(has));
