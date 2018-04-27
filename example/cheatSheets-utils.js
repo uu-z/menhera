@@ -1,4 +1,4 @@
-import { $set, $get, $merge, $diff, $has } from "../dist";
+import { $set, $get, $merge, $diff, $has, $match, $str } from "../dist";
 
 let _ = {};
 
@@ -87,3 +87,11 @@ let has = $has(_, {
 });
 
 console.log("$has: ", JSON.stringify(has));
+
+let key = $str({
+  equal: { "foo.bar.String": "123456" },
+  get: { number: "foo.bar.number" }
+});
+let match = $match(_, {
+  [key]: ({ number }) => console.log(number)
+});

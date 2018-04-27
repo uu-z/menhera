@@ -4,13 +4,11 @@ import get from "lodash.get";
 import set from "lodash.set";
 import has from "lodash.has";
 
-let mathchPath = /\./;
+const matchPath = /\./;
+export const $str = JSON.stringify;
 export const $use = (_, _object) => {
   const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
-    if (mathchPath.test(_key)) {
-      depth = `${parentDepth}${_key}`;
-    }
     const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
 
@@ -48,23 +46,33 @@ export const $use = (_, _object) => {
   return _;
 };
 
-export const $set = (_, _object) => {
+export const $run = (_method, _, _object) => {
   if (Array.isArray(_object)) {
-    let cache = $merge(_object);
-    _set(_, cache);
+    let cache = [];
+    $(_object, (key, val) => {
+      cache[key] = _method(_, val);
+    });
     return cache;
   }
 
   if (typeof _object === "object") {
-    return _set(_, _object);
+    return _method(_, _object);
   }
 };
+
+export const $set = (_, _object) => $run(_set, _, _object);
 
 export const _set = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
-    set(_, depth, _val);
-    set(cache, depth, _val);
+    if (matchPath.test(_val)) {
+      let result = get(_, _val);
+      set(_, depth, result);
+      set(cache, depth, result);
+    } else {
+      set(_, depth, _val);
+      set(cache, depth, _val);
+    }
     return;
   };
   const onFunction = ({ object, depth, _key, _val }) => {
@@ -103,26 +111,20 @@ export const $merge = _array => {
   return cache;
 };
 
-export const $get = (_, _object) => {
-  if (Array.isArray(_object)) {
-    let cache = [];
-    $(_object, (key, val) => {
-      cache[key] = _get(_, val);
-    });
-    return cache;
-  }
-
-  if (typeof _object === "object") {
-    return _get(_, _object);
-  }
-};
+export const $get = (_, _object) => $run(_get, _, _object);
 
 export const _get = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
-    let result = get(_, depth);
-    result && set(cache, depth, result);
-    !result && set(cache, depth, _val);
+    let result;
+    if (matchPath.test(_val)) {
+      result = get(_, _val);
+      result && set(cache, depth, result);
+    } else {
+      result = get(_, depth);
+      result && set(cache, depth, result);
+      !result && set(cache, depth, _val);
+    }
     return;
   };
 
@@ -156,19 +158,7 @@ export const _get = (_, _object) => {
   return cache;
 };
 
-export const $diff = (_, _object) => {
-  if (Array.isArray(_object)) {
-    let cache = [];
-    $(_object, (key, val) => {
-      cache[key] = _diff(_, val);
-    });
-    return cache;
-  }
-
-  if (typeof _object === "object") {
-    return _diff(_, _object);
-  }
-};
+export const $diff = (_, _object) => $run(_diff, _, _object);
 
 export const _diff = (_, _object) => {
   let cache = {};
@@ -197,10 +187,11 @@ export const _diff = (_, _object) => {
   return cache;
 };
 
+export const $has = (_, _object) => $run(_has, _, _object);
 export const _has = (_, _object) => {
   let cache = {};
   const onObject = ({ object, depth, _key, _val }) => {
-    let target = get(_, depth);
+    let target = get(_, depth, {});
     $(object, (key, val) => {
       if (typeof val === "object") {
         return;
@@ -225,16 +216,88 @@ export const _has = (_, _object) => {
   return cache;
 };
 
-export const $has = (_, _object) => {
-  if (Array.isArray(_object)) {
-    let cache = [];
-    $(_object, (key, val) => {
-      cache[key] = _has(_, val);
-    });
-    return cache;
-  }
+export const $match = (_, _object) => $run(_match, _, _object);
 
-  if (typeof _object === "object") {
-    return _has(_, _object);
-  }
+export const _match = (_, _object) => {
+  $(_object, (_key, _val) => {
+    const { invalid, valid, equal, get: __get } = JSON.parse(_key);
+    let isinvalid = true;
+    let isValid = true;
+    let isEqual = true;
+    let cache = {};
+
+    invalid && (isinvalid = $invalid(_, invalid));
+    valid && (isValid = $valid(_, valid));
+    equal && (isEqual = $equal(_, equal));
+
+    if (!isEqual || !isValid || !isinvalid) {
+      return;
+    }
+    __get && $set(cache, $get(_, __get));
+
+    _val(cache);
+  });
+};
+
+export const $invalid = (_, _object) => $run(_invalid, _, _object);
+export const _invalid = (_, _object) => {
+  let isinValid = true;
+  const onObject = ({ object, depth, _key, _val }) => {
+    $(object, (key, val) => {
+      if (typeof val === "object" || !isinValid) {
+        return;
+      }
+      let newDepth = depth ? `${depth}.${key}` : key;
+      let target = get(_, newDepth);
+      if (target) {
+        isinValid = false;
+        return;
+      }
+    });
+    scanObject({ object, depth, onObject });
+  };
+  onObject({ object: _object, depth: "" });
+  return isinValid;
+};
+
+export const $valid = (_, _object) => $run(_valid, _, _object);
+export const _valid = (_, _object) => {
+  let isValid = true;
+  const onObject = ({ object, depth, _key, _val }) => {
+    $(object, (key, val) => {
+      if (typeof val === "object" || !isValid) {
+        return;
+      }
+      let newDepth = depth ? `${depth}.${key}` : key;
+      let target = get(_, newDepth);
+      if (!target) {
+        isValid = false;
+        return;
+      }
+    });
+    scanObject({ object, depth, onObject });
+  };
+  onObject({ object: _object, depth: "" });
+  return isValid;
+};
+
+export const $equal = (_, _object) => $run(_equal, _, _object);
+export const _equal = (_, _object) => {
+  let isEqual = true;
+  const onObject = ({ object, depth, _key, _val }) => {
+    $(object, (key, val) => {
+      if (typeof val === "object" || isEqual) {
+        return;
+      }
+      let newDepth = depth ? `${depth}.${key}` : key;
+      let target = get(_, newDepth);
+      if (val !== target) {
+        isEqual = false;
+        return;
+      }
+    });
+    scanObject({ object, depth, onObject });
+  };
+  onObject({ object: _object, depth: "" });
+  return isEqual;
 };

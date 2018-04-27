@@ -44,45 +44,29 @@ Mhr.$use({
 ![index](./assets/index.png)
 
 ```js
-import mhr from "menehra";
+import { $match, $str } from "menhera";
 
-mhr.$use({
-  _hooks: {
-    "foo.bar": {
-      $({ _key, _val }) {
-        console.log(`${_key}: ${JSON.stringify(_val)}`);
-      }
-    }
+let obj = {
+  loading: true,
+  error: true,
+  foo: {
+    foo: 123,
+    bar: 123
   }
+};
+
+let loading = $str({ equal: { loading: true }, get: { loading: "" } });
+let error = $str({ valid: { error: "" }, get: { error: "" } });
+let foobar = $str({
+  equal: { foo: { bar: 123 } },
+  get: { bar: "foo.bar" }
 });
 
-mhr.$set({
-  "foo.bar": {
-    String: "123456",
-    Boolean: false,
-    Number: 123,
-    Array: [1, 2, 3],
-    Object: {
-      1: 1,
-      2: 2,
-      3: 3
-    },
-    Function: ({ tar }) => val => val + 1
-  }
+$match(obj, {
+  [loading]: ({ loading }) => console.log("loading", loading),
+  [error]: ({ error }) => console.log("error", error),
+  [foobar]: ({ bar }) => console.log(bar)
 });
-
-mhr.$use(
-  mhr.$get({
-    "foo.bar": {
-      String: "",
-      Boolean: ({ tar }) => !tar,
-      Number: ({ tar }) => tar + 123333,
-      Array: ({ tar }) => [...tar, ...[4, 5, 6]],
-      Object: ({ tar }) => ({ ...tar, ...{ 4: 4, 5: 5, 6: 6 } }),
-      Function: ({ tar }) => tar(123455)
-    }
-  })
-);
 ```
 
 ![getset](./assets/getset.png)
