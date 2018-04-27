@@ -14,27 +14,15 @@ const testRoot = ({ _val }) => {
 
 Mhr.$use({
   _hooks: {
-    foo: {
-      bar: {
-        foo1: {
-          bar1: {
-            $: testEach,
-            _: testRoot,
-            test,
-            testFn
-          }
-        }
-      }
+    "foo.bar.foo1.bar1": {
+      $: testEach,
+      _: testRoot,
+      test,
+      testFn
     }
   },
-  foo: {
-    bar: {
-      foo1: {
-        bar1: {
-          test: "foo bar",
-          testFn: () => "foo bar"
-        }
-      }
-    }
+  "foo.bar.foo1.bar1": {
+    test: "foo bar",
+    testFn: () => "foo bar"
   }
 });

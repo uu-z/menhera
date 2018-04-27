@@ -50,7 +50,7 @@ export const scanObject = ({
           if (Array.isArray(_val)) {
             onArray({
               hook: "onArray",
-              object: object,
+              object,
               depth: newDepth,
               parentDepth,
               _key,

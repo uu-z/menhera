@@ -4,9 +4,13 @@ import get from "lodash.get";
 import set from "lodash.set";
 import has from "lodash.has";
 
+let mathchPath = /\./;
 export const $use = (_, _object) => {
   const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
+    if (mathchPath.test(_key)) {
+      depth = `${parentDepth}${_key}`;
+    }
     const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
 
