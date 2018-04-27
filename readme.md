@@ -69,4 +69,4 @@ $match(obj, {
 });
 ```
 
-![getset](./assets/getset.png)
+![preview](./assets/match.png)
