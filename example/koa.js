@@ -1,24 +1,27 @@
-import Mhr from "../dist";
-import Koa from "koa";
-import Router from "koa-router";
+import Mhr, { $merge } from "../dist";
 import * as routes from "./koa/routers";
 import * as controllers from "./koa/controllers";
+import * as models from "./koa/model";
 import * as koa from "./koa/hooks";
-
+import * as mongoose from "./koa/mongoose";
 
 Mhr.$use({
-  app: new Koa(),
-  router: new Router(),
-  controllers: {},
   _hooks: {
-    koa
+    koa: $merge([koa, mongoose])
   },
   koa: {
-    data: {
-      test: { index: 0, user: "" }
-    },
+    models,
     controllers,
     routes,
-    listen: 3000
+    config: {
+      listen: 3000,
+      dbConfig: {
+        auth: false,
+        user: "admin",
+        dbname: "data",
+        pwd: "xxx",
+        uri: "localhost:27017/"
+      }
+    }
   }
 });

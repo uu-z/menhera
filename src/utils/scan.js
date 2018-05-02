@@ -74,6 +74,11 @@ export const _setSimple = (_, _object) => {
     }
     return;
   };
+  const onFunction = ({ object, depth, _key, _val }) => {
+    set(_, depth, _val);
+    set(cache, depth, _val);
+    return;
+  };
   const onObject = ({ object, depth, _key, _val }) => {
     if (Object.keys(object).length === 0) {
       set(_, depth, _val);
@@ -85,6 +90,7 @@ export const _setSimple = (_, _object) => {
       depth,
       onObject,
       onVariable,
+      onFunction,
       onArray: onVariable
     });
   };
@@ -141,10 +147,10 @@ export const setMethods = {
 export const $set = (_, _object, { type = "simple" } = {}) =>
   $run(setMethods[type], _, _object);
 
-export const $merge = _array => {
+export const $merge = (_array, options) => {
   let cache = {};
   $(_array, (key, val) => {
-    $set(cache, val);
+    $set(cache, val, options);
   });
   return cache;
 };
