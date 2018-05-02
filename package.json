@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.7.1-rc",
+  "version": "0.7.1-rc2",
   "main": "dist/index.js",
   "license": "MIT",
   "files": [
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "bili": "^3.1.0",
-    "menhera": "^0.6.7-rc5",
+    "menhera": "^0.7.1-rc",
     "menhera-cli": "^0.3.1-rc2"
   },
   "dependencies": {

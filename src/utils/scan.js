@@ -1,8 +1,6 @@
-import { $, scanObject, HOOKS } from "../utils";
+import { $, scanObject, HOOKS, get, set, has } from "../utils";
 import { useHooks } from "./scanHooks";
-import get from "lodash.get";
-import set from "lodash.set";
-import has from "lodash.has";
+import { $minCore } from "../index";
 
 const matchPath = /\./;
 export const $str = JSON.stringify;
@@ -47,6 +45,9 @@ export const $use = (_, _object) => {
 };
 
 export const $run = (_method, _, _object) => {
+  if (!_method) {
+    throw new Error("$run: _method is invalid");
+  }
   if (Array.isArray(_object)) {
     let cache = [];
     $(_object, (key, val) => {
@@ -60,9 +61,39 @@ export const $run = (_method, _, _object) => {
   }
 };
 
-export const $set = (_, _object) => $run(_set, _, _object);
+export const _setSimple = (_, _object) => {
+  let cache = {};
+  const onVariable = ({ object, depth, _key, _val }) => {
+    if (matchPath.test(_val)) {
+      let result = get(_, _val);
+      set(_, depth, result);
+      set(cache, depth, result);
+    } else {
+      set(_, depth, _val);
+      set(cache, depth, _val);
+    }
+    return;
+  };
+  const onObject = ({ object, depth, _key, _val }) => {
+    if (Object.keys(object).length === 0) {
+      set(_, depth, _val);
+      set(cache, depth, _val);
+      return;
+    }
+    scanObject({
+      object,
+      depth,
+      onObject,
+      onVariable,
+      onArray: onVariable
+    });
+  };
+  onObject({ object: _object, depth: "" });
 
-export const _set = (_, _object) => {
+  return cache;
+};
+
+export const _setAdvanced = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
     if (matchPath.test(_val)) {
@@ -103,10 +134,17 @@ export const _set = (_, _object) => {
   return cache;
 };
 
+export const setMethods = {
+  simple: _setSimple,
+  advanced: _setAdvanced
+};
+export const $set = (_, _object, { type = "simple" } = {}) =>
+  $run(setMethods[type], _, _object);
+
 export const $merge = _array => {
   let cache = {};
   $(_array, (key, val) => {
-    _set(cache, val);
+    $set(cache, val);
   });
   return cache;
 };
@@ -216,9 +254,12 @@ export const _has = (_, _object) => {
   return cache;
 };
 
-export const $match = (_, _object) => $run(_match, _, _object);
+export const _matchSimple = (_, _array) => {
+  console.log(JSON.stringify(_array));
+  throw new Error("not implemented");
+};
 
-export const _match = (_, _object) => {
+export const _matchAdvanced = (_, _object) => {
   $(_object, (_key, _val) => {
     const { invalid, valid, equal, get: __get } = JSON.parse(_key);
     let isinvalid = true;
@@ -238,6 +279,13 @@ export const _match = (_, _object) => {
     _val(cache);
   });
 };
+
+export const matchMethods = {
+  simple: _matchSimple,
+  advanced: _matchAdvanced
+};
+export const $match = (target, _object, { type = "simple" } = {}) =>
+  $run(matchMethods[type], target, _object);
 
 export const $invalid = (_, _object) => $run(_invalid, _, _object);
 export const _invalid = (_, _object) => {
@@ -300,4 +348,19 @@ export const _equal = (_, _object) => {
   };
   onObject({ object: _object, depth: "" });
   return isEqual;
+};
+
+const scanMethod = {
+  simple: _scanSimple
+};
+export const $scan = (_, _object, { type = "simple" }) =>
+  $run(scanMethod[type], _, _object);
+
+export const _scanSimple = (target, _object) => {
+  let minMhr = $minCore(
+    {},
+    {
+      _hooks: _object
+    }
+  ).$use(target);
 };
