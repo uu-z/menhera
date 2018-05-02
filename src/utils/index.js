@@ -7,7 +7,6 @@ import has from "lodash.has";
 export { get, set, has };
 
 export const HOOKS = Symbol("hooks");
-export const EVENTS = Symbol("events");
 
 export const $ = (obj, cb) => {
   for (let [key, val] of Object.entries(obj)) {

@@ -16,8 +16,12 @@ let foobar = $str({
   get: { bar: "foo.bar" }
 });
 
-$match(obj, {
-  [loading]: ({ loading }) => console.log("loading", loading),
-  [error]: ({ error }) => console.log("error", error),
-  [foobar]: ({ bar }) => console.log(bar)
-});
+$match(
+  obj,
+  {
+    [loading]: ({ loading }) => console.log("loading", loading),
+    [error]: ({ error }) => console.log("error", error),
+    [foobar]: ({ bar }) => console.log(bar)
+  },
+  { type: "advanced" }
+);
