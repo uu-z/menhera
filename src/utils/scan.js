@@ -1,6 +1,5 @@
 import { $, scanObject, HOOKS, get, set, has } from "../utils";
 import { useHooks } from "./scanHooks";
-import { $minCore } from "../index";
 
 const matchPath = /\./;
 export const $str = JSON.stringify;
@@ -362,11 +361,4 @@ const scanMethod = {
 export const $scan = (_, _object, { type = "simple" }) =>
   $run(scanMethod[type], _, _object);
 
-export const _scanSimple = (target, _object) => {
-  let minMhr = $minCore(
-    {},
-    {
-      _hooks: _object
-    }
-  ).$use(target);
-};
+export const _scanSimple = (target, _object) => {};
