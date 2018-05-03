@@ -27,11 +27,17 @@ const testRoot = ({ _val }) => {
 
 Mhr.$use({
   _hooks: {
-    "foo.bar.foo1.bar1": {
-      $: testEach,
-      _: testRoot,
-      test,
-      testFn
+    foo: {
+      bar: {
+        foo1: {
+          bar1: {
+            $: testEach,
+            _: testRoot,
+            test,
+            testFn
+          }
+        }
+      }
     }
   },
   "foo.bar.foo1.bar1": {
@@ -40,39 +46,3 @@ Mhr.$use({
   }
 });
 ```
-
-![index](./assets/index.png)
-
-```js
-import { $match, $str } from "menhera";
-
-let obj = {
-  loading: true,
-  error: true,
-  foo: {
-    foo: 123,
-    bar: 123
-  }
-};
-
-let loading = $str({ equal: { loading: true }, get: { loading: "" } });
-let error = $str({ valid: { error: "" }, get: { error: "" } });
-let foobar = $str({
-  equal: { foo: { bar: 123 } },
-  get: { bar: "foo.bar" }
-});
-
-$match(
-  obj,
-  {
-    [loading]: ({ loading }) => console.log("loading", loading),
-    [error]: ({ error }) => console.log("error", error),
-    [foobar]: ({ bar }) => console.log(bar)
-  },
-  {
-    type: "advanced"
-  }
-);
-```
-
-![preview](./assets/match.png)
