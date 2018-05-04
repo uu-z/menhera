@@ -1,10 +1,39 @@
 export * from "./scan";
 export * from "./hooks";
 
-import get from "lodash.get";
-import set from "lodash.set";
-import has from "lodash.has";
-export { get, set, has };
+import lget from "lodash.get";
+import lset from "lodash.set";
+import lhas from "lodash.has";
+
+export const matchSlashPath = /\//g;
+export const matchPath = /\/|\./g;
+
+export const get = (obj, path, def) => {
+  if (matchSlashPath.test(path)) {
+    path = path.replace(matchSlashPath, ".");
+  }
+  let result = lget(obj, path, def);
+
+  if (typeof result === "string" && matchPath.test(result)) {
+    return get(obj, result, def);
+  } else {
+    return result;
+  }
+};
+
+export const set = (obj, path, def) => {
+  if (matchSlashPath.test(path)) {
+    path = path.replace(matchSlashPath, ".");
+  }
+  return lset(obj, path, def);
+};
+
+export const has = (obj, path, def) => {
+  if (matchSlashPath.test(path)) {
+    path = path.replace(matchSlashPath, ".");
+  }
+  return lhas(obj, path, def);
+};
 
 export const HOOKS = Symbol("hooks");
 

@@ -1,6 +1,4 @@
-import get from "lodash.get";
-import set from "lodash.set";
-import { scanObject, $, HOOKS } from "../utils";
+import { scanObject, $, HOOKS, get, set } from "../utils";
 
 export const initHooks = _ => {
   let cache = {};
@@ -14,10 +12,10 @@ export const _hooks = {
     if (typeof _val === "object") {
       const onFunction = ({ depth, _val }) => {
         let target = get(_[HOOKS], depth, []);
-        if (!target.includes(_val.bind(cp))) {
-          target.push(_val.bind(cp));
-          set(_[HOOKS], depth, target);
-        }
+        // if (!target.includes(_val.bind(cp))) {
+        target.push(_val.bind(cp));
+        set(_[HOOKS], depth, target);
+        // }
       };
       const onVariable = ({ depth, _val }) => {
         if (Array.isArray(_val)) {

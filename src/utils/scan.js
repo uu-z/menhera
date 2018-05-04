@@ -1,9 +1,8 @@
-import { $, scanObject, HOOKS, get, set, has } from "../utils";
+import { $, scanObject, HOOKS, get, set, has, matchPath } from "../utils";
 import { useHooks } from "./scanHooks";
 
-const matchDotPath = /\./;
-const matchSlashPath = /\//g;
 export const $str = JSON.stringify;
+
 export const $use = (_, _object) => {
   const hooks = useHooks(_);
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
@@ -64,11 +63,9 @@ export const $run = (_method, _, _object) => {
 export const _setSimple = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
-    if (matchSlashPath.test(_val)) {
-      _val = _val.replace(matchSlashPath, ".");
-    }
-    if (matchDotPath.test(_val)) {
+    if (matchPath.test(_val)) {
       let result = get(_, _val);
+
       set(_, depth, result);
       set(cache, depth, result);
     } else {
@@ -105,10 +102,7 @@ export const _setSimple = (_, _object) => {
 export const _setAdvanced = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
-    if (matchSlashPath.test(_val)) {
-      _val = _val.replace(matchSlashPath, ".");
-    }
-    if (matchDotPath.test(_val)) {
+    if (matchPath.test(_val)) {
       let result = get(_, _val);
       set(_, depth, result);
       set(cache, depth, result);
@@ -167,11 +161,7 @@ export const _get = (_, _object) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
     let result;
-    if (matchSlashPath.test(_val)) {
-      _val = _val.replace(matchSlashPath, ".");
-      console.log(_key);
-    }
-    if (matchDotPath.test(_val)) {
+    if (matchPath.test(_val)) {
       result = get(_, _val);
       result && set(cache, depth, result);
     } else {

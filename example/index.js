@@ -1,4 +1,4 @@
-import Mhr, { HOOKS } from "../dist";
+const Mhr = require("../dist").default;
 
 Mhr.$use({
   _hooks: {

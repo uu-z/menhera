@@ -1,6 +1,4 @@
-import get from "lodash.get";
-import set from "lodash.set";
-import { $, HOOKS } from "../utils";
+import { $, HOOKS, get, set } from "../utils";
 
 export const useHooks = _ => ({
   onAny: {
