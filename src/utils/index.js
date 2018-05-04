@@ -6,7 +6,7 @@ import lset from "lodash.set";
 import lhas from "lodash.has";
 
 export const matchSlashPath = /\//g;
-export const matchPath = /\/|\./g;
+export const matchPath = /\/|\./;
 
 export const get = (obj, path, def) => {
   if (matchSlashPath.test(path)) {
