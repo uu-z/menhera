@@ -23,6 +23,7 @@
   "dependencies": {
     "@nx-js/observer-util": "^4.1.2",
     "mongoose": "^5.0.17",
-    "mongoose-timestamp": "^0.6.0"
+    "mongoose-timestamp": "^0.6.0",
+    "z": "^1.0.6"
   }
 }
