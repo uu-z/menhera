@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Mhr from "../dist";
+import Mhr, { set } from "../dist";
 import { _methods, _lifeCycle } from "./plugins";
 
 export const Event = {

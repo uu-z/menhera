@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "bili": "^3.1.0",
-    "menhera": "^0.7.1-rc",
+    "menhera": "^0.7.4-rc1",
     "menhera-cli": "^0.3.1-rc2"
   },
   "dependencies": {
