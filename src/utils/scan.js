@@ -55,9 +55,7 @@ export const $run = (_method, _, _object) => {
     return cache;
   }
 
-  if (typeof _object === "object") {
-    return _method(_, _object);
-  }
+  return _method(_, _object);
 };
 
 export const _setSimple = (_, _object) => {
@@ -157,7 +155,7 @@ export const $merge = (_array, options) => {
 
 export const $get = (_, _object) => $run(_get, _, _object);
 
-export const _get = (_, _object) => {
+export const _get = (_, args) => {
   let cache = {};
   const onVariable = ({ object, depth, _key, _val }) => {
     let result;
@@ -197,8 +195,8 @@ export const _get = (_, _object) => {
       onArray: onVariable
     });
   };
-  onObject({ object: _object, depth: "" });
-
+  typeof args === "object" && onObject({ object: args, depth: "" });
+  typeof args !== "object" && onVariable({ depth: args });
   return cache;
 };
 

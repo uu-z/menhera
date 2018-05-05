@@ -1,6 +1,6 @@
 import { scanObject, $, HOOKS, get, set } from "../utils";
 
-export const initHooks = _ => {
+export const initHooks = () => {
   let cache = {};
   cache._hooks = { _: [_hooks._] };
   cache._mount = { $: [_mount.$] };

@@ -15,4 +15,4 @@ export const $core = (_, _object) => {
   return _;
 };
 
-export default $core({}, {});
+export default $core(_object => $core({}, _object), {});
