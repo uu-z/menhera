@@ -1,9 +1,11 @@
-export * from "./scan";
-export * from "./hooks";
-
 import lget from "lodash.get";
 import lset from "lodash.set";
 import lhas from "lodash.has";
+import uuid from "uuid";
+
+export * from "./scan";
+export * from "./hooks";
+export { uuid };
 
 export const matchSlashPath = /\//g;
 export const matchPath = /\/|\./;

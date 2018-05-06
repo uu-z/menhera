@@ -1,33 +1,23 @@
-import { scanObject, $, HOOKS, get, set } from "../utils";
+import { scanObject, $, HOOKS, get, set, uuid } from "../utils";
 
 export const initHooks = () => {
   let cache = {};
-  cache._hooks = { _: [_hooks._] };
-  cache._mount = { $: [_mount.$] };
+  cache._hooks = { _: { [uuid.v1()]: _hooks._ } };
+  cache._mount = { $: { [uuid.v1()]: _mount.$ } };
   return cache;
 };
 
 export const _hooks = {
   _({ _, _val, cp }) {
+    const { uuid } = cp;
     if (typeof _val === "object") {
       const onFunction = ({ depth, _val }) => {
-        let target = get(_[HOOKS], depth, []);
-        // if (!target.includes(_val.bind(cp))) {
-        target.push(_val.bind(cp));
+        let target = get(_[HOOKS], depth, {});
+        target[uuid] = _val.bind(cp);
         set(_[HOOKS], depth, target);
-        // }
-      };
-      const onVariable = ({ depth, _val }) => {
-        if (Array.isArray(_val)) {
-          $(_val, (key, val) => {
-            if (typeof val === "function") {
-              onFunction({ depth, _val: val });
-            }
-          });
-        }
       };
       const onObject = ({ object, depth, _key, _val }) => {
-        scanObject({ object, depth, onObject, onFunction, onVariable });
+        scanObject({ object, depth, onObject, onFunction });
       };
       onObject({ object: _val, depth: "" });
     }

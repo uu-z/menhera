@@ -1,18 +1,19 @@
-import { $, scanObject, HOOKS, get, set, has, matchPath } from "../utils";
+import { $, scanObject, HOOKS, get, set, has, matchPath, uuid } from "../utils";
 import { useHooks } from "./scanHooks";
 
 export const $str = JSON.stringify;
 
 export const $use = (_, _object) => {
   const hooks = useHooks(_);
+  _object.uuid = uuid.v1();
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
     const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
 
     const _hooks = hooks[hook];
     _hooks &&
-      $(_hooks, (key, hook) => {
-        hook({ hook, object, parentDepth, depth, _key, _val, _object });
+      $(_hooks, (key, shook) => {
+        shook({ hook, object, parentDepth, depth, _key, _val, _object });
       });
   };
 
