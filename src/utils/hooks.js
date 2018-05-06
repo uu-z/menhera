@@ -1,20 +1,35 @@
-import { scanObject, $, HOOKS, get, set, uuid } from "../utils";
-
-export const initHooks = () => {
-  let cache = {};
-  cache._hooks = { _: { [uuid.v1()]: _hooks._ } };
-  cache._mount = { $: { [uuid.v1()]: _mount.$ } };
-  return cache;
-};
+import { scanObject, $, HOOKS, get, set } from "../utils";
 
 export const _hooks = {
   _({ _, _val, cp }) {
     const { uuid } = cp;
     if (typeof _val === "object") {
       const onFunction = ({ depth, _val }) => {
-        let target = get(_[HOOKS], depth, {});
-        target[uuid] = _val.bind(cp);
-        set(_[HOOKS], depth, target);
+        let target = get(_[HOOKS], depth);
+        if (!target) {
+          target = new Map([[uuid, _val.bind(cp)]]);
+          set(_[HOOKS], depth, target);
+        } else {
+          target.set(uuid, _val.bind(cp));
+        }
+      };
+      const onObject = ({ object, depth, _key, _val }) => {
+        scanObject({ object, depth, onObject, onFunction });
+      };
+      onObject({ object: _val, depth: "" });
+    }
+  }
+};
+
+export const _unhooks = {
+  _({ _, _val, cp }) {
+    const { uuid } = cp;
+
+    if (typeof _val === "object") {
+      const onFunction = ({ depth, _val }) => {
+        let target = get(_[HOOKS], depth);
+        if (!target) return;
+        target.delete(uuid);
       };
       const onObject = ({ object, depth, _key, _val }) => {
         scanObject({ object, depth, onObject, onFunction });

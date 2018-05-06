@@ -1,5 +1,4 @@
 const Mhr = require("../dist").default;
-const { HOOKS } = require("../dist");
 
 Mhr.$use({
   _hooks: {

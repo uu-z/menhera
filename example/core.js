@@ -1,4 +1,4 @@
-import { $core, $get, $set, $use } from "../dist";
+import { $core, $get, $set, $use, $ } from "../dist";
 
 class Foo {
   constructor(object) {
@@ -18,19 +18,23 @@ const _ = new Foo({
   }
 });
 
-let a = $set(_, {
-  foo: {
-    bar: {
-      String: "123",
-      Number: 123,
-      Array: ({ tar = [1, 2, 3] }) => tar,
-      Object: ({ tar }) => ({
-        1: 1,
-        2: 2,
-        3: 3
-      })
+let a = $set(
+  _,
+  {
+    foo: {
+      bar: {
+        String: "123",
+        Number: 123,
+        Array: ({ tar = [1, 2, 3] }) => tar,
+        Object: ({ tar }) => ({
+          1: 1,
+          2: 2,
+          3: 3
+        })
+      }
     }
-  }
-});
+  },
+  { type: "advanced" }
+);
 
 $use(_, a);

@@ -2,13 +2,27 @@ import lget from "lodash.get";
 import lset from "lodash.set";
 import lhas from "lodash.has";
 import uuid from "uuid";
+import * as hooks from "./hooks";
 
 export * from "./scan";
-export * from "./hooks";
+// export * from "./hooks";
 export { uuid };
 
 export const matchSlashPath = /\//g;
 export const matchPath = /\/|\./;
+
+export const initHooks = () => {
+  let cache = {};
+  let _uuid = uuid.v1();
+
+  $(hooks, (key, val) => {
+    $(val, (hookKey, hookVal) => {
+      let _val = new Map().set(_uuid, hookVal);
+      set(cache, `${key}.${hookKey}`, _val);
+    });
+  });
+  return cache;
+};
 
 export const get = (obj, path, def) => {
   if (matchSlashPath.test(path)) {
@@ -44,6 +58,13 @@ export const $ = (obj, cb) => {
     cb(key, val);
   }
 };
+
+export const $M = (map, cb) => {
+  for (let [key, val] of map) {
+    cb(key, val);
+  }
+};
+
 export const scanObject = ({
   object,
   depth = null,

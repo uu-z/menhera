@@ -1,9 +1,9 @@
-import { $, HOOKS, get, set } from "../utils";
+import { $, $M, HOOKS, get, set } from "../utils";
 
 const handleHooks = ({ key, _key, _, _val, _object }) => {
   const hooks = get(_[HOOKS], key);
   hooks &&
-    $(hooks, (uuid, h) => {
+    $M(hooks, (uuid, h) => {
       h({ _, _key, _val, cp: _object });
     });
 };
@@ -12,7 +12,7 @@ const handleEachHooks = ({ _, key, _key, _val, _object }) => {
   const hooks = get(_[HOOKS], key);
   hooks &&
     $(_val, (key, val) => {
-      $(hooks, (uuid, h) => h({ _, _key: key, _val: val, cp: _object }));
+      $M(hooks, (uuid, h) => h({ _, _key: key, _val: val, cp: _object }));
     });
 };
 

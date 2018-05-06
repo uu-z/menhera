@@ -4,8 +4,9 @@ import { useHooks } from "./scanHooks";
 export const $str = JSON.stringify;
 
 export const $use = (_, _object) => {
+  !_object.uuid && (_object.uuid = uuid.v1());
+
   const hooks = useHooks(_);
-  _object.uuid = uuid.v1();
   const BindHook = ({ hook, object, depth, parentDepth, _key, _val }) => {
     const validHook = has(_[HOOKS], depth);
     if (depth != "" && !validHook) return;
@@ -41,6 +42,13 @@ export const $use = (_, _object) => {
   }
 
   typeof _object === "object" && onObject({ object: _object, depth: "" });
+  return _;
+};
+
+export const $unuse = (_, _object) => {
+  const { uuid, _hooks } = _object;
+
+  $use(_, { uuid, _unhooks: _hooks });
   return _;
 };
 
@@ -258,6 +266,8 @@ export const _has = (_, _object) => {
 
   return cache;
 };
+
+//
 
 export const _matchSimple = (_, _array) => {
   console.log(JSON.stringify(_array));
