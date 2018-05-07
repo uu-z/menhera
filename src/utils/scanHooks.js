@@ -1,5 +1,6 @@
 import {$, $M, HOOKS, get, set} from '../utils'
 
+// koa-compose
 const compose = middleware => {
   return (ctx, next) => {
     let index = -1
