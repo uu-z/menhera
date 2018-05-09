@@ -20,7 +20,7 @@ const compose = middleware => {
   }
 }
 
-const handleHooks = ({depth, key, _key, _, _val, _object}) => {
+const handleHooks = ({object, depth, key, _key, _, _val, _object}) => {
   const hooks = get(_[HOOKS], key)
   hooks &&
     $M(hooks, (uuid, h) => {
@@ -30,15 +30,15 @@ const handleHooks = ({depth, key, _key, _, _val, _object}) => {
         fns({depth, _, _key, _val, cp: _object})
         return
       }
-      h({depth, _, _key, _val, cp: _object})
+      h({depth, _, _key, _val, cp: _object, parent: object})
     })
 }
 
-const handleEachHooks = ({depth, _, key, _key, _val, _object}) => {
+const handleEachHooks = ({object, depth, _, key, _key, _val, _object}) => {
   const hooks = get(_[HOOKS], key)
   hooks &&
     $(_val, (key, val) => {
-      $M(hooks, (uuid, h) => h({depth, _, _key: key, _val: val, cp: _object}))
+      $M(hooks, (uuid, h) => h({depth, _, _key: key, _val: val, cp: _object, parent: object}))
     })
 }
 
@@ -47,63 +47,63 @@ export const useHooks = _ => ({
     any({object, parentDepth, depth, _key, _val, _object}) {
       if (typeof _val === 'object') return
       const key = `${depth}`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     },
     _({object, depth, _key, _val, _object}) {
       const key = `${depth}._`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     }
   },
   onObject: {
     O({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.O`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     },
     $({object, depth, _key, _val, _object}) {
       const key = `${depth}.$`
-      handleEachHooks({depth, key, _, _val, _object})
+      handleEachHooks({object, depth, key, _, _val, _object})
     },
     O$({object, depth, _key, _val, _object}) {
       const key = `${depth}.O$`
-      handleEachHooks({depth, key, _, _val, _object})
+      handleEachHooks({object, depth, key, _, _val, _object})
     },
     $O({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$O`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     }
   },
   onArray: {
     A({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.A`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     },
     A$({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.A$`
-      handleEachHooks({depth, key, _, _val, _object})
+      handleEachHooks({object, depth, key, _, _val, _object})
     },
     $A({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$A`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     }
   },
   onFunction: {
     F({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.F`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     },
     $F({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$F`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     }
   },
   onVariable: {
     V({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.V`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     },
     $V({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$V`
-      handleHooks({depth, key, _, _key, _val, _object})
+      handleHooks({object, depth, key, _, _key, _val, _object})
     }
   }
 })
