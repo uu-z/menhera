@@ -67,3 +67,13 @@ export const _mount = {
     })
   }
 }
+
+export const _run = {
+  $({_, _val, cp}) {
+    let cps = Array.isArray(_val) ? _val : [_val]
+    $(cps, (key, component) => {
+      let cp = typeof component === 'function' ? component({_}) : component
+      _.$use(cp)
+    })
+  }
+}
