@@ -1,6 +1,6 @@
 # Menhera
 
-an experimental lovely frame
+an experimental lovely framework
 
 ### Install
 
