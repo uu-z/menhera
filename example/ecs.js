@@ -1,56 +1,56 @@
-import { EventEmitter } from "events";
-import Mhr from "../dist";
-import { _data, _lifeCycle } from "./plugins";
+import {EventEmitter} from 'events'
+import Mhr from '../dist'
+import {_data, _lifeCycle} from './utils'
 
 const World = _ => ({
-  name: "menhera-world",
+  name: 'menhera-world',
   _data: {
     entities: {},
     systems: []
   },
   start() {
-    setInterval(this.tick.bind(this), 1000);
+    setInterval(this.tick.bind(this), 1000)
   },
   tick() {
-    let entities = Object.values(this.entities);
-    console.log(this.entities);
+    let entities = Object.values(this.entities)
+    console.log(this.entities)
     this.systems.forEach(system => {
       entities.forEach(entity => {
-        if (system["CheckComponents"]) {
-          let check = system["CheckComponents"].every((e, i, a) => {
-            return entity[e] !== undefined;
-          });
+        if (system['CheckComponents']) {
+          let check = system['CheckComponents'].every((e, i, a) => {
+            return entity[e] !== undefined
+          })
           if (check) {
-            system.updateEach(entity);
+            system.updateEach(entity)
           }
         } else {
-          system.updateEach(entity);
+          system.updateEach(entity)
         }
-      });
-    });
+      })
+    })
   },
   _hooks: {
     ECS: {
       onRegisterECS: {
-        _({ _, _key, _val, cp }) {
-          const { registerSystem, registerEntity } = _val;
-          const { name } = cp;
+        _({_, _key, _val, cp}) {
+          const {registerSystem, registerEntity} = _val
+          const {name} = cp
           if (registerSystem) {
-            this.systems.push(cp);
+            this.systems.push(cp)
           }
           if (registerEntity) {
-            this.entities[name] = cp;
+            this.entities[name] = cp
           }
         }
       }
     }
   }
-});
+})
 
 const MovementSystem = {
-  name: "MovementSystem",
+  name: 'MovementSystem',
   _data: {
-    CheckComponents: ["position", "velocity"]
+    CheckComponents: ['position', 'velocity']
   },
   ECS: {
     onRegisterECS: {
@@ -58,36 +58,36 @@ const MovementSystem = {
     }
   },
   updateEach(entity) {
-    const { position, velocity } = entity;
-    position.x += velocity.x;
-    position.y += velocity.y;
+    const {position, velocity} = entity
+    position.x += velocity.x
+    position.y += velocity.y
   }
-};
+}
 
 const TestEntity1 = {
-  name: "test1",
+  name: 'test1',
   _data: {
-    position: { x: 1, y: 1 },
-    velocity: { x: 1, y: 1 }
+    position: {x: 1, y: 1},
+    velocity: {x: 1, y: 1}
   },
   ECS: {
     onRegisterECS: {
       registerEntity: true
     }
   }
-};
+}
 const TestEntity2 = {
-  name: "test2",
+  name: 'test2',
   _data: {
-    position: { x: 1, y: 1 },
-    velocity: { x: 10, y: 10 }
+    position: {x: 1, y: 1},
+    velocity: {x: 10, y: 10}
   },
   ECS: {
     onRegisterECS: {
       registerEntity: true
     }
   }
-};
+}
 
 Mhr.$use({
   _hooks: {
@@ -100,7 +100,7 @@ Mhr.$use({
     entities: [TestEntity1, TestEntity2]
   },
   _lifeCycle: {
-    lifeCycle: ["start"],
+    lifeCycle: ['start'],
     run: true
   }
-});
+})

@@ -26,7 +26,6 @@ const handleHooks = ({object, depth, key, _key, _, _val, _object}) => {
     $M(hooks, (uuid, h) => {
       if (h instanceof Set) {
         let fns = compose([...h])
-        console.log(fns)
         fns({depth, _, _key, _val, cp: _object})
         return
       }
@@ -79,6 +78,10 @@ export const useHooks = _ => ({
     },
     A$({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${depth}.A$`
+      handleEachHooks({object, depth, key, _, _val, _object})
+    },
+    $({object, depth, _key, _val, _object}) {
+      const key = `${depth}.$`
       handleEachHooks({object, depth, key, _, _val, _object})
     },
     $A({object, parentDepth, depth, _key, _val, _object}) {

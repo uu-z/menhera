@@ -1,4 +1,4 @@
-import {scanObject, $, HOOKS, get, set} from '../utils'
+import {scanObject, $, HOOKS, get, set, uuid} from '../utils'
 
 export const _hooks = {
   _({_, _val, cp}) {

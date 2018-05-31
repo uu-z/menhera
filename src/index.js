@@ -1,23 +1,27 @@
-import { initHooks, HOOKS, $use, $unuse } from "./utils";
-import { EventEmitter } from "events";
+import {initHooks, HOOKS, $use, $unuse} from './utils'
+import {EventEmitter} from 'events'
+const {assign} = Object
 
-export * from "./utils";
+export * from './utils'
+export * from './plugins'
 
 export const $core = (_, _object) => {
-  _[HOOKS] = initHooks(_);
-  _._events = new EventEmitter();
-  _._events.on("$use", _object => $use(_, _object));
-  _.$use = _object => {
-    _._events.emit("$use", _object);
-    return _;
-  };
-  _._events.on("$unuse", _object => $unuse(_, _object));
-  _.$unuse = _object => {
-    _._events.emit("$unuse", _object);
-    return _;
-  };
-  _.$use(_object);
-  return _;
-};
+  assign(_, {
+    [HOOKS]: initHooks(_),
+    _events: new EventEmitter(),
+    $use: _object => {
+      _._events.emit('$use', _object)
+      return _
+    },
+    $unuse: _object => {
+      _._events.emit('$unuse', _object)
+      return _
+    }
+  })
+  _._events.on('$use', _object => $use(_, _object))
+  _._events.on('$unuse', _object => $unuse(_, _object))
+  _.$use(_object)
+  return _
+}
 
-export default $core(_object => $core({}, _object), {});
+export default $core(_object => $core({}, _object), {})

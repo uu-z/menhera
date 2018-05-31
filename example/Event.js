@@ -1,45 +1,45 @@
-import { EventEmitter } from "events";
-import Mhr, { set, get } from "../dist";
-import { _methods, _lifeCycle } from "./plugins";
+import {EventEmitter} from 'events'
+import Mhr, {set, get} from '../dist'
+import {_methods, _lifeCycle} from './utils'
 
 export const Event = {
-  name: "Event",
+  name: 'Event',
   Event: new EventEmitter(),
   _hooks: {
     Event: {
       on: {
-        $({ _, _key, _val, cp }) {
-          this.Event.on(_key, _val);
+        $({_, _key, _val, cp}) {
+          this.Event.on(_key, _val)
         }
       },
       emit: {
-        $({ _, _key, _val }) {
-          this.Event.emit(_key, { val: _val });
+        $({_, _key, _val}) {
+          this.Event.emit(_key, {val: _val})
         }
       }
     }
   }
-};
+}
 
 let Test = {
-  name: "Test",
+  name: 'Test',
   awake() {
-    console.log("test0");
+    console.log('test0')
   },
-  start({ _ }) {
-    _.$use({ Event: { emit: { test1: "test1", test2: "test2" } } });
+  start({_}) {
+    _.$use({Event: {emit: {test1: 'test1', test2: 'test2'}}})
   },
   Event: {
     on: {
-      test1({ val }) {
-        console.log(val);
+      test1({val}) {
+        console.log(val)
       },
-      test2({ val }) {
-        console.log(val);
+      test2({val}) {
+        console.log(val)
       }
     }
   }
-};
+}
 
 Mhr.$use({
   _hooks: {
@@ -50,7 +50,7 @@ Mhr.$use({
     Test
   },
   _lifeCycle: {
-    lifeCycle: ["awake", "start"],
+    lifeCycle: ['awake', 'start'],
     run: true
   }
-});
+})
