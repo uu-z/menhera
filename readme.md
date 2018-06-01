@@ -11,20 +11,16 @@ yarn add menhera
 ### Example
 
 ```js
-import Mhr from "menehra";
+import Mhr from 'menhera'
 
 Mhr.$use({
-  _hooks: {
-    foo: {
-      bar: {
-        test: ({ _val }) => console.log(_val),
-        testFn: ({ _val }) => console.log(_val())
-      }
-    }
+  '$foo.bar': {
+    test: ({_val}) => console.log(_val),
+    testFn: ({_val}) => console.log(_val())
   },
-  "foo.bar": {
-    test: "foo bar",
-    testFn: () => "foo bar"
+  'foo.bar': {
+    test: 'foo bar',
+    testFn: () => 'foo bar'
   }
-});
+})
 ```

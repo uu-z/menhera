@@ -1,4 +1,4 @@
-import {initHooks, HOOKS, $use, $unuse} from './utils'
+import {initHooks, HOOKS, $, $use, $unuse, compile} from './utils'
 import {EventEmitter} from 'events'
 const {assign} = Object
 
@@ -9,17 +9,17 @@ export const $core = (_, _object) => {
   assign(_, {
     [HOOKS]: initHooks(_),
     _events: new EventEmitter(),
-    $use: _object => {
-      _._events.emit('$use', _object)
+    $use: object => {
+      _._events.emit('$use', compile(object))
       return _
     },
-    $unuse: _object => {
-      _._events.emit('$unuse', _object)
+    $unuse: object => {
+      _._events.emit('$unuse', compile(object))
       return _
     }
   })
-  _._events.on('$use', _object => $use(_, _object))
-  _._events.on('$unuse', _object => $unuse(_, _object))
+  _._events.on('$use', object => $use(_, object))
+  _._events.on('$unuse', object => $unuse(_, object))
   _.$use(_object)
   return _
 }

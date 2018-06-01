@@ -3,6 +3,7 @@ import lset from 'lodash.set'
 import lhas from 'lodash.has'
 import uuid from 'uuid'
 import * as hooks from './hooks'
+import * as compiles from './compiles'
 
 export * from './exec'
 export {uuid}
@@ -10,6 +11,14 @@ export const HOOKS = Symbol('hooks')
 
 export const matchSlashPath = /\//g
 export const matchPath = /\/|\./
+
+export const compile = _object => {
+  let ctx = {_object}
+  $(compiles, (k, v) => {
+    v(ctx)
+  })
+  return {...ctx, ...ctx._object}
+}
 
 export const initHooks = () => {
   let cache = {}
