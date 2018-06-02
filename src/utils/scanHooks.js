@@ -41,7 +41,7 @@ const handleEachHooks = ({object, depth, _, key, _key, _val, _object}) => {
     })
 }
 
-export const useHooks = _ => ({
+export default _ => ({
   onAny: {
     any({object, parentDepth, depth, _key, _val, _object}) {
       if (typeof _val === 'object') return

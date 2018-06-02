@@ -13,7 +13,10 @@ export const matchSlashPath = /\//g
 export const matchPath = /\/|\./
 
 export const compile = _object => {
-  let ctx = {_object}
+  let ctx = {
+    _object,
+    _keys: Object.keys(_object)
+  }
   $(compiles, (k, v) => {
     v(ctx)
   })
