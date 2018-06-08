@@ -1,4 +1,4 @@
-import Mhr from '../src'
+import Mhr from '../dist'
 
 Mhr.$use({
   $foo: {
