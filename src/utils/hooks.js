@@ -62,8 +62,8 @@ export const _mount = {
         console.log(`_mount: name "${name}" exists`)
         return
       }
-      _.$use(cp)
       _[name] = cp
+      _.$use(cp)
     })
   }
 }
