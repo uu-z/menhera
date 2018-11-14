@@ -53,7 +53,7 @@ export const _unhooks = {
 }
 
 export const _mount = {
-  $({_, _val, cp}) {
+  $({_, _val}) {
     let cps = Array.isArray(_val) ? _val : [_val]
     $(cps, (key, component) => {
       let cp = typeof component === 'function' ? component({_}) : component
@@ -63,7 +63,15 @@ export const _mount = {
         return
       }
       _[name] = cp
-      _.$use(cp)
+      const onFunction = ({depth, _val}) => {
+        set(_[name], depth, _val.bind(_[name]))
+      }
+      const onObject = ({object, depth}) => {
+        scanObject({object, depth, onObject, onFunction})
+      }
+      onObject({object: _[name]})
+
+      _.$use(_[name])
     })
   }
 }

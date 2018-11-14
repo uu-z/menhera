@@ -100,7 +100,7 @@ export const scanObject = ({object, depth = null, onObject, onArray, onFunction,
             _val
           })
         } else if ((onArray || onObject) && typeof _val === 'object') {
-          if (Array.isArray(_val)) {
+          if (onArray && Array.isArray(_val)) {
             onArray({
               hook: 'onArray',
               object: object,
@@ -110,14 +110,15 @@ export const scanObject = ({object, depth = null, onObject, onArray, onFunction,
               _val
             })
           } else {
-            onObject({
-              hook: 'onObject',
-              object: object[_key],
-              depth: newDepth,
-              parentDepth,
-              _key,
-              _val
-            })
+            onObject &&
+              onObject({
+                hook: 'onObject',
+                object: object[_key],
+                depth: newDepth,
+                parentDepth,
+                _key,
+                _val
+              })
           }
         } else {
           onVariable &&
