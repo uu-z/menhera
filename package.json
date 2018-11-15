@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.8.2",
+  "version": "0.8.3-rc1",
   "main": "dist/index.js",
   "license": "MIT",
   "files": [
