@@ -3,7 +3,6 @@ import {EventEmitter} from 'events'
 const {assign} = Object
 
 export * from './utils'
-export * from './plugins'
 
 export const $core = (_, _object) => {
   assign(_, {

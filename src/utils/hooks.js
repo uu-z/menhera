@@ -85,3 +85,5 @@ export const _run = {
     })
   }
 }
+
+export const data = {}

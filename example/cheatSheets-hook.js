@@ -1,41 +1,41 @@
-import Mhr, { $, $get, $set, $merge } from "../dist";
+const Mhr = require('../dist').default
 
 Mhr.$use({
   _hooks: {
     foo: {
       bar0: {
-        _({ _key, _val }) {
-          console.log(`_:`, _key, _val);
+        _({_key, _val}) {
+          console.log(`_:`, _key, _val)
         }
       },
       bar1: {
-        $F({ _key, _val }) {
-          console.log(`$F:`, _key, _val);
+        $F({_key, _val}) {
+          console.log(`$F:`, _key, _val)
         },
-        $V({ _key, _val }) {
-          console.log(`$V:`, _key, _val);
+        $V({_key, _val}) {
+          console.log(`$V:`, _key, _val)
         },
-        $O({ _key, _val }) {
-          console.log(`$O:`, _key, _val);
+        $O({_key, _val}) {
+          console.log(`$O:`, _key, _val)
         },
-        $A({ _key, _val }) {
-          console.log(`$A`, _key, _val);
+        $A({_key, _val}) {
+          console.log(`$A`, _key, _val)
         }
       },
       bar2: {
-        A({ _val }) {
-          console.log(`A:`, _val);
+        A({_val}) {
+          console.log(`A:`, _val)
         },
-        A$({ _key, _val }) {
-          console.log(`A$_${_key}:`, _val);
+        A$({_key, _val}) {
+          console.log(`A$_${_key}:`, _val)
         }
       },
       bar3: {
-        O({ _key, _val }) {
-          console.log(`O:`, _key, _val);
+        O({_key, _val}) {
+          console.log(`O:`, _key, _val)
         },
-        O$({ _key, _val }) {
-          console.log(`O$:`, _key, _val);
+        O$({_key, _val}) {
+          console.log(`O$:`, _key, _val)
         }
       }
     }
@@ -55,4 +55,4 @@ Mhr.$use({
       O: {}
     }
   }
-});
+})

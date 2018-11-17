@@ -22,7 +22,8 @@ const compose = middleware => {
 
 const handleHooks = ({object, depth, key, _key, _, _val, _object}) => {
   const hooks = get(_[HOOKS], key)
-  hooks &&
+  hooks instanceof Map &&
+    hooks &&
     $M(hooks, (uuid, h) => {
       if (h instanceof Set) {
         let fns = compose([...h])
@@ -35,16 +36,16 @@ const handleHooks = ({object, depth, key, _key, _, _val, _object}) => {
 
 const handleEachHooks = ({object, depth, _, key, _key, _val, _object}) => {
   const hooks = get(_[HOOKS], key)
-  hooks &&
+  hooks instanceof Map &&
+    hooks &&
     $(_val, (key, val) => {
       $M(hooks, (uuid, h) => h({depth, _, _key: key, _val: val, cp: _object, parent: object}))
     })
 }
 
-export default _ => ({
+export const ScanHooks = _ => ({
   onAny: {
     any({object, parentDepth, depth, _key, _val, _object}) {
-      if (typeof _val === 'object') return
       const key = `${depth}`
       handleHooks({object, depth, key, _, _key, _val, _object})
     },

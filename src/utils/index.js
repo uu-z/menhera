@@ -5,7 +5,7 @@ import uuid from 'uuid'
 import * as hooks from './hooks'
 import * as compiles from './compiles'
 
-export * from './exec'
+export * from './methods'
 export {uuid}
 export const HOOKS = Symbol('hooks')
 
@@ -75,7 +75,7 @@ export const $M = (map, cb) => {
   }
 }
 
-export const scanObject = ({object, depth = null, onObject, onArray, onFunction, onVariable, onAny}) => {
+export const scanObject = ({object, depth = '', onObject, onArray, onFunction, onVariable, onAny}) => {
   if (object) {
     $(object, (_key, _val) => {
       let parentDepth = depth

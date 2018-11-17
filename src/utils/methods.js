@@ -1,5 +1,5 @@
-import {$, scanObject, HOOKS, get, set, has, matchPath, uuid} from '../utils'
-import scanHooks_ from './scanHooks'
+import {$, scanObject, HOOKS, get, set, has, matchPath, uuid} from '.'
+import {ScanHooks} from './ScanHooks'
 
 export const $str = JSON.stringify
 
@@ -22,10 +22,11 @@ export const $use = (_, _object) => $exec(_use, _, _object)
 export const _use = (_, _object) => {
   !_object.uuid && (_object.uuid = uuid.v1())
 
-  const _scanHooks = scanHooks_(_)
+  const _scanHooks = ScanHooks(_)
   const BindHook = ({hook, object, depth, parentDepth, _key, _val}) => {
     const validHook = has(_[HOOKS], depth)
-    if (depth != '' && !validHook) return
+    const parentValidHook = has(_[HOOKS], parentDepth)
+    if (depth != '' && !validHook && !parentValidHook) return
 
     const scanHooks = _scanHooks[hook]
     scanHooks &&
@@ -35,9 +36,11 @@ export const _use = (_, _object) => {
   }
 
   const onObject = data => {
-    const {object, hook, depth} = data
+    const {object, hook, depth, parentDepth} = data
     const validHook = has(_[HOOKS], depth)
-    if (depth != '' && !validHook) return
+    const parentValidHook = has(_[HOOKS], parentDepth)
+
+    if (depth != '' && !validHook && !parentValidHook) return
     hook && BindHook(data)
 
     scanObject({
