@@ -21,11 +21,7 @@ export const $exec = (_method, _, _object) => {
     throw new Error('$exec: _method is invalid')
   }
   if (Array.isArray(_object)) {
-    let cache = []
-    $(_object, (key, val) => {
-      cache[key] = _method(_, val)
-    })
-    return cache
+    return _object.map(val => _method(_, val))
   }
 
   return _method(_, _object)

@@ -1,4 +1,4 @@
-const Mhr = require('../dist')
+const Mhr = require('../dist').default
 
 Mhr.$use({
   $foo: {

@@ -1,21 +1,9 @@
-import {HOOKS, initHooks, $use, $compile, _scanHooks} from './utils'
+import {HOOKS, initHooks, $use, $compile, _scanHooks, inject, _compilers} from './utils'
 
 let core = {
   [HOOKS]: initHooks(),
   _scanHooks,
-  _compilers: {
-    hooks: ctx => {
-      let keys = ctx._keys
-      keys = keys.filter(key => key.startsWith('$'))
-      if (keys.length > 0) {
-        ctx._hooks = {}
-        keys.forEach(key => {
-          let newKey = key.replace(/\$/, '')
-          ctx._hooks[newKey] = ctx._object[key]
-        })
-      }
-    }
-  },
+  _compilers,
   $compile,
   $use: data => {
     $use(core, core.$compile(core, data))
@@ -23,4 +11,10 @@ let core = {
   }
 }
 
+core.$use({
+  $compilers: inject.injectObject('_compilers'),
+  $scanHooks: inject.injectObjectDeep('_scanHooks')
+})
+
 export default core
+export * from './utils'

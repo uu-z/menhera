@@ -78,12 +78,12 @@ export const _scanHooks = {
       const key = `${depth}.A`
       handleHooks({object, depth, key, _key, _val, _object})
     },
-    A$({object, parentDepth, depth, _key, _val, _object}) {
-      const key = `${depth}.A$`
-      handleEachHooks({object, depth, key, _val, _object})
-    },
     $({object, depth, _key, _val, _object}) {
       const key = `${depth}.$`
+      handleEachHooks({object, depth, key, _val, _object})
+    },
+    A$({object, parentDepth, depth, _key, _val, _object}) {
+      const key = `${depth}.A$`
       handleEachHooks({object, depth, key, _val, _object})
     },
     $A({object, parentDepth, depth, _key, _val, _object}) {
