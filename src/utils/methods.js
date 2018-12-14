@@ -1,7 +1,20 @@
 import {$, scanObject, HOOKS, get, set, has, matchPath, uuid} from '.'
-import {ScanHooks} from './ScanHooks'
+import _ from '../index'
 
 export const $str = JSON.stringify
+
+export const $compile = (_, _object) => $exec(_compile, _, _object)
+
+export const _compile = (_, _object) => {
+  let ctx = {
+    _object,
+    _keys: Object.keys(_object)
+  }
+  $(_._compilers, (k, v) => {
+    v(ctx)
+  })
+  return {...ctx, ...ctx._object}
+}
 
 export const $exec = (_method, _, _object) => {
   if (!_method) {
@@ -21,14 +34,12 @@ export const $exec = (_method, _, _object) => {
 export const $use = (_, _object) => $exec(_use, _, _object)
 export const _use = (_, _object) => {
   !_object.uuid && (_object.uuid = uuid.v1())
-
-  const _scanHooks = ScanHooks(_)
   const BindHook = ({hook, object, depth, parentDepth, _key, _val}) => {
     const validHook = has(_[HOOKS], depth)
     const parentValidHook = has(_[HOOKS], parentDepth)
     if (depth != '' && !validHook && !parentValidHook) return
 
-    const scanHooks = _scanHooks[hook]
+    const scanHooks = _._scanHooks[hook]
     scanHooks &&
       $(scanHooks, (key, shook) => {
         shook({hook, object, parentDepth, depth, _key, _val, _object})

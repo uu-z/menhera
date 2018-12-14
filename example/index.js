@@ -1,4 +1,4 @@
-import Mhr from '../dist'
+const Mhr = require('../dist')
 
 Mhr.$use({
   $foo: {

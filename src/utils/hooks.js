@@ -1,7 +1,8 @@
 import {scanObject, $, HOOKS, get, set, uuid} from '../utils'
+import _ from '../index'
 
 export const _hooks = {
-  _({_, _val, cp}) {
+  _({_val, cp}) {
     const {uuid} = cp
     if (typeof _val === 'object') {
       const onFunction = ({depth, _val}) => {
@@ -35,7 +36,7 @@ export const _hooks = {
 }
 
 export const _unhooks = {
-  _({_, _val, cp}) {
+  _({_val, cp}) {
     const {uuid} = cp
 
     if (typeof _val === 'object') {
@@ -53,7 +54,7 @@ export const _unhooks = {
 }
 
 export const _mount = {
-  $({_, _val}) {
+  $({_val}) {
     let cps = Array.isArray(_val) ? _val : [_val]
     $(cps, (key, component) => {
       let cp = typeof component === 'function' ? component({_}) : component
@@ -63,21 +64,13 @@ export const _mount = {
         return
       }
       _[name] = cp
-      const onFunction = ({depth, _val}) => {
-        set(_[name], depth, _val.bind(_[name]))
-      }
-      const onObject = ({object, depth}) => {
-        scanObject({object, depth, onObject, onFunction})
-      }
-      onObject({object: _[name]})
-
       _.$use(_[name])
     })
   }
 }
 
 export const _run = {
-  $({_, _val, cp}) {
+  $({_val, cp}) {
     let cps = Array.isArray(_val) ? _val : [_val]
     $(cps, (key, component) => {
       let cp = typeof component === 'function' ? component({_}) : component
@@ -85,5 +78,3 @@ export const _run = {
     })
   }
 }
-
-export const data = {}
