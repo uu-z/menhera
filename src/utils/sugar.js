@@ -1,5 +1,5 @@
 import Mhr from '../index'
-import {get, set} from '../utils'
+import {get, set} from '.'
 
 export default {
   injectVar(name) {
@@ -66,6 +66,14 @@ export default {
         let target = get(Mhr, name, [])
         set(Mhr, name, [...target, ..._val])
       }
+    }
+  },
+  relay(key) {
+    return {
+      $: ({_key, _val}) =>
+        Mhr.$use({
+          [key]: _val
+        })
     }
   }
 }

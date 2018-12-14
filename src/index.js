@@ -1,4 +1,4 @@
-import {HOOKS, initHooks, $use, $compile, _scanHooks, inject, _compilers} from './utils'
+import {HOOKS, initHooks, $use, $compile, _scanHooks, sugar, _compilers} from './utils'
 
 let core = {
   [HOOKS]: initHooks(),
@@ -12,8 +12,8 @@ let core = {
 }
 
 core.$use({
-  $compilers: inject.injectObject('_compilers'),
-  $scanHooks: inject.injectObjectDeep('_scanHooks')
+  $compilers: sugar.injectObject('_compilers'),
+  $scanHooks: sugar.injectObjectDeep('_scanHooks')
 })
 
 export default core

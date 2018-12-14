@@ -3,11 +3,11 @@ import lset from 'lodash.set'
 import lhas from 'lodash.has'
 import uuid from 'uuid'
 import * as hooks from './hooks'
-import inject from './inject'
+import sugar from './sugar'
 
 export * from './methods'
 export * from './compilers'
-export {uuid, inject}
+export {uuid, sugar}
 export const HOOKS = Symbol('hooks')
 export * from './scan'
 

@@ -11,18 +11,18 @@ yarn add menhera
 ### Example
 
 ```js
-import Mhr from 'menhera'
+const Mhr = require('menhera').default
+const {sugar} = require('menhera')
 
 Mhr.$use({
-  $foo: {
-    bar: {
-      test: ({_val}) => console.log(_val),
-      testFn: ({_val}) => console.log(_val())
-    }
+  $foo: sugar.relay('bar'),
+  $bar({_val}) {
+    console.log(_val)
   },
-  'foo.bar': {
-    test: 'foo bar',
-    testFn: () => 'foo bar'
-  }
+  foo: [{a: 1, b: 2}, {a: 2, b: 3}, {a: 3, b: 4}]
 })
+
+// { a: 1, b: 2 }
+// { a: 2, b: 3 }
+// { a: 3, b: 4 }
 ```
