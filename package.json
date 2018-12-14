@@ -1,6 +1,6 @@
 {
   "name": "menhera",
-  "version": "0.8.5-rc2",
+  "version": "0.9.0",
   "main": "dist/index.js",
   "license": "MIT",
   "files": [
@@ -14,7 +14,7 @@
     "@types/uuid": "^3.4.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
-    "bili": "^3.1.0",
+    "bili": "^3.4.2",
     "menhera": "^0.8.1-rc1",
     "menhera-cli": "^0.3.1-rc2"
   },
