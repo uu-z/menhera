@@ -3,7 +3,7 @@ const {EventEmitter} = require('events')
 
 const event = new EventEmitter()
 
-Mhr.$use({
+Mhr.use({
   $on: {
     $V({_key, _val}) {
       event.on(_key, () => {

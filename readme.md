@@ -11,12 +11,12 @@ yarn add menhera
 ### Example
 
 ```js
-const Mhr = require('../dist').default
+const Mhr = require('menhera').default
 const {EventEmitter} = require('events')
 
 const event = new EventEmitter()
 
-Mhr.$use({
+Mhr.use({
   $on: {
     $V({_key, _val}) {
       event.on(_key, () => {
@@ -65,6 +65,13 @@ event.emit('test0')
 event.emit('test1')
 event.emit('test2')
 event.emit('test3')
+
+// test0
+// test1
+// test2.foo
+// test2.bar
+//test3.0
+// test3.1
 
 // test0
 // test1

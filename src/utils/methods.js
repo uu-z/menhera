@@ -1,5 +1,6 @@
 import {$, scanObject, HOOKS, get, set, has, matchPath, uuid} from '.'
 import _ from '../index'
+import core from '../index'
 
 export const $str = JSON.stringify
 
@@ -25,6 +26,11 @@ export const $exec = (_method, _, _object) => {
   }
 
   return _method(_, _object)
+}
+
+export const use = data => {
+  $use(core, $compile(core, data))
+  return core
 }
 
 export const $use = (_, _object) => $exec(_use, _, _object)
