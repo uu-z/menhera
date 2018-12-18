@@ -70,13 +70,6 @@ event.emit('test3')
 // test1
 // test2.foo
 // test2.bar
-//test3.0
-// test3.1
-
-// test0
-// test1
-// test2.foo
-// test2.bar
-//test3.0
+// test3.0
 // test3.1
 ```
