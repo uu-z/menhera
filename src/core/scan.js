@@ -1,4 +1,4 @@
-import {$, $M, HOOKS, get, set} from '../utils'
+import {$, $M, HOOKS, get, set} from '.'
 import _ from '../index'
 
 // // koa-compose
@@ -35,7 +35,7 @@ const handleHooks = ({object, depth, key, _key, _val, _object}) => {
     })
 }
 
-const handleEachHooks = ({object, depth, key, _key, _val, _object}) => {
+const handleEachHooks = ({object, depth, key, _val, _object}) => {
   const hooks = get(_[HOOKS], key)
   hooks instanceof Map &&
     hooks &&
@@ -56,7 +56,7 @@ export const _scanHooks = {
     }
   },
   onObject: {
-    O({object, parentDepth, depth, _key, _val, _object}) {
+    O({object, depth, _key, _val, _object}) {
       const key = `${depth}.O`
       handleHooks({object, depth, key, _key, _val, _object})
     },
@@ -71,10 +71,14 @@ export const _scanHooks = {
     $O({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$O`
       handleHooks({object, depth, key, _key, _val, _object})
+    },
+    $I({object, parentDepth, depth, _key, _val, _object}) {
+      const key = `${parentDepth}.$I`
+      handleHooks({object, depth, key, _key, _val, _object})
     }
   },
   onArray: {
-    A({object, parentDepth, depth, _key, _val, _object}) {
+    A({object, depth, _key, _val, _object}) {
       const key = `${depth}.A`
       handleHooks({object, depth, key, _key, _val, _object})
     },
@@ -82,18 +86,26 @@ export const _scanHooks = {
       const key = `${depth}.$`
       handleEachHooks({object, depth, key, _val, _object})
     },
-    A$({object, parentDepth, depth, _key, _val, _object}) {
+    A$({object, depth, _key, _val, _object}) {
       const key = `${depth}.A$`
       handleEachHooks({object, depth, key, _val, _object})
     },
     $A({object, parentDepth, depth, _key, _val, _object}) {
       const key = `${parentDepth}.$A`
       handleHooks({object, depth, key, _key, _val, _object})
+    },
+    $I({object, parentDepth, depth, _key, _val, _object}) {
+      const key = `${parentDepth}.$I`
+      handleHooks({object, depth, key, _key, _val, _object})
     }
   },
   onFunction: {
-    F({object, parentDepth, depth, _key, _val, _object}) {
+    F({object, depth, _key, _val, _object}) {
       const key = `${depth}.F`
+      handleHooks({object, depth, key, _key, _val, _object})
+    },
+    I({object, parentDepth, depth, _key, _val, _object}) {
+      const key = `${parentDepth}.I`
       handleHooks({object, depth, key, _key, _val, _object})
     },
     $F({object, parentDepth, depth, _key, _val, _object}) {
@@ -102,8 +114,12 @@ export const _scanHooks = {
     }
   },
   onVariable: {
-    V({object, parentDepth, depth, _key, _val, _object}) {
+    V({object, depth, _key, _val, _object}) {
       const key = `${depth}.V`
+      handleHooks({object, depth, key, _key, _val, _object})
+    },
+    I({object, parentDepth, depth, _key, _val, _object}) {
+      const key = `${parentDepth}.I`
       handleHooks({object, depth, key, _key, _val, _object})
     },
     $V({object, parentDepth, depth, _key, _val, _object}) {

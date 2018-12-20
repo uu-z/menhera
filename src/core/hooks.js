@@ -1,4 +1,4 @@
-import {scanObject, $, HOOKS, get, set, uuid} from '../utils'
+import {scanObject, $, HOOKS, get, set, $set, $merge} from '.'
 import _ from '../index'
 
 export const _hooks = {
@@ -50,6 +50,12 @@ export const _unhooks = {
       }
       onObject({object: _val, depth: ''})
     }
+  }
+}
+
+export const _metas = {
+  _({_val}) {
+    $set(_, _val)
   }
 }
 

@@ -1,5 +1,5 @@
 export const _compilers = {
-  hooks: ctx => {
+  _hooks: ctx => {
     let keys = ctx._keys
     keys = keys.filter(key => key.startsWith('$'))
     if (keys.length > 0) {
@@ -10,14 +10,14 @@ export const _compilers = {
       })
     }
   },
-  metas: ctx => {
+  _metas: ctx => {
     let keys = ctx._keys
     keys = keys.filter(key => key.startsWith('__'))
     if (keys.length > 0) {
-      ctx._hooks = {}
+      ctx._metas = {}
       keys.forEach(key => {
-        let newKey = key.replace(/--/, '')
-        ctx._hooks[newKey] = ctx._object[key]
+        let newKey = key.replace(/__/, '')
+        ctx._metas[newKey] = ctx._object[key]
       })
     }
   }

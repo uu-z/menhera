@@ -1,17 +1,18 @@
-import {HOOKS, initHooks, use, $compile, _scanHooks, sugar, _compilers} from './utils'
+import {HOOKS, initHooks, use, unuse, _scanHooks, utils, _compilers} from './core'
 
-let core = {
+let menhera = {
   [HOOKS]: initHooks(),
   _scanHooks,
   _compilers,
   use,
-  $use: use
+  $use: use,
+  unuse
 }
 
-core.use({
-  $compilers: sugar.injectObject('_compilers'),
-  $scanHooks: sugar.injectObjectDeep('_scanHooks')
+menhera.use({
+  $compilers: utils.injectObject('_compilers'),
+  $scanHooks: utils.injectObjectDeep('_scanHooks')
 })
 
-export default core
-export * from './utils'
+export default menhera
+export * from './core'

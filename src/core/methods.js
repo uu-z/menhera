@@ -71,6 +71,11 @@ export const _use = (_, _object) => {
   return _
 }
 
+export const unuse = data => {
+  $unuse(core, $compile(core, data))
+  return core
+}
+
 export const $unuse = (_, _object) => $exec(_unuse, _, _object)
 
 export const _unuse = (_, _object) => {
@@ -279,99 +284,98 @@ export const _has = (_, _object) => {
   return cache
 }
 
-//
+// //
+// export const _matchSimple = (_, _array) => {
+//   console.log(JSON.stringify(_array))
+//   throw new Error('not implemented')
+// }
 
-export const _matchSimple = (_, _array) => {
-  console.log(JSON.stringify(_array))
-  throw new Error('not implemented')
-}
+// export const _matchAdvanced = (_, _object) => {
+//   $(_object, (_key, _val) => {
+//     const {invalid, valid, equal, get: __get} = JSON.parse(_key)
+//     let isinvalid = true
+//     let isValid = true
+//     let isEqual = true
+//     let cache = {}
 
-export const _matchAdvanced = (_, _object) => {
-  $(_object, (_key, _val) => {
-    const {invalid, valid, equal, get: __get} = JSON.parse(_key)
-    let isinvalid = true
-    let isValid = true
-    let isEqual = true
-    let cache = {}
+//     invalid && (isinvalid = $invalid(_, invalid))
+//     valid && (isValid = $valid(_, valid))
+//     equal && (isEqual = $equal(_, equal))
 
-    invalid && (isinvalid = $invalid(_, invalid))
-    valid && (isValid = $valid(_, valid))
-    equal && (isEqual = $equal(_, equal))
+//     if (!isEqual || !isValid || !isinvalid) {
+//       return
+//     }
+//     __get && $set(cache, $get(_, __get))
 
-    if (!isEqual || !isValid || !isinvalid) {
-      return
-    }
-    __get && $set(cache, $get(_, __get))
+//     _val(cache)
+//   })
+// }
 
-    _val(cache)
-  })
-}
+// export const matchMethods = {
+//   simple: _matchSimple,
+//   advanced: _matchAdvanced
+// }
+// export const $match = (target, _object, {type = 'simple'} = {}) => $exec(matchMethods[type], target, _object)
 
-export const matchMethods = {
-  simple: _matchSimple,
-  advanced: _matchAdvanced
-}
-export const $match = (target, _object, {type = 'simple'} = {}) => $exec(matchMethods[type], target, _object)
+// export const $invalid = (_, _object) => $exec(_invalid, _, _object)
+// export const _invalid = (_, _object) => {
+//   let isinValid = true
+//   const onObject = ({object, depth, _key, _val}) => {
+//     $(object, (key, val) => {
+//       if (typeof val === 'object' || !isinValid) {
+//         return
+//       }
+//       let newDepth = depth ? `${depth}.${key}` : key
+//       let target = get(_, newDepth)
+//       if (target) {
+//         isinValid = false
+//         return
+//       }
+//     })
+//     scanObject({object, depth, onObject})
+//   }
+//   onObject({object: _object, depth: ''})
+//   return isinValid
+// }
 
-export const $invalid = (_, _object) => $exec(_invalid, _, _object)
-export const _invalid = (_, _object) => {
-  let isinValid = true
-  const onObject = ({object, depth, _key, _val}) => {
-    $(object, (key, val) => {
-      if (typeof val === 'object' || !isinValid) {
-        return
-      }
-      let newDepth = depth ? `${depth}.${key}` : key
-      let target = get(_, newDepth)
-      if (target) {
-        isinValid = false
-        return
-      }
-    })
-    scanObject({object, depth, onObject})
-  }
-  onObject({object: _object, depth: ''})
-  return isinValid
-}
+// export const $valid = (_, _object) => $exec(_valid, _, _object)
+// export const _valid = (_, _object) => {
+//   let isValid = true
+//   const onObject = ({object, depth, _key, _val}) => {
+//     $(object, (key, val) => {
+//       if (typeof val === 'object' || !isValid) {
+//         return
+//       }
+//       let newDepth = depth ? `${depth}.${key}` : key
+//       let target = get(_, newDepth)
+//       if (!target) {
+//         isValid = false
+//         return
+//       }
+//     })
+//     scanObject({object, depth, onObject})
+//   }
+//   onObject({object: _object, depth: ''})
+//   return isValid
+// }
 
-export const $valid = (_, _object) => $exec(_valid, _, _object)
-export const _valid = (_, _object) => {
-  let isValid = true
-  const onObject = ({object, depth, _key, _val}) => {
-    $(object, (key, val) => {
-      if (typeof val === 'object' || !isValid) {
-        return
-      }
-      let newDepth = depth ? `${depth}.${key}` : key
-      let target = get(_, newDepth)
-      if (!target) {
-        isValid = false
-        return
-      }
-    })
-    scanObject({object, depth, onObject})
-  }
-  onObject({object: _object, depth: ''})
-  return isValid
-}
-
-export const $equal = (_, _object) => $exec(_equal, _, _object)
-export const _equal = (_, _object) => {
-  let isEqual = true
-  const onObject = ({object, depth, _key, _val}) => {
-    $(object, (key, val) => {
-      if (typeof val === 'object' || isEqual) {
-        return
-      }
-      let newDepth = depth ? `${depth}.${key}` : key
-      let target = get(_, newDepth)
-      if (val !== target) {
-        isEqual = false
-        return
-      }
-    })
-    scanObject({object, depth, onObject})
-  }
-  onObject({object: _object, depth: ''})
-  return isEqual
-}
+// export const $equal = (_, _object) => $exec(_equal, _, _object)
+// export const _equal = (_, _object) => {
+//   let isEqual = true
+//   const onObject = ({object, depth, _key, _val}) => {
+//     $(object, (key, val) => {
+//       if (typeof val === 'object' || isEqual) {
+//         return
+//       }
+//       let newDepth = depth ? `${depth}.${key}` : key
+//       let target = get(_, newDepth)
+//       if (val !== target) {
+//         isEqual = false
+//         return
+//       }
+//     })
+//     scanObject({object, depth, onObject})
+//   }
+//   onObject({object: _object, depth: ''})
+//   return isEqual
+// }
