@@ -44,7 +44,7 @@ export const _use = (_, _object) => {
     const scanHooks = _._scanHooks[hook]
     scanHooks &&
       $(scanHooks, (key, shook) => {
-        shook({hook, object, parentDepth, depth, _key, _val, _object})
+        shook({_, hook, object, parentDepth, depth, _key, _val, _object})
       })
   }
 
@@ -85,7 +85,7 @@ export const _unuse = (_, _object) => {
   return _
 }
 
-export const _setSimple = (_, _object) => {
+export const sSet = (_, _object) => {
   let cache = {}
   const onVariable = ({object, depth, _key, _val}) => {
     if (matchPath.test(_val)) {
@@ -124,7 +124,7 @@ export const _setSimple = (_, _object) => {
   return cache
 }
 
-export const _setAdvanced = (_, _object) => {
+export const aSet = (_, _object) => {
   let cache = {}
   const onVariable = ({object, depth, _key, _val}) => {
     if (matchPath.test(_val)) {
@@ -166,8 +166,8 @@ export const _setAdvanced = (_, _object) => {
 }
 
 export const setMethods = {
-  simple: _setSimple,
-  advanced: _setAdvanced
+  simple: sSet,
+  advanced: aSet
 }
 export const $set = (_, _object, {type = 'simple'} = {}) => $exec(setMethods[type], _, _object)
 

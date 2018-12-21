@@ -61,8 +61,14 @@ export const $ = (obj, cb) => {
 }
 
 export const $M = (map, cb) => {
-  for (let [key, val] of map) {
-    cb(key, val)
+  if (map instanceof Map) {
+    for (let [key, val] of map) {
+      cb(key, val)
+    }
+  } else {
+    for (let [key, val] of Object.entries(map)) {
+      cb(key, val)
+    }
   }
 }
 
