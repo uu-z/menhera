@@ -27,8 +27,9 @@ const handleHooks = ({object, depth, key, _key, _val, _object}) => {
     hooks &&
     $M(hooks, (uuid, h) => {
       if (h instanceof Set) {
-        let fns = [...h]
-        fns({depth, _key, _val, cp: _object})
+        for (let fn of h) {
+          fn({depth, _key, _val, cp: _object, parent: object})
+        }
       } else {
         h({depth, _key, _val, cp: _object, parent: object})
       }
@@ -40,7 +41,15 @@ const handleEachHooks = ({object, depth, key, _val, _object}) => {
   hooks instanceof Map &&
     hooks &&
     $(_val, (key, val) => {
-      $M(hooks, (uuid, h) => h({depth, _key: key, _val: val, cp: _object, parent: object}))
+      $M(hooks, (uuid, h) => {
+        if (h instanceof Set) {
+          for (let fn of h) {
+            fn({depth, _key: key, _val: val, cp: _object, parent: object})
+          }
+        } else {
+          h({depth, _key: key, _val: val, cp: _object, parent: object})
+        }
+      })
     })
 }
 

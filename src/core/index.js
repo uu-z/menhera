@@ -31,12 +31,12 @@ export const get = (obj, path, def) => {
   if (matchSlashPath.test(path)) {
     path = path.replace(matchSlashPath, '.')
   }
-  let result = lget(obj, path, def)
+  let result = lget(obj, path)
 
   if (typeof result === 'string' && matchPath.test(result)) {
     return get(obj, result, def)
   } else {
-    return result
+    return result || def
   }
 }
 

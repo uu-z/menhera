@@ -89,7 +89,7 @@ export const _setSimple = (_, _object) => {
   let cache = {}
   const onVariable = ({object, depth, _key, _val}) => {
     if (matchPath.test(_val)) {
-      let result = get(_, _val)
+      let result = get(_, _val, _val)
 
       set(_, depth, result)
       set(cache, depth, result)
@@ -128,7 +128,7 @@ export const _setAdvanced = (_, _object) => {
   let cache = {}
   const onVariable = ({object, depth, _key, _val}) => {
     if (matchPath.test(_val)) {
-      let result = get(_, _val)
+      let result = get(_, _val, _val)
       set(_, depth, result)
       set(cache, depth, result)
     } else {

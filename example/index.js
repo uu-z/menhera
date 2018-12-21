@@ -53,6 +53,7 @@ event.emit('test1')
 event.emit('test2')
 event.emit('test3')
 
+console.log(Mhr)
 // test0
 // test1
 // test2.foo
