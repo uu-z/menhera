@@ -1,4 +1,4 @@
-import Mhr from '../index'
+import Mhr from '../../index'
 import {get, set} from '.'
 
 export default {
@@ -71,7 +71,7 @@ export default {
   relay(key) {
     return {
       $: ({_key, _val}) =>
-        Mhr.$use({
+        Mhr.use({
           [key]: _val
         })
     }

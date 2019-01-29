@@ -1,5 +1,5 @@
-const Mhr = require('../dist').default
-const {EventEmitter} = require('events')
+import Mhr from '../index'
+import {EventEmitter} from 'events'
 
 const event = new EventEmitter()
 

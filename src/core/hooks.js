@@ -1,8 +1,7 @@
 import {scanObject, $, HOOKS, get, set, $set, $merge} from '.'
-import _ from '../index'
 
 export const _hooks = {
-  _({_val, cp}) {
+  _({_val, cp, _}) {
     const {uuid} = cp
     if (typeof _val === 'object') {
       const onFunction = ({depth, _val}) => {
@@ -60,7 +59,7 @@ export const _metas = {
 }
 
 export const _mount = {
-  $({_val}) {
+  $({_val, _}) {
     let cps = Array.isArray(_val) ? _val : [_val]
     $(cps, (key, component) => {
       let cp = typeof component === 'function' ? component({_}) : component
@@ -70,17 +69,17 @@ export const _mount = {
         return
       }
       _[name] = cp
-      _.$use(_[name])
+      _.use(_[name])
     })
   }
 }
 
 export const _run = {
-  $({_val, cp}) {
+  $({_val, cp, _}) {
     let cps = Array.isArray(_val) ? _val : [_val]
     $(cps, (key, component) => {
       let cp = typeof component === 'function' ? component({_}) : component
-      _.$use(cp)
+      _.use(cp)
     })
   }
 }

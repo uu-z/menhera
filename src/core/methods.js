@@ -1,6 +1,4 @@
 import {$, scanObject, HOOKS, get, set, has, matchPath, uuid} from '.'
-import _ from '../index'
-import core from '../index'
 
 export const $str = JSON.stringify
 
@@ -28,9 +26,9 @@ export const $exec = (_method, _, _object) => {
   return _method(_, _object)
 }
 
-export const use = data => {
-  $use(core, $compile(core, data))
-  return core
+export const use = _ => data => {
+  $use(_, $compile(_, data))
+  return _
 }
 
 export const $use = (_, _object) => $exec(_use, _, _object)
@@ -71,9 +69,9 @@ export const _use = (_, _object) => {
   return _
 }
 
-export const unuse = data => {
-  $unuse(core, $compile(core, data))
-  return core
+export const unuse = _ => data => {
+  $unuse(_, $compile(_, data))
+  return _
 }
 
 export const $unuse = (_, _object) => $exec(_unuse, _, _object)
@@ -81,7 +79,7 @@ export const $unuse = (_, _object) => $exec(_unuse, _, _object)
 export const _unuse = (_, _object) => {
   const {uuid, _hooks} = _object
 
-  $use(_, {uuid, _unhooks: _hooks})
+  use(_, {uuid, _unhooks: _hooks})
   return _
 }
 

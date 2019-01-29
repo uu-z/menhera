@@ -1,19 +1,16 @@
 {
   "name": "menhera",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "main": "dist/index.js",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
+  "types": "index.d.ts",
   "scripts": {
-    "build": "bili  --filename index.js",
+    "build": "bili  ./index.js",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.3.1",
     "@types/uuid": "^3.4.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
     "bili": "^3.4.2",
     "menhera": "^0.8.1-rc1",
     "menhera-cli": "^0.3.1-rc2"

@@ -1,4 +1,4 @@
 {
-  "presets": ["env", "stage-3"]
+  "presets": ["@babel/env"]
   // "plugins": ["transform-runtime"]
 }
