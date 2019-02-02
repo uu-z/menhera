@@ -1,18 +1,23 @@
-declare namespace Menhera {
-  interface use {
-    (data: object | Object[]): Mhr
-  }
+declare global {
+  namespace Menhera {
+    interface UseObject {
+      _run: Object | Object[]
+      _hooks: Object | Object[]
+      _compilers: Object
+      _scanHooks: Object
+    }
+    interface use {
+      (data: UseObject | UseObject[]): Mhr
+    }
 
-  interface Mhr {
-    _run: Object | Object[]
-    _hooks: Object | Object[]
-    _compilers: Object
-    _scanHooks: Object
-    use: use
-  }
+    interface Mhr {
+      use: use
+      unuse: use
+    }
 
-  interface MhrStatic extends Mhr {
-    new (): Mhr
+    interface MhrStatic extends Mhr {
+      new (): Mhr
+    }
   }
 }
 
